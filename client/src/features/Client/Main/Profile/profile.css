@@ -1,0 +1,41 @@
+.tio-checkmark-circle {
+    color: #377dff;
+}
+
+.nav-pills .nav-link {
+    border-radius: unset;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: unset;
+    background-color: unset;
+}
+
+.nav-pills:not(.nav-segment) .nav-link.active {
+    color: unset;
+    background-color: unset;
+}
+
+.nav-pills:not(.nav-segment) .nav-link:hover {
+    border-radius: .25rem .25rem 0 0;
+}
+
+.profile-section__text-wrap {
+    padding: 15px 0px;
+}
+
+.list-box {
+    list-style: none;
+    padding: 0;
+}
+
+.list-box li.list-item-box {
+    font-size: 14px;
+    line-height: 30px;
+    color: #767676;
+    padding: 0px 12px;
+    display: inline-block;
+    background-color: hsl(0, 0%, 90%);
+    margin: 0px 8px 8px 0px;
+    border-radius: 8px;
+}

@@ -1,0 +1,74 @@
+.navbar-vertical-fixed {
+    left: unset;
+}
+
+.navbar-vertical-fixed {
+    width: 360px;
+}
+
+.navbar-vertical:not([class*=container]) .navbar-nav.navbar-nav-lg .nav-link {
+    margin: unset;
+}
+
+#notificationDropdown {
+    top: 0;
+    z-index: 999;
+    left: 360px;
+}
+
+.top-trend {
+    padding: 20px 0;
+}
+
+.trend {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.list-trend {
+    padding: .375rem 1.75rem;
+}
+
+.list-trend .user-box:nth-child(1n + 0) {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.list-trend .user-box:nth-child(4n + 0) {
+    margin-right: 0px;
+}
+
+.user-box .avatar {
+    width: unset;
+    height: unset;
+}
+
+.list-trend img {
+    max-width: unset;
+    width: 65px;
+    height: 65px;
+}
+
+.btn-signout {
+    right: 15px;
+    padding: 5px;
+}
+
+.profile-detail:hover {
+    color: unset !important;
+}
+
+.profile-detail a:hover span{
+    color: #0052ea !important;
+}
+
+.btn-signout:hover {
+    color: #0052ea;
+    background-color: #e0e5ef;
+    border-color: #d7deeb;
+    border-radius: 5px;
+}
+
+.navbar-dropdown-menu {
+    position: fixed!important;
+}

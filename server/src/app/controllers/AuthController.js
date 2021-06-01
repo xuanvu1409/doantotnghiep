@@ -1,0 +1,58 @@
+const Member = require('../models/member');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const ramdom = require("../helper/random");
+
+class AuthController {
+
+    register = async (req, res) => {
+        const {name, email, locationId, password, dateOfBirth, genderId} = req.body;
+        try {
+            const oldMember = await Member.findOne({email: email});
+            if (oldMember) return res.status(400).json({message: "Email đã tồn tại"});
+
+            const member = await Member.create({
+                profileId: ramdom.randomString(),
+                name: name,
+                email: email,
+                locationId: locationId,
+                password: await bcrypt.hash(password, 15),
+                dateOfBirth: dateOfBirth,
+                genderId: genderId,
+                avatar: '/avatar/placeholder.png'
+            })
+            const token = await jwt.sign({email: member.email, id: member._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
+            return res.status(200).json({
+                message: "Đăng ký tài khoản thành công",
+                member,
+                token
+            });
+        } catch (error) {
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+            console.log(error);
+        }
+    }
+
+    login = async (req, res) => {
+        const {email, password} = req.body;
+
+        try {
+            const oldMember = await Member.findOne({email});
+            if (!oldMember) return res.status(401).json({message: "Email không tồn tại"});
+            const isPasswordCorrect = await bcrypt.compare(password, oldMember.password);
+            if (!isPasswordCorrect) return res.status(400).json({message: "Mật khẩu không hợp lệ"});
+            const token = await jwt.sign({email: oldMember.email, id: oldMember._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
+            return res.status(200).json({
+                member: oldMember,
+                message: "Đăng nhập thành công",
+                token
+            });
+        } catch (error) {
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+            console.log(error);
+        }
+    }
+}
+
+module.exports = new AuthController;
+

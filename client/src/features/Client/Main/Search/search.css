@@ -1,0 +1,22 @@
+.search-page .img-profile {
+    height: 280px;
+    object-fit: cover;
+}
+
+.search-page .card-title {
+    color: #ffffff;
+ }
+
+.search-page .card-title i {
+    color: #377dff;
+}
+
+.search-page .card-img-custom {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    background-image: linear-gradient(to top,rgba(0,0,0,.6) 0%,rgba(0,0,0,.4428) 19%,rgba(0,0,0,.3246) 34%,rgba(0,0,0,.2292) 47%,rgba(0,0,0,.1668) 56.5%,rgba(0,0,0,.1164) 65%,rgba(0,0,0,.0756) 73%,rgba(0,0,0,.045) 80.2%,rgba(0,0,0,.0252) 86.1%,rgba(0,0,0,.0126) 91%,rgba(0,0,0,.0048) 95.2%,rgba(0,0,0,.0012) 98.2%,transparent 100%);
+}
