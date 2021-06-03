@@ -4,7 +4,7 @@ const autoIncrement = require('mongoose-auto-increment');
 
 const memberSchema =  new Schema({
     profileId: {type: String, unique: true},
-    avatar:  String,
+    avatar:  {srcImage: String, cloudinaryId: String},
     name:  {type: String, required: true},
     email:  {type: String, unique: true},
     mobile:  String,

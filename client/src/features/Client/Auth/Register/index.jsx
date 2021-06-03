@@ -8,6 +8,7 @@ import {getLocation} from "../../../../api/locationApi";
 import {getGender} from "../../../../api/genderApi";
 import {registerAction} from "./registerAction";
 import {useDispatch, useSelector} from "react-redux";
+import {Spinner} from "react-bootstrap";
 
 const day = () => {
     const items = [];
@@ -381,8 +382,14 @@ const Index = () => {
                                         isSubmitting
                                             ?
                                             <button className="btn btn-lg btn-block btn-primary mb-2" type="button" disabled>
-                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                &nbsp;Loading...
+                                                <Spinner
+                                                    as="span"
+                                                    animation="grow"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                                &nbsp;Xin chờ...
                                             </button>
                                             :
                                             <button type="submit" className="btn btn-lg btn-block btn-primary mb-2">Tạo

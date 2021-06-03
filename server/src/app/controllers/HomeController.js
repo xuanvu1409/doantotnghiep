@@ -6,7 +6,7 @@ const Language = require('../models/languages');
 
 class HomeController {
 
-    get(req, res) {
+    get = (req, res) => {
         res.send("Welcome to Xuan Vu's website");
     }
 

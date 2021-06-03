@@ -98,7 +98,7 @@ const LanguageForm = () => {
                             {
                                 currentMember.languageId.length === 0
                                 &&
-                                <li>Cho mọi người biết bạn có thể giao tiếp bằng ngôn ngữ nào</li>
+                                <li>Hãy cho mọi người biết bạn có thể giao tiếp bằng ngôn ngữ nào</li>
                             }
 
                         </ul>

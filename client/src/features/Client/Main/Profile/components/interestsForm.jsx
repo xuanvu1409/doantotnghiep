@@ -97,7 +97,7 @@ const InterestsForm = () => {
                             {
                                 currentMember.interestsId.length === 0
                                 &&
-                                    <li>Cho mọi người biết sở thích của bạn</li>
+                                    <li>Hãy cho mọi người biết sở thích của bạn</li>
                             }
 
                         </ul>

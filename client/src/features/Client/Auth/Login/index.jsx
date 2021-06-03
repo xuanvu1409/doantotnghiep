@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import "./login.css";
 import {useDispatch, useSelector} from "react-redux";
 import {loginAction} from "./loginAction";
+import {Spinner} from "react-bootstrap";
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -185,9 +186,14 @@ const Index = () => {
                                         isSubmitting
                                             ?
                                             <button className="btn btn-lg btn-block btn-primary" type="button" disabled>
-                                                <span className="spinner-border spinner-border-sm" role="status"
-                                                      aria-hidden="true"></span>
-                                                &nbsp;Loading...
+                                                <Spinner
+                                                    as="span"
+                                                    animation="grow"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                                &nbsp;Xin chờ...
                                             </button>
                                             :
                                             <button type="submit" className="btn btn-lg btn-block btn-primary">Đăng

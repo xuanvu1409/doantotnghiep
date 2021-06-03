@@ -2,7 +2,7 @@ import React from 'react';
 import {Link, NavLink} from "react-router-dom";
 import "./sidebar.css";
 import {useSelector} from "react-redux";
-import {getImage, titleCase} from "../../../utils/helper";
+import {titleCase} from "../../../utils/helper";
 import Logout from "./components/logout";
 
 const Index = () => {
@@ -476,7 +476,7 @@ const Index = () => {
                                                         {
                                                             memberState.currentMember.avatar
                                                             &&
-                                                            <img className="avatar-img" src={getImage(memberState.currentMember.avatar)}
+                                                            <img className="avatar-img" src={memberState.currentMember.avatar.srcImage}
                                                                  alt="Image Description"/>
                                                         }
                                                     </div>

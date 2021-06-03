@@ -35,3 +35,15 @@ export const updateInterests = async (formData) => {
 export const updateLanguage = async (formData) => {
     return await axios.post('/profile/update-language', formData);
 }
+
+export const uploadImage = async (formData) => {
+    return await axios.post('/profile/upload-image', formData);
+}
+
+export const getGalleryById = async (_id) => {
+    return await axios.get('/profile/get-gallery/' + _id);
+}
+
+export const removeImageById = async (_id) => {
+    return await axios.delete('/profile/remove-image/' + _id);
+}

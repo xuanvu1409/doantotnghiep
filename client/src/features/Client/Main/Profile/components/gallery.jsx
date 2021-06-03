@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useDropzone} from "react-dropzone";
+import {useSelector} from "react-redux";
+import {getGalleryById, removeImageById, uploadImage} from "../../../../../api/memberApi";
+import {useForm} from "react-hook-form";
+import {toast} from "react-toastify";
+import {getImage} from "../../../../../utils/helper";
+import {Button, Modal, Spinner} from "react-bootstrap";
 
 const thumbsContainer = {
     display: 'flex',
@@ -34,7 +40,53 @@ const img = {
     height: '100%',
 };
 
+function MyVerticallyCenteredModal(props) {
+    const {item, loadImage, onHide} = props;
+
+    useEffect(() => {
+        console.log(item)
+    })
+
+
+    const removeImage = async () => {
+        await removeImageById(item).then(res => {
+            toast.success(res.data.message);
+            loadImage();
+            onHide()
+        })
+    }
+
+    return (
+        <Modal
+            {...props}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Xoá ảnh
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>
+                    Bạn chắc chắn muốn xóa ảnh này
+                </p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => removeImage()}>Xác nhận</Button>
+                <Button onClick={props.onHide}>Đóng</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
 const Gallery = () => {
+    const [modalShow, setModalShow] = React.useState(false);
+    const {currentMember} = useSelector(state => state.member);
+    const [gallery, setGallery] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [itemRemove, setItemRemove] = useState(0);
+    const {handleSubmit} = useForm();
     const {getRootProps, getInputProps} = useDropzone({
         accept: 'image/*',
         multiple: true,
@@ -46,21 +98,31 @@ const Gallery = () => {
     });
     const [files, setFiles] = useState([]);
 
+    useEffect(() => {
+        getGallery();
+    }, [])
+
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
         files.forEach(file => URL.revokeObjectURL(file.preview));
     }, [files]);
 
-    const removeFile = (event) => {
+    const getGallery = async () => {
+        await getGalleryById(currentMember._id).then(res => {
+            setGallery(res.data);
+        })
+    }
+
+    const removeFile = (event, i) => {
         event.stopPropagation();
         const newFiles = [...files]
         if (newFiles.length > 0) {
-            newFiles.splice(0, 1)
+            newFiles.splice(i, 1)
             setFiles(newFiles)
         }
     }
 
-    const thumbs = files.map(file => (
+    const thumbs = files.map((file, i) => (
         <div key={file.name}>
             <div style={thumb}>
                 <div style={thumbInner}>
@@ -70,19 +132,60 @@ const Gallery = () => {
                         alt={file.name}
                     />
                     <div className="d-flex justify-content-end dz-close-icon position-absolute text-white"
-                         onClick={removeFile} style={{"right": 0}}><small className="tio-clear"/></div>
+                         onClick={(e) => removeFile(e, i)} style={{"right": 0}}><small className="tio-clear"/></div>
                 </div>
             </div>
         </div>
     ));
 
+    const onSubmit = (data) => {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("_id", currentMember._id);
+        files.map(file => (formData.append('image', file)))
+        uploadImage(formData).then(res => {
+            toast.success(res.data.message);
+            getGallery();
+            const newFiles = [...files]
+            if (newFiles.length > 0) {
+                newFiles.splice(0, newFiles.length);
+                setFiles(newFiles);
+            }
+            setLoading(false);
+        }).catch(e => console.log(e))
+    }
+
+    const openModal = (_id) => {
+        setModalShow(true);
+        setItemRemove(_id);
+    }
+
     return (
         <div className="card mb-3 mb-lg-5">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Header */}
                 <div className="card-header">
                     <h4 className="card-header-title">Media</h4>
-                    { files.length > 0 && <button type={"submit"} className={"btn btn-primary btn-sm"}>Lưu</button>}
+                    {
+                        files.length > 0
+                        &&
+                        (
+                            loading
+                                ?
+                                <button className="btn btn-primary btn-sm" type="button" disabled>
+                                    <Spinner
+                                        as="span"
+                                        animation="grow"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                    &nbsp;Xin chờ...
+                                </button>
+                                :
+                                <button type={"submit"} className={"btn btn-primary btn-sm"}>Lưu</button>
+                        )
+                    }
                 </div>
                 {/* End Header */}
 
@@ -114,111 +217,45 @@ const Gallery = () => {
                          data-hs-fancybox-options="{
                      &quot;selector&quot;: &quot;#fancyboxGallery .js-fancybox-item&quot;
                    }">
-                        <div className="col-6 col-sm-4 col-md-3">
-                            {/* Card */}
-                            <div className="card card-sm">
-                                <img className="card-img-top" src="assets\img\400x400\img7.jpg" alt="Image Description"/>
-                                <div className="card-body">
-                                    <div className="row text-center">
-                                        <div className="col">
-                                            <a className="js-fancybox-item text-body" href="javascript:;"
-                                               data-toggle="tooltip" data-placement="top" title="View"
-                                               data-src="./assets/img/725x1080/img1.jpg" data-caption="Image #01">
-                                                <i className="tio-visible-outlined"/>
-                                            </a>
+                        {gallery.map(e => (
+                            <div className="col-6 col-sm-4 col-md-3 mb-3" key={e._id}>
+                                {/* Card */}
+                                <div className="card card-sm">
+                                    <img className="card-img-top"
+                                         src={e.cloudinaryId ? e.srcImage : getImage(e.srcImage)}
+                                         alt="Image Description"/>
+                                    <div className="card-body">
+                                        <div className="row text-center">
+                                            <div className="col">
+                                                <span className="js-fancybox-item text-body">
+                                                    <i className="tio-visible-outlined"/>
+                                                </span>
+                                            </div>
+                                            <div className="col column-divider">
+                                                <span onClick={() => openModal(e._id)}
+                                                      className="text-danger btn-remove-image" data-toggle="tooltip"
+                                                      data-placement="top" title="Delete">
+                                                    <i className="tio-delete-outlined"/>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="col column-divider">
-                                            <a className="text-danger" href="javascript:;" data-toggle="tooltip"
-                                               data-placement="top" title="Delete">
-                                                <i className="tio-delete-outlined"/>
-                                            </a>
-                                        </div>
+                                        {/* End Row */}
                                     </div>
-                                    {/* End Row */}
                                 </div>
+                                {/* End Card */}
                             </div>
-                            {/* End Card */}
-                        </div>
-                        <div className="col-6 col-sm-4 col-md-3">
-                            {/* Card */}
-                            <div className="card card-sm">
-                                <img className="card-img-top" src="assets\img\400x400\img8.jpg" alt="Image Description"/>
-                                <div className="card-body">
-                                    <div className="row text-center">
-                                        <div className="col">
-                                            <a className="js-fancybox-item text-body" href="javascript:;"
-                                               data-toggle="tooltip" data-placement="top" title="View"
-                                               data-src="./assets/img/1920x1080/img1.jpg" data-caption="Image #02">
-                                                <i className="tio-visible-outlined"/>
-                                            </a>
-                                        </div>
-                                        <div className="col column-divider">
-                                            <a className="text-danger" href="javascript:;" data-toggle="tooltip"
-                                               data-placement="top" title="Delete">
-                                                <i className="tio-delete-outlined"/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {/* End Row */}
-                                </div>
-                            </div>
-                            {/* End Card */}
-                        </div>
-                        <div className="col-6 col-sm-4 col-md-3">
-                            {/* Card */}
-                            <div className="card card-sm">
-                                <img className="card-img-top" src="assets\img\400x400\img9.jpg" alt="Image Description"/>
-                                <div className="card-body">
-                                    <div className="row text-center">
-                                        <div className="col">
-                                            <a className="js-fancybox-item text-body" href="javascript:;"
-                                               data-toggle="tooltip" data-placement="top" title="View"
-                                               data-src="./assets/img/1920x1080/img2.jpg" data-caption="Image #03">
-                                                <i className="tio-visible-outlined"/>
-                                            </a>
-                                        </div>
-                                        <div className="col column-divider">
-                                            <a className="text-danger" href="javascript:;" data-toggle="tooltip"
-                                               data-placement="top" title="Delete">
-                                                <i className="tio-delete-outlined"/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {/* End Row */}
-                                </div>
-                            </div>
-                            {/* End Card */}
-                        </div>
-                        <div className="col-6 col-sm-4 col-md-3">
-                            {/* Card */}
-                            <div className="card card-sm">
-                                <img className="card-img-top" src="assets\img\400x400\img10.jpg" alt="Image Description"/>
-                                <div className="card-body">
-                                    <div className="row text-center">
-                                        <div className="col">
-                                            <a className="js-fancybox-item text-body" href="javascript:;"
-                                               data-toggle="tooltip" data-placement="top" title="View"
-                                               data-src="./assets/img/1920x1080/img3.jpg" data-caption="Image #04">
-                                                <i className="tio-visible-outlined"/>
-                                            </a>
-                                        </div>
-                                        <div className="col column-divider">
-                                            <a className="text-danger" href="javascript:;" data-toggle="tooltip"
-                                               data-placement="top" title="Delete">
-                                                <i className="tio-delete-outlined"/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {/* End Row */}
-                                </div>
-                            </div>
-                            {/* End Card */}
-                        </div>
+                        ))}
                     </div>
                     {/* End Gallery */}
                 </div>
             </form>
             {/* Body */}
+            <MyVerticallyCenteredModal
+                loadImage={getGallery}
+                item={itemRemove}
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
         </div>
     );
 };
