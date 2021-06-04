@@ -51,3 +51,7 @@ export const removeImageById = async (_id) => {
 export const setAvatarById = async (_id) => {
     return await axios.get('profile/set-avatar/' + _id);
 }
+
+export const changePass = async (_id, formData) => {
+    return await axios.put('/profile/change-pass/' + _id, formData);
+}

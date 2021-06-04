@@ -4,6 +4,7 @@ const Interests = require('../models/interests');
 const Language = require('../models/languages');
 const Image = require('../models/images');
 const cloudinary = require('../../config/cloudinary');
+const bcrypt = require("bcrypt");
 
 class ProfileController {
 
@@ -194,11 +195,13 @@ class ProfileController {
             await Image.find(
                 {memberId: _id},
                 {},
-                {sort:{
-                    cloudinaryId: -1
-                }},(err, docs) => {
-                res.json(docs);
-            })
+                {
+                    sort: {
+                        cloudinaryId: -1
+                    }
+                }, (err, docs) => {
+                    res.json(docs);
+                })
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});
@@ -242,6 +245,27 @@ class ProfileController {
                 .catch(error => {
                     console.log(error)
                 })
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    changePass = async (req, res) => {
+        const {_id} = req.params;
+        const {currentPassword, newPassword} = req.body;
+
+        try {
+            const member = await Member.findById(_id);
+            if (!member) return res.status(400).json({message: "Thành viên không tồn tại"});
+            const match = await bcrypt.compare(currentPassword, member.password);
+            if (!match) {
+                return res.status(400).json({message:"Mật khẩu không hợp lệ"});
+            }
+            member.password = await bcrypt.hash(newPassword, 15)
+            member.save(err => {
+                if (!err) return res.json({message: "Cập nhật thành công"});
+            })
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});

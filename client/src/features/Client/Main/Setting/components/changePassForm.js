@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
 import InputFeild from "../../../../../components/Share/inputFeild";
-import {getLanguage} from "../../../../../api/languageApi";
+import {changePass} from "../../../../../api/memberApi";
+import {useSelector} from "react-redux";
+import {toast} from "react-toastify";
 
 const ChangePassForm = () => {
+    const {currentMember} = useSelector(state => state.member);
     const form = useForm();
-    const {handleSubmit} = form;
+    const {handleSubmit, setError} = form;
     const [isFormVisible, setIsFormVisible] = useState(false);
 
     const toggleForm = () => {
@@ -16,8 +19,17 @@ const ChangePassForm = () => {
         }
     }
 
-    const onSubmit = (data) => {
-
+    const onSubmit = async (data) => {
+        if (data.newPassword !== data.confirmPassword) {
+            setError('confirmPassword', {message: "Mật khẩu không khớp"})
+        } else {
+            await changePass(currentMember._id, data).then(res => {
+                console.log(res)
+                toast.success(res.data.message);
+            }).catch(e => {
+                console.log(e)
+            })
+        }
     }
 
     return (
@@ -69,20 +81,20 @@ const ChangePassForm = () => {
                         </form>
                         :
                         <div onClick={toggleForm}>
-                            <InputFeild name={"currentPassword"} type={"password"} label={"Mật khẩu hiện tại"}
+                            <InputFeild name={""} type={"password"} label={"Mật khẩu hiện tại"}
                                         form={form}
                                         disable={true}
-                                        error={{required: {value: true, message: "Vui lòng điền mật khẩu hiện tại"}}}
+
                             />
-                            <InputFeild name={"currentPassword"} type={"password"} label={"Mật khẩu mới"}
+                            <InputFeild name={""} type={"password"} label={"Mật khẩu mới"}
                                         form={form}
                                         disable={true}
-                                        error={{required: {value: true, message: "Vui lòng điền mật khẩu hiện tại"}}}
+
                             />
-                            <InputFeild name={"currentPassword"} type={"password"} label={"Nhập lại mật khẩu"}
+                            <InputFeild name={""} type={"password"} label={"Nhập lại mật khẩu"}
                                         form={form}
                                         disable={true}
-                                        error={{required: {value: true, message: "Vui lòng điền mật khẩu hiện tại"}}}
+
                             />
                         </div>
                 }

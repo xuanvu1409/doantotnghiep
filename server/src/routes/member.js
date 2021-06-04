@@ -20,6 +20,7 @@ router.post('/profile/upload-image', uploadMultiple, profileController.uploadIma
 router.get('/profile/get-gallery/:_id', auth, profileController.getGallery);
 router.delete('/profile/remove-image/:_id', auth, profileController.removeImageById);
 router.get('/profile/set-avatar/:_id', auth, profileController.setAvatarbyId);
+router.put('/profile/change-pass/:_id', auth, profileController.changePass);
 router.get('/', homeController.get);
 
 module.exports = router;
