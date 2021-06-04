@@ -6,39 +6,7 @@ import {useForm} from "react-hook-form";
 import {uploadAvatar} from "../../../../../api/memberApi";
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 import {toast} from "react-toastify";
-
-const thumbsContainer = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 16,
-    justifyContent: 'center'
-};
-
-const thumb = {
-    display: 'inline-flex',
-    borderRadius: 2,
-    border: '1px solid #eaeaea',
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-    boxSizing: 'border-box'
-};
-
-const thumbInner = {
-    display: 'flex',
-    minWidth: 0,
-    overflow: 'hidden',
-    position: 'relative'
-};
-
-const img = {
-    display: 'block',
-    width: 'auto',
-    height: '100%',
-};
+import Dropzone from "../../../../../components/Share/dropzone";
 
 
 function MyVerticallyCenteredModal(props) {
@@ -48,16 +16,6 @@ function MyVerticallyCenteredModal(props) {
     const [loading, setLoading] = useState(false);
     const {handleSubmit} = useForm();
     const dispatch = useDispatch();
-    const {getRootProps, getInputProps} = useDropzone({
-        autoDiscover: false,
-        accept: 'image/*',
-        multiple: false,
-        onDrop: acceptedFiles => {
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })));
-        },
-    });
 
     useEffect(() => {
         if (show === true) {
@@ -66,31 +24,6 @@ function MyVerticallyCenteredModal(props) {
             setFiles(newFiles)
         }
     }, [show])
-
-    const removeFile = (event) => {
-        event.stopPropagation();
-        const newFiles = [...files]
-        if (newFiles.length > 0) {
-            newFiles.splice(0, 1)
-            setFiles(newFiles)
-        }
-    }
-
-    const thumbs = files.map(file => (
-        <div key={file.name}>
-            <div style={thumb}>
-                <div style={thumbInner}>
-                    <img
-                        src={file.preview}
-                        style={img}
-                        alt={file.name}
-                    />
-                    <div className="d-flex justify-content-end dz-close-icon position-absolute text-white"
-                         onClick={removeFile} style={{"right": 0}}><small className="tio-clear"/></div>
-                </div>
-            </div>
-        </div>
-    ));
 
     const onSubmit = () => {
         setLoading(true);
@@ -107,11 +40,6 @@ function MyVerticallyCenteredModal(props) {
         })
     }
 
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
-
     return (
         <Modal
             {...props}
@@ -125,25 +53,7 @@ function MyVerticallyCenteredModal(props) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div {...getRootProps({className: 'js-dropzone dropzone-custom custom-file-boxed dropzone'})}>
-                        <input {...getInputProps()} type="file"/>
-                        <div className="dz-message custom-file-boxed-label">
-                            {files.length > 0
-                                ?
-                                <aside style={thumbsContainer}>
-                                    {thumbs}
-                                </aside>
-                                :
-                                <>
-                                    <img className="avatar avatar-xl avatar-4by3 mb-3"
-                                         src="assets/svg/illustrations/browse.svg" alt="Image Description"/>
-                                    <h5>Kéo và thả tệp của bạn vào đây hoặc nhấp để chọn ảnh</h5>
-                                </>
-                            }
-                        </div>
-
-
-                    </div>
+                    <Dropzone files={files} setFiles={setFiles}/>
                 </Modal.Body>
                 <Modal.Footer>
                     {
@@ -158,7 +68,7 @@ function MyVerticallyCenteredModal(props) {
                                     aria-hidden="true"
                                 />&nbsp;Xin chờ...</button>
                             :
-                            <button type={"submit"} className={"btn btn-primary"}>Lưu</button>
+                             (files.length > 0 && <button type={"submit"} className={"btn btn-primary"}>Lưu</button>)
                     }
                     <button type={"button"} onClick={props.onHide} className={"btn btn-danger"}>Đóng</button>
                 </Modal.Footer>

@@ -191,7 +191,12 @@ class ProfileController {
     getGallery = async (req, res) => {
         const {_id} = req.params;
         try {
-            await Image.find({memberId: _id}, (err, docs) => {
+            await Image.find(
+                {memberId: _id},
+                {},
+                {sort:{
+                    cloudinaryId: -1
+                }},(err, docs) => {
                 res.json(docs);
             })
         } catch (e) {
@@ -204,9 +209,39 @@ class ProfileController {
         const {_id} = req.params;
         try {
             const image = await Image.findById(_id);
+            if (!image) return res.json({message: "Ảnh không tồn tại"})
             await cloudinary.uploader.destroy(image.cloudinaryId);
             image.remove();
             res.json({message: "Cập nhật thành công"});
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    setAvatarbyId = async (req, res) => {
+        const {_id} = req.params;
+        try {
+            const image = await Image.findById(_id);
+            if (!image) return res.status(404).json({message: "Ảnh không tồn tại"})
+            const member = await Member.findById(image.memberId);
+            if (!member) return res.status(404).json({message: "Thành viên không tồn tại"})
+            await cloudinary.uploader
+                .upload(image.srcImage)
+                .then(async (result) => {
+                    await cloudinary.uploader.destroy(member.avatar.cloudinaryId);
+                    await Member.findOneAndUpdate(image.memberId, {
+                        avatar: {
+                            srcImage: result.secure_url,
+                            cloudinaryId: result.public_id
+                        }
+                    }, (err) => {
+                        if (!err) return res.json({message: "Cập nhật thành công", _id: member._id});
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});

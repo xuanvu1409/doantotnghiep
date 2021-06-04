@@ -3,15 +3,14 @@ import $ from "jquery";
 import ScrollspyNav from "react-scrollspy-nav";
 import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
+import ChangePassForm from "./components/changePassForm";
 
 const Index = () => {
     const {currentMember} = useSelector(state => state.member);
 
     useEffect(() => {
         $('.js-sticky-block').each(function () {
-            new window.HSStickyBlock($(this), {
-                targetSelector: $('#header').hasClass('navbar-fixed') ? '#header' : null
-            }).init();
+            new window.HSStickyBlock($(this)).init();
         });
     }, [])
 
@@ -21,18 +20,18 @@ const Index = () => {
             <div className="page-header">
                 <div className="row align-items-end">
                     <div className="col-sm mb-2 mb-sm-0">
-                        <nav aria-label="breadcrumb">
-                            <ol className="breadcrumb breadcrumb-no-gutter">
-                                <li className="breadcrumb-item"><a className="breadcrumb-link" href="javascript:;">Pages</a></li>
-                                <li className="breadcrumb-item"><a className="breadcrumb-link" href="javascript:;">Account</a></li>
-                                <li className="breadcrumb-item active" aria-current="page">Settings</li>
-                            </ol>
-                        </nav>
-                        <h1 className="page-header-title">Settings</h1>
+                        {/*<nav aria-label="breadcrumb">*/}
+                        {/*    <ol className="breadcrumb breadcrumb-no-gutter">*/}
+                        {/*        <li className="breadcrumb-item"><a className="breadcrumb-link" href="javascript:;">Pages</a></li>*/}
+                        {/*        <li className="breadcrumb-item"><a className="breadcrumb-link" href="javascript:;">Account</a></li>*/}
+                        {/*        <li className="breadcrumb-item active" aria-current="page">Settings</li>*/}
+                        {/*    </ol>*/}
+                        {/*</nav>*/}
+                        <h1 className="page-header-title">Cài đặt</h1>
                     </div>
                     <div className="col-sm-auto">
                         <Link className="btn btn-primary" to={"/profile/"+ currentMember.profileId}>
-                            <i className="tio-user mr-1" /> My profile
+                            <i className="tio-user mr-1" /> Hồ sơ
                         </Link>
                     </div>
                 </div>
@@ -45,15 +44,15 @@ const Index = () => {
                     <div className="navbar-vertical navbar-expand-lg mb-3 mb-lg-5">
                         {/* Navbar Toggle */}
                         <button type="button" className="navbar-toggler btn btn-block btn-white mb-3" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarVerticalNavMenu" data-toggle="collapse" data-target="#navbarVerticalNavMenu">
-          <span className="d-flex justify-content-between align-items-center">
-            <span className="h5 mb-0">Nav menu</span>
-            <span className="navbar-toggle-default">
-              <i className="tio-menu-hamburger" />
-            </span>
-            <span className="navbar-toggle-toggled">
-              <i className="tio-clear" />
-            </span>
-          </span>
+                      <span className="d-flex justify-content-between align-items-center">
+                        <span className="h5 mb-0">Nav menu</span>
+                        <span className="navbar-toggle-default">
+                          <i className="tio-menu-hamburger" />
+                        </span>
+                        <span className="navbar-toggle-toggled">
+                          <i className="tio-clear" />
+                        </span>
+                      </span>
                         </button>
                         {/* End Navbar Toggle */}
                         <div id="navbarVerticalNavMenu" className="collapse navbar-collapse">
@@ -71,7 +70,7 @@ const Index = () => {
                }">
                                 <li className="nav-item">
                                     <a className="nav-link" href="#basic">
-                                        <i className="tio-user-outlined nav-icon" /> Basic information
+                                        <i className="tio-user-outlined nav-icon" /> Thông tin cơ bản
                                     </a>
                                 </li>
                                 <li className="nav-item">
@@ -129,70 +128,9 @@ const Index = () => {
                 </div>
                 <div className="col-lg-9">
                     {/* Card */}
-                    <div className="card mb-3 mb-lg-5">
-                        {/* Profile Cover */}
-                        <div className="profile-cover">
-                            <div className="profile-cover-img-wrapper">
-                                <img id="profileCoverImg" className="profile-cover-img" src="assets\img\1920x400\img2.jpg" alt="Image Description" />
-                                {/* Custom File Cover */}
-                                <div className="profile-cover-content profile-cover-btn">
-                                    <div className="custom-file-btn">
-                                        <input type="file" className="js-file-attach custom-file-btn-input" id="profileCoverUplaoder" data-hs-file-attach-options="{
-                          &quot;textTarget&quot;: &quot;#profileCoverImg&quot;,
-                          &quot;mode&quot;: &quot;image&quot;,
-                          &quot;targetAttr&quot;: &quot;src&quot;,
-                          &quot;allowTypes&quot;: [&quot;.png&quot;, &quot;.jpeg&quot;, &quot;.jpg&quot;]
-                       }" />
-                                        <label className="custom-file-btn-label btn btn-sm btn-white" htmlFor="profileCoverUplaoder">
-                                            <i className="tio-add-photo mr-sm-1" />
-                                            <span className="d-none d-sm-inline-block">Update your header</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                {/* End Custom File Cover */}
-                            </div>
-                        </div>
-                        {/* End Profile Cover */}
-                        {/* Avatar */}
-                        <label className="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar" htmlFor="avatarUploader">
-                            <img id="avatarImg" className="avatar-img" src="assets\img\160x160\img6.jpg" alt="Image Description" />
-                            <input type="file" className="js-file-attach avatar-uploader-input" id="avatarUploader" data-hs-file-attach-options="{
-                    &quot;textTarget&quot;: &quot;#avatarImg&quot;,
-                    &quot;mode&quot;: &quot;image&quot;,
-                    &quot;targetAttr&quot;: &quot;src&quot;,
-                    &quot;allowTypes&quot;: [&quot;.png&quot;, &quot;.jpeg&quot;, &quot;.jpg&quot;]
-                 }" />
-                            <span className="avatar-uploader-trigger">
-            <i className="tio-edit avatar-uploader-icon shadow-soft" />
-          </span>
-                        </label>
-                        {/* End Avatar */}
-                        {/* Body */}
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-sm-5">
-                                    <span className="d-block font-size-sm mb-2">Who can see your profile photo? <i className="tio-help-outlined" data-toggle="tooltip" data-placement="top" title="Your visibility setting only applies to your profile photo. Your header image is always visible to anyone." /></span>
-                                    {/* Select */}
-                                    <div className="select2-custom">
-                                        <select className="js-select2-custom custom-select" size={1} style={{opacity: 0}} data-hs-select2-options="{
-                          &quot;minimumResultsForSearch&quot;: &quot;Infinity&quot;
-                        }">
-                                            <option value="privacy1" data-option-template="<span class=&quot;media&quot;><i class=&quot;tio-earth-east tio-lg text-body mr-2&quot; style=&quot;margin-top: .125rem;&quot;></i><span class=&quot;media-body&quot;><span class=&quot;d-block&quot;>Anyone</span><small class=&quot;select2-custom-hide&quot;>Visible to anyone who can view your content. Accessible by installed apps.</small></span></span>">Anyone</option>
-                                            <option value="privacy2" data-option-template="<span class=&quot;media&quot;><i class=&quot;tio-lock-outlined tio-lg text-body mr-2&quot; style=&quot;margin-top: .125rem;&quot;></i><span class=&quot;media-body&quot;><span class=&quot;d-block&quot;>Only you</span><small class=&quot;select2-custom-hide&quot;>Only visible to you.</small></span></span>">Only you</option>
-                                        </select>
-                                    </div>
-                                    {/* End Select */}
-                                </div>
-                            </div>
-                            {/* End Row */}
-                        </div>
-                        {/* End Body */}
-                    </div>
-                    {/* End Card */}
-                    {/* Card */}
                     <div id="basic" className="card mb-3 mb-lg-5">
                         <div className="card-header">
-                            <h2 className="card-title h4">Basic information</h2>
+                            <h2 className="card-title h4">Thông tin cơ bản</h2>
                         </div>
                         {/* Body */}
                         <div className="card-body">
@@ -343,12 +281,12 @@ const Index = () => {
                         </div>
                         {/* Body */}
                         <div className="card-body">
-                            <p>Your current email address is <span className="font-weight-bold">mark@example.com</span></p>
+                            <p>Email hiện tại của bạn là <span className="font-weight-bold">{currentMember.email}</span></p>
                             {/* Form */}
                             <form>
                                 {/* Form Group */}
                                 <div className="row form-group">
-                                    <label htmlFor="newEmailLabel" className="col-sm-3 col-form-label input-label">New email address</label>
+                                    <label htmlFor="newEmailLabel" className="col-sm-3 col-form-label input-label">Địa chỉ email mới</label>
                                     <div className="col-sm-9">
                                         <input type="email" className="form-control" name="newEmail" id="newEmailLabel" placeholder="Enter new email address" aria-label="Enter new email address" />
                                     </div>
@@ -365,64 +303,7 @@ const Index = () => {
                     {/* End Card */}
                     {/* Card */}
                     <div id="passwordSection" className="card mb-3 mb-lg-5">
-                        <div className="card-header">
-                            <h4 className="card-title">Change your password</h4>
-                        </div>
-                        {/* Body */}
-                        <div className="card-body">
-                            {/* Form */}
-                            <form id="changePasswordForm">
-                                {/* Form Group */}
-                                <div className="row form-group">
-                                    <label htmlFor="currentPasswordLabel" className="col-sm-3 col-form-label input-label">Current password</label>
-                                    <div className="col-sm-9">
-                                        <input type="password" className="form-control" name="currentPassword" id="currentPasswordLabel" placeholder="Enter current password" aria-label="Enter current password" />
-                                    </div>
-                                </div>
-                                {/* End Form Group */}
-                                {/* Form Group */}
-                                <div className="row form-group">
-                                    <label htmlFor="newPassword" className="col-sm-3 col-form-label input-label">New password</label>
-                                    <div className="col-sm-9">
-                                        <input type="password" className="js-pwstrength form-control" name="newPassword" id="newPassword" placeholder="Enter new password" aria-label="Enter new password" data-hs-pwstrength-options="{
-                         &quot;ui&quot;: {
-                           &quot;container&quot;: &quot;#changePasswordForm&quot;,
-                           &quot;viewports&quot;: {
-                             &quot;progress&quot;: &quot;#passwordStrengthProgress&quot;,
-                             &quot;verdict&quot;: &quot;#passwordStrengthVerdict&quot;
-                           }
-                         }
-                       }" />
-                                        <p id="passwordStrengthVerdict" className="form-text mb-2">
-                                        </p><div id="passwordStrengthProgress" />
-                                    </div>
-                                </div>
-                                {/* End Form Group */}
-                                {/* Form Group */}
-                                <div className="row form-group">
-                                    <label htmlFor="confirmNewPasswordLabel" className="col-sm-3 col-form-label input-label">Confirm new password</label>
-                                    <div className="col-sm-9">
-                                        <div className="mb-3">
-                                            <input type="password" className="form-control" name="confirmNewPassword" id="confirmNewPasswordLabel" placeholder="Confirm your new password" aria-label="Confirm your new password" />
-                                        </div>
-                                        <h5>Password requirements:</h5>
-                                        <p className="font-size-sm mb-2">Ensure that these requirements are met:</p>
-                                        <ul className="font-size-sm">
-                                            <li>Minimum 8 characters long - the more, the better</li>
-                                            <li>At least one lowercase character</li>
-                                            <li>At least one uppercase character</li>
-                                            <li>At least one number, symbol, or whitespace character</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                {/* End Form Group */}
-                                <div className="d-flex justify-content-end">
-                                    <button type="submit" className="btn btn-primary">Save Changes</button>
-                                </div>
-                            </form>
-                            {/* End Form */}
-                        </div>
-                        {/* End Body */}
+                        <ChangePassForm/>
                     </div>
                     {/* End Card */}
                     {/* Card */}

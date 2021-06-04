@@ -884,7 +884,7 @@ const Index = () => {
                 </div>
             </div>
             {/* End Activity */}
-            {/* Welcome Message Modal */}
+            {/* Welcome Message CustomModal */}
             <div className="modal fade" id="welcomeMessageModal" tabIndex={-1} role="dialog" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
@@ -936,8 +936,8 @@ const Index = () => {
                     </div>
                 </div>
             </div>
-            {/* End Welcome Message Modal */}
-            {/* Create a new user Modal */}
+            {/* End Welcome Message CustomModal */}
+            {/* Create a new user CustomModal */}
             <div className="modal fade" id="inviteUserModal" tabIndex={-1} role="dialog"
                  aria-labelledby="inviteUserModalTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
@@ -1207,7 +1207,7 @@ const Index = () => {
                     </form>
                 </div>
             </div>
-            {/* End Create a new user Modal */}
+            {/* End Create a new user CustomModal */}
             {/* ========== END SECONDARY CONTENTS ========== */}
         </div>
     );

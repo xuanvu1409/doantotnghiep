@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {titleCase} from "../../../../utils/helper";
@@ -8,13 +8,20 @@ import Info from "./components/info";
 import Gallery from "./components/gallery";
 import Avatar from "./components/avatar";
 import {getMember} from "../../../../components/Client/Sidebar/memberSlice";
+import {useParams} from "react-router-dom";
 
 const Index = () => {
+    const {profileId} = useParams();
     const dispatch = useDispatch();
+    const [isMe, setIsMe] = useState(false);
     const {currentMember} = useSelector(state => state.member);
 
     useEffect(() => {
-        dispatch(getMember(currentMember._id));
+        dispatch(getMember(currentMember._id)).then(res => {
+            if (res.payload.profileId === profileId) {
+                setIsMe(true);
+            }
+        });
     }, [dispatch])
 
     return (
@@ -73,9 +80,28 @@ const Index = () => {
                                     <Nav.Link eventKey="gallery">Bộ sưu tập</Nav.Link>
                                 </li>
                                 <li className="nav-item ml-auto">
-                                    <Link className="btn btn-sm btn-white mr-2" to={'/settings'}>
-                                        <i className="tio-settings mr-1"/> Cài đặt
-                                    </Link>
+                                    {
+                                        isMe
+                                            ?
+                                            <Link className="btn btn-sm btn-white mr-2" to={'/settings'}>
+                                                <i className="tio-settings mr-1"/> Cài đặt
+                                            </Link>
+                                            :
+                                            <div className="custom-control custom-checkbox-switch mr-2">
+                                                <input type="checkbox" id="connectionsListCheckbox7"
+                                                       className="custom-control-input custom-checkbox-switch-input"/>
+                                                <label className="custom-checkbox-switch-label btn-sm"
+                                                       htmlFor="connectionsListCheckbox7">
+                                                <span className="custom-checkbox-switch-default">
+                                                  <i className="tio-user-add mr-1"/> Connect
+                                                </span>
+                                                                                                <span className="custom-checkbox-switch-active">
+                                                  <i className="tio-done mr-1"/> Connected
+                                                </span>
+                                                </label>
+                                            </div>
+
+                                    }
                                     <a className="btn btn-icon btn-sm btn-white mr-2" href="#">
                                         <i className="tio-format-points mr-1"/>
                                     </a>

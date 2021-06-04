@@ -19,6 +19,7 @@ router.post('/login', authController.login);
 router.post('/profile/upload-image', uploadMultiple, profileController.uploadImage);
 router.get('/profile/get-gallery/:_id', auth, profileController.getGallery);
 router.delete('/profile/remove-image/:_id', auth, profileController.removeImageById);
+router.get('/profile/set-avatar/:_id', auth, profileController.setAvatarbyId);
 router.get('/', homeController.get);
 
 module.exports = router;

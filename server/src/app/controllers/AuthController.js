@@ -23,7 +23,7 @@ class AuthController {
                     srcImage: 'https://res.cloudinary.com/xuanvu/image/upload/v1622666322/placeholder_rltzqh.png'
                 }
             })
-            const token = await jwt.sign({email: member.email, id: member._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
+            const token = await jwt.sign({profileId: member.profileId, id: member._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
             return res.status(200).json({
                 message: "Đăng ký tài khoản thành công",
                 member,
@@ -43,7 +43,7 @@ class AuthController {
             if (!oldMember) return res.status(401).json({message: "Email không tồn tại"});
             const isPasswordCorrect = await bcrypt.compare(password, oldMember.password);
             if (!isPasswordCorrect) return res.status(400).json({message: "Mật khẩu không hợp lệ"});
-            const token = await jwt.sign({email: oldMember.email, id: oldMember._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
+            const token = await jwt.sign({profileId: oldMember.profileId, id: oldMember._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
             return res.status(200).json({
                 member: oldMember,
                 message: "Đăng nhập thành công",

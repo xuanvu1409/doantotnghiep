@@ -7,8 +7,12 @@ import WorkAndEducationForm from "./workAndEducationForm";
 import LocationForm from "./locationForm";
 import InterestsForm from "./interestsForm";
 import LanguageForm from "./languageForm";
+import {Link} from "react-router-dom";
+import {current} from "@reduxjs/toolkit";
+import {useSelector} from "react-redux";
 
 const Info = () => {
+    const {currentMember} = useSelector(state => state.member);
 
     return (
         <div className="row">
@@ -31,50 +35,29 @@ const Info = () => {
                 <div className="card mb-3 mb-lg-5">
                     {/* Header */}
                     <div className="card-header">
-                        <h2 className="card-header-title h5">Thông tin cá nhân</h2>
-                        <button className="btn btn-sm btn-white"><i className="tio-edit"></i></button>
+                        <h2 className="card-header-title h5">Thông tin liên hệ</h2>
+                        <Link to={'/settings'} className="btn btn-sm btn-white"><i className="tio-edit"></i></Link>
                     </div>
                     {/* End Header */}
                     {/* Body */}
                     <div className="card-body">
                         <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3">
-                            <li className="py-0">
-                                <small className="card-subtitle">About</small>
-                            </li>
-                            <li>
-                                <i className="tio-user-outlined nav-icon"/>
-                                Mark Williams
-                            </li>
-                            <li>
-                                <i className="tio-briefcase-outlined nav-icon"/>
-                                No department title
-                            </li>
-                            <li>
-                                <i className="tio-city nav-icon"/>
-                                Pixeel Ltd.
-                            </li>
-                            <li className="pt-2 pb-0">
-                                <small className="card-subtitle">Contacts</small>
-                            </li>
-                            <li>
-                                <i className="tio-online nav-icon"/>
-                                mark@example.com
-                            </li>
-                            <li>
-                                <i className="tio-android-phone-vs nav-icon"/>
-                                +1 (555) 752-01-10
-                            </li>
-                            <li className="pt-2 pb-0">
-                                <small className="card-subtitle">Teams</small>
-                            </li>
-                            <li className="font-size-sm text-body">
-                                <i className="tio-group-equal nav-icon"/>
-                                You are not a member of any teams
-                            </li>
-                            <li className="font-size-sm text-body">
-                                <i className="tio-briefcase-outlined nav-icon"/>
-                                You are not working on any projects
-                            </li>
+                            {
+                                currentMember.mobile
+                                &&
+                                <li>
+                                    <i className="tio-android-phone nav-icon mr-2"/>
+                                    {currentMember.mobile}
+                                </li>
+                            }
+                            {
+                                currentMember.email
+                                &&
+                                <li>
+                                    <i className="tio-email-outlined nav-icon mr-2"/>
+                                    {currentMember.email}
+                                </li>
+                            }
                         </ul>
                     </div>
                     {/* End Body */}

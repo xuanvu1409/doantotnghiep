@@ -274,7 +274,7 @@ const Index = () => {
                                     {/* End Form Group */}
                                     <div className="form-group">
                                         <label className="input-label" htmlFor="signupSrPassword">Giới tính</label>
-                                        {/* Input Group */}
+                                        {/* InputFeild Group */}
                                         <div className="input-group input-group-md-down-break">
                                             {/* Custom Radio */}
                                             <div className="form-control form-control-lg">
@@ -325,7 +325,7 @@ const Index = () => {
                                             {errors.genderId &&
                                             <div className="invalid-feedback">Vui lòng chọn giới tính</div>}
                                         </div>
-                                        {/* End Input Group */}
+                                        {/* End InputFeild Group */}
                                     </div>
 
                                     {/* Form Group */}
@@ -420,7 +420,7 @@ const Index = () => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            {/* Input Group */}
+                            {/* InputFeild Group */}
                             <div className="input-group input-group-down-break card-body-height">
                                 {
                                     listGender.map((e, i) => (
@@ -439,7 +439,7 @@ const Index = () => {
                                     ))
                                 }
                             </div>
-                            {/* End Input Group */}
+                            {/* End InputFeild Group */}
 
                         </div>
                     </div>

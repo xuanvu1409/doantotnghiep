@@ -10,3 +10,7 @@
   min-height: 100vh;
   background-color: #F9FAFC;
 }
+
+.border-popup {
+  border-radius: .75rem !important;
+}

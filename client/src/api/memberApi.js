@@ -47,3 +47,7 @@ export const getGalleryById = async (_id) => {
 export const removeImageById = async (_id) => {
     return await axios.delete('/profile/remove-image/' + _id);
 }
+
+export const setAvatarById = async (_id) => {
+    return await axios.get('profile/set-avatar/' + _id);
+}
