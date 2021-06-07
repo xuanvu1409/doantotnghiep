@@ -1,10 +1,11 @@
 const JobTitle = require('../models/jobTitle');
 const Member = require('../models/member');
 const Interests = require('../models/interests');
-const Language = require('../models/languages');
-const Image = require('../models/images');
+const Language = require('../models/language');
+const Image = require('../models/image');
 const cloudinary = require('../../config/cloudinary');
 const bcrypt = require("bcrypt");
+const Contact = require('../models/contact');
 
 class ProfileController {
 
@@ -268,6 +269,86 @@ class ProfileController {
             })
         } catch (e) {
             console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    updateBasicInfo = async (req, res) => {
+        const {_id} = req.params;
+        const {name, dateOfBirth, genderId} = req.body;
+        try {
+            const member = await Member.findById(_id);
+            if (!member) return res.status(400).json({message: "Thành viên không tồn tại"});
+            member.name = name;
+            member.dateOfBirth = dateOfBirth;
+            member.genderId = genderId;
+            member.save(err => {
+                if (!err) return res.json({message: "Cập nhật thành công", _id: member._id});
+            })
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    updateContact = async (req, res) => {
+        const {_id} = req.params;
+        try {
+            await Contact.deleteMany({memberId: _id}, (err, docs) => {
+                if (err) {
+                    return res.status(400).json({message: "Lỗi xóa liên hệ"});
+                } else {
+                    Contact.create(req.body, (err, docs) => {
+                        if (err) {
+                            return res.status(400).json({message: "Lỗi tạo liên hệ"});
+                        } else {
+                            return res.json({message: "Cập nhật thành công"});
+                        }
+                    })
+                }
+            });
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    getContactByMemberId = async (req, res) => {
+        const {memberId} = req.params;
+        try {
+            await Contact.find({memberId}, (err, docs) => {
+                return res.json(docs)
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    changeStatusContact = async (req, res) => {
+        const {_id} = req.params;
+        const  {isHide} = req.body;
+        try {
+            const contact = await Contact.findById(_id);
+            if (!contact) return res.status(404).json({message: "Liên hệ không tồn tại"});
+            contact.isHide = isHide;
+            contact.save(err => {
+                if (!err) return res.json({message: "Cập nhật thành công"});
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    getContactNotHidden = async (req, res) => {
+        const {memberId} = req.params;
+        try {
+            await Contact.find({memberId, isHide: false}, (err, docs) => {
+                if (!err) return res.json(docs);
+            })
+        } catch (e) {
+            console.log(e)
             res.status(500).json({message: "Đã xảy ra sự cố"});
         }
     }

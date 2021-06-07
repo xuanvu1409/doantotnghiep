@@ -55,3 +55,19 @@ export const setAvatarById = async (_id) => {
 export const changePass = async (_id, formData) => {
     return await axios.put('/profile/change-pass/' + _id, formData);
 }
+
+export const updateBasicInfo = async (_id, formData) => {
+    return await axios.put('/profile/update-basic-info/' + _id, formData);
+}
+
+export const updateContact = async (_id, formData) => {
+    return await axios.put('/profile/update-contact/' + _id, formData);
+}
+
+export const changeStatusContact = async (_id, formData) => {
+    return await axios.put('/profile/change-status-contact/' + _id, formData);
+}
+
+export const getContactNotHidden = async (memberId) => {
+    return await axios.get('/profile/get-contact-not-hidden/' + memberId);
+}

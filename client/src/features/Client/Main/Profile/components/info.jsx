@@ -10,6 +10,7 @@ import LanguageForm from "./languageForm";
 import {Link} from "react-router-dom";
 import {current} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
+import Contact from "./contact";
 
 const Info = () => {
     const {currentMember} = useSelector(state => state.member);
@@ -32,36 +33,7 @@ const Info = () => {
                 {/*</div>*/}
                 {/* End Card */}
                 {/* Card */}
-                <div className="card mb-3 mb-lg-5">
-                    {/* Header */}
-                    <div className="card-header">
-                        <h2 className="card-header-title h5">Thông tin liên hệ</h2>
-                        <Link to={'/settings'} className="btn btn-sm btn-white"><i className="tio-edit"></i></Link>
-                    </div>
-                    {/* End Header */}
-                    {/* Body */}
-                    <div className="card-body">
-                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3">
-                            {
-                                currentMember.mobile
-                                &&
-                                <li>
-                                    <i className="tio-android-phone nav-icon mr-2"/>
-                                    {currentMember.mobile}
-                                </li>
-                            }
-                            {
-                                currentMember.email
-                                &&
-                                <li>
-                                    <i className="tio-email-outlined nav-icon mr-2"/>
-                                    {currentMember.email}
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    {/* End Body */}
-                </div>
+                <Contact memberId={currentMember._id}/>
                 {/* End Card */}
                 {/* Card */}
                 <div className="card card-lg mb-3 mb-lg-5">

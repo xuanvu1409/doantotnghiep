@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Modal, Spinner} from "react-bootstrap";
-import {useDropzone} from 'react-dropzone';
 import {useForm} from "react-hook-form";
 import {uploadAvatar} from "../../../../../api/memberApi";
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 import {toast} from "react-toastify";
 import Dropzone from "../../../../../components/Share/dropzone";
+import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
 
 
 function MyVerticallyCenteredModal(props) {
@@ -56,20 +56,7 @@ function MyVerticallyCenteredModal(props) {
                     <Dropzone files={files} setFiles={setFiles}/>
                 </Modal.Body>
                 <Modal.Footer>
-                    {
-                        loading
-                            ?
-                            <button type={"button"} className={"btn btn-primary"} disabled={true}>
-                                <Spinner
-                                    as="span"
-                                    animation="grow"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                />&nbsp;Xin chờ...</button>
-                            :
-                             (files.length > 0 && <button type={"submit"} className={"btn btn-primary"}>Lưu</button>)
-                    }
+                    <ButtonSubmit className={'mr-2'} loading={loading}/>
                     <button type={"button"} onClick={props.onHide} className={"btn btn-danger"}>Đóng</button>
                 </Modal.Footer>
             </form>

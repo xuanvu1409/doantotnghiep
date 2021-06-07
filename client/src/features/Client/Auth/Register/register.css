@@ -12,7 +12,7 @@
     max-height: 70vh;
 }
 
-.register-page .invalid-feedback {
+.invalid-feedback {
     display: unset;
 }
 
@@ -36,10 +36,10 @@
     border-color: rgba(55,125,255,.4);
 }
 
-.register-page .valid-dob .form-group {
+.valid-dob .form-group {
     margin-bottom: unset;
 }
 
-.register-page .invalid-dob {
+.invalid-dob {
     margin-bottom: 1.5rem;
 }

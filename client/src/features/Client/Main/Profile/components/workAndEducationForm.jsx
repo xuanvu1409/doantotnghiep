@@ -6,23 +6,25 @@ import {updateWorkAndEducation} from "../../../../../api/memberApi";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from 'react-toastify';
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
+import useToggle from '../../../../../hooks/useToggle';
+import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
 
 const WorkAndEducationForm = () => {
     const {currentMember} = useSelector(state => state.member);
-    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isFormVisible, setIsFormVisible] = useToggle();
     const [jobTitle, setJobTitle] = useState();
     const {control, register, setValue, handleSubmit, formState: {errors}} = useForm();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const getAllJobTitle = async () => {
-            await getJobTitle().then(res => {
+        if (isFormVisible) {
+            getJobTitle().then(res => {
                 let jobTitle = res.data.map(e => ({label: e.name, value: e.name}))
                 setJobTitle(jobTitle);
             })
         }
-        getAllJobTitle();
-    }, [])
+    }, [isFormVisible === true])
 
     const toggleForm = () => {
         if (isFormVisible) {
@@ -45,11 +47,12 @@ const WorkAndEducationForm = () => {
                 jobTitle: data.jobTitle === undefined ? "" : data.jobTitle.value
             }
         }
-
+        setLoading(true);
         updateWorkAndEducation(formData).then(res => {
             dispatch(getMember(res.data._id));
             toast.success(res.data.message);
             setIsFormVisible(false);
+            setLoading(false);
         }).catch(e => {
             console.log(e)
         })
@@ -116,14 +119,14 @@ const WorkAndEducationForm = () => {
                                 <div className="invalid-feedback">{errors.education.message}</div>}
                             </div>
                             <div className="float-right">
-                                <input type="submit" className="btn btn-primary mr-2" value={"Lưu"}/>
+                                <ButtonSubmit loading={loading} className={'mr-2'}/>
                                 <button type="button" onClick={toggleForm}
                                         className="btn btn-light">Hủy
                                 </button>
                             </div>
                         </form>
                         :
-                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3">
+                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
                             {
                                 currentMember.workAndEducation && (currentMember.workAndEducation.jobTitle || currentMember.workAndEducation.company || currentMember.workAndEducation.education)
                                     ?

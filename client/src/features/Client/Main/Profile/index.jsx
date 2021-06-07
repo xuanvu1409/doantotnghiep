@@ -67,10 +67,7 @@ const Index = () => {
                 </div>
                 {/* End Profile Header */}
                 <Tab.Container id="left-tabs-example" defaultActiveKey="info">
-                    <div className="js-nav-scroller hs-nav-scroller-horizontal mb-5" data-hs-nav-scroller-options="{
-                         &quot;type&quot;: &quot;horizontal&quot;,
-                         &quot;delay&quot;: 20
-                       }">
+                    <div className="hs-nav-scroller-horizontal mb-5">
                         <Nav variant="pills" className="flex-column">
                             <ul className="nav nav-tabs align-items-center">
                                 <li className="nav-item">
@@ -95,7 +92,7 @@ const Index = () => {
                                                 <span className="custom-checkbox-switch-default">
                                                   <i className="tio-user-add mr-1"/> Connect
                                                 </span>
-                                                                                                <span className="custom-checkbox-switch-active">
+                                                    <span className="custom-checkbox-switch-active">
                                                   <i className="tio-done mr-1"/> Connected
                                                 </span>
                                                 </label>
@@ -108,11 +105,7 @@ const Index = () => {
                                     {/* Unfold */}
                                     <div className="hs-unfold hs-nav-scroller-unfold">
                                         <a className="js-hs-unfold-invoker btn btn-icon btn-sm btn-white"
-                                           href="javascript:;"
-                                           data-hs-unfold-options="{
-                   &quot;target&quot;: &quot;#profileDropdown&quot;,
-                   &quot;type&quot;: &quot;css-animation&quot;
-                 }">
+                                           href="javascript:;">
                                             <i className="tio-more-vertical"/>
                                         </a>
                                         <div id="profileDropdown"

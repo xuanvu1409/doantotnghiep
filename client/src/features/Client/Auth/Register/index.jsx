@@ -1,46 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import "./register.css";
-import {togglePassword, toTimestamp} from "../../../../utils/helper";
+import {togglePassword} from "../../../../utils/helper";
 import {useForm, Controller} from "react-hook-form";
 import Select from 'react-select';
 import {getLocation} from "../../../../api/locationApi";
-import {getGender} from "../../../../api/genderApi";
 import {registerAction} from "./registerAction";
 import {useDispatch, useSelector} from "react-redux";
-import {Spinner} from "react-bootstrap";
-
-const day = () => {
-    const items = [];
-    for (let i = 1; i <= 31; i++) {
-        items.push({label: i, value: i})
-    }
-    return items;
-}
-
-const month = () => {
-    const items = [];
-    for (let i = 1; i <= 12; i++) {
-        items.push({label: i, value: i})
-    }
-    return items;
-}
-
-const year = () => {
-    const items = [];
-    const nowYear = new Date().getFullYear();
-    for (let i = nowYear - 15; i >= nowYear - 80; i--) {
-        items.push({label: i, value: i})
-    }
-    return items;
-}
+import {Button, Spinner} from "react-bootstrap";
+import DateOfBirth from "../../../../components/Share/dateOfBirth";
+import Gender from "../../../../components/Share/gender";
+import moment from "moment";
 
 const Index = () => {
     const registerState = useSelector(state => state.register);
     const dispatch = useDispatch();
     const [listLocation, setListLocation] = useState([]);
-    const [listGender, setListGender] = useState([]);
-    const {register, setValue, setError, handleSubmit, control, formState: {errors, isSubmitting}} = useForm();
+    const form = useForm();
+    const {register, setError, handleSubmit, control, formState: {errors, isSubmitting}} = form;
 
     useEffect(() => {
         document.getElementById("root").style.width = "100%";
@@ -56,23 +33,11 @@ const Index = () => {
         location();
     }, [])
 
-
-    const gender = async () => {
-        await window.$(".modal").modal("show");
-        const {data} = await getGender();
-        setListGender(data);
-    }
-
-    const setGender = async (e) => {
-        await window.$(".modal").modal("hide");
-        setValue("genderId", e.target.value);
-    }
-
     const onSubmit = async (data) => {
         const formData = {
             ...data,
             locationId: data.location.value,
-            dateOfBirth: Number(toTimestamp(data.year.value, data.month.value, data.day.value))
+            dateOfBirth: moment(data.year.value + '-' + data.month.value + '-' + data.day.value).format()
         }
         await dispatch(registerAction(formData));
     }
@@ -95,8 +60,8 @@ const Index = () => {
                         <img className="w-100" src="assets\svg\logos\logo.svg" alt="Image Description"
                              style={{minWidth: '7rem', maxWidth: '7rem'}}/>
                     </a>
-                    {/* Select */}
-                    {/* End Select */}
+                    {/* SelectFeild */}
+                    {/* End SelectFeild */}
                 </div>
             </header>
             {/* ========== END HEADER ========== */}
@@ -115,8 +80,8 @@ const Index = () => {
                                         <img className="w-100" src="assets\svg\logos\logo.svg" alt="Image Description"
                                              style={{minWidth: '7rem', maxWidth: '7rem'}}/>
                                     </a>
-                                    {/* Select */}
-                                    {/* End Select */}
+                                    {/* SelectFeild */}
+                                    {/* End SelectFeild */}
                                 </div>
                             </div>
                             {/* End Logo & Language */}
@@ -171,7 +136,7 @@ const Index = () => {
                                         <p>Bạn đã có tài khoản? <Link to="/login">Đăng nhập tại đây</Link></p>
                                     </div>
                                     {/* Form Group */}
-                                    <div className="js-form-message form-group">
+                                    <div className="form-group">
                                         <label className="input-label" htmlFor="signupSrEmail">Tên</label>
                                         <input type="text"
                                                className={`form-control form-control-lg ${errors.name && "is-invalid"}`} {...register("name", {
@@ -188,71 +153,10 @@ const Index = () => {
                                     {/* End Form Group */}
                                     <label className="input-label" htmlFor="fullNameSrEmail">Sinh nhật</label>
                                     {/* Form Group */}
-                                    <div className="form-row valid-dob">
-                                        <div className="col-sm-4">
-                                            <div className="js-form-message form-group" style={{marginBottom: 'unset'}}>
-                                                <Controller
-                                                    name="day"
-                                                    rules={{required: true}}
-                                                    render={({field}) => (
-                                                        <Select
-                                                            placeholder={<div>Ngày</div>}
-                                                            {...field}
-                                                            options={day()}
-                                                            components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                                                        />
-                                                    )}
-                                                    control={control}
-                                                    defaultValue=""
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-4">
-                                            <div className="js-form-message form-group">
-                                                <Controller
-                                                    name="month"
-                                                    rules={{required: true}}
-                                                    render={({field}) => (
-                                                        <Select
-                                                            placeholder={<div>Tháng</div>}
-                                                            {...field}
-                                                            options={month()}
-                                                            components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                                                        />
-                                                    )}
-                                                    control={control}
-                                                    defaultValue=""
-                                                />
-
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-4">
-                                            <div className="js-form-message form-group">
-                                                <Controller
-                                                    name="year"
-                                                    rules={{required: true}}
-                                                    render={({field}) => (
-                                                        <Select
-                                                            placeholder={<div>Năm</div>}
-                                                            {...field}
-                                                            options={year()}
-                                                            components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                                                        />
-                                                    )}
-                                                    control={control}
-                                                    defaultValue=""
-                                                />
-
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-12 invalid-dob">
-                                            {(errors.day || errors.month || errors.year) &&
-                                            <div className="invalid-feedback">Vui lòng chọn ngày sinh của bạn</div>}
-                                        </div>
-                                    </div>
+                                    <DateOfBirth form={form} />
                                     {/* End Form Group */}
                                     {/* Form Group */}
-                                    <div className="js-form-message form-group">
+                                    <div className="form-group">
                                         <label className="input-label" htmlFor="signupSrEmail">Tỉnh, thành phố</label>
                                         <Controller
                                             name="location"
@@ -275,61 +179,12 @@ const Index = () => {
                                     <div className="form-group">
                                         <label className="input-label" htmlFor="signupSrPassword">Giới tính</label>
                                         {/* InputFeild Group */}
-                                        <div className="input-group input-group-md-down-break">
-                                            {/* Custom Radio */}
-                                            <div className="form-control form-control-lg">
-                                                <div className="custom-control custom-radio">
-                                                    <input type="radio" className="custom-control-input"
-                                                           value={1}
-                                                           {...register("genderId", {
-                                                               required: true
-                                                           })}
-                                                           id="genderTypeRadioEg1"/>
-                                                    <label className="custom-control-label"
-                                                           htmlFor="genderTypeRadioEg1"><i
-                                                        className="tio-face-male"></i> Nam</label>
-                                                </div>
-                                            </div>
-                                            {/* End Custom Radio */}
-                                            {/* Custom Radio */}
-                                            <div className="form-control form-control-lg">
-                                                <div className="custom-control custom-radio">
-                                                    <input type="radio" className="custom-control-input"
-                                                           value={2}
-                                                           {...register("genderId", {
-                                                               required: true
-                                                           })}
-                                                           id="genderTypeRadioEg2"
-                                                    />
-                                                    <label className="custom-control-label"
-                                                           htmlFor="genderTypeRadioEg2"><i
-                                                        className="tio-face-female"></i> Nữ</label>
-                                                </div>
-                                            </div>
-                                            {/* End Custom Radio */}
-                                            {/* Custom Radio */}
-                                            <div className="form-control form-control-lg">
-                                                <div className="custom-control custom-radio">
-                                                    <input type="radio" className="custom-control-input"
-                                                           value={3}
-                                                           {...register("genderId", {
-                                                               required: true
-                                                           })} id="genderTypeRadioEg3"/>
-                                                    <label className="custom-control-label" htmlFor="genderTypeRadioEg3"
-                                                        // data-toggle="modal"
-                                                        // data-target=".bd-example-modal-sm"
-                                                           onClick={gender}>Khác</label>
-                                                </div>
-                                            </div>
-                                            {/* End Custom Radio */}
-                                            {errors.genderId &&
-                                            <div className="invalid-feedback">Vui lòng chọn giới tính</div>}
-                                        </div>
+                                        <Gender form={form} inputClass={'form-control form-control-lg'}/>
                                         {/* End InputFeild Group */}
                                     </div>
 
                                     {/* Form Group */}
-                                    <div className="js-form-message form-group">
+                                    <div className="form-group">
                                         <label className="input-label" htmlFor="signupSrPassword">Email</label>
                                         <div className="input-group input-group-merge">
                                             <input type="text" {...register("email", {
@@ -347,7 +202,7 @@ const Index = () => {
                                         </div>
                                     </div>
                                     {/* Form Group */}
-                                    <div className="js-form-message form-group">
+                                    <div className="form-group">
                                         <label className="input-label"
                                                htmlFor="signupSrConfirmPassword">Mật khẩu</label>
                                         <div className="input-group input-group-merge">
@@ -407,44 +262,6 @@ const Index = () => {
                 {/* End Content */}
             </main>
             {/* ========== END MAIN CONTENT ========== */}
-            <div className="modal fade bd-example-modal-sm" tabIndex="-1" role="dialog"
-                 aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-sm" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title h4 text-center" id="mySmallModalLabel">Chọn giới tính của
-                                bạn</h5>
-                            <button type="button" className="btn btn-xs btn-icon btn-ghost-secondary btn-close"
-                                    data-dismiss="modal" aria-label="Close">
-                                <i className="tio-clear tio-lg"></i>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            {/* InputFeild Group */}
-                            <div className="input-group input-group-down-break card-body-height">
-                                {
-                                    listGender.map((e, i) => (
-                                        <div className="form-control form-control-lg" key={i}>
-                                            <div className="custom-control custom-radio">
-                                                <input type="radio" className="custom-control-input"
-                                                       value={e._id}
-                                                       onChange={e => setGender(e)}
-                                                       {...register("genderId")}
-                                                       id={"genderTypeRadioVerEg" + i}
-                                                />
-                                                <label className="custom-control-label"
-                                                       htmlFor={"genderTypeRadioVerEg" + i}>{e.name}</label>
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                            {/* End InputFeild Group */}
-
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
 

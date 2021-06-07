@@ -1,33 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import InputFeild from "../../../../../components/Share/inputFeild";
 import {changePass} from "../../../../../api/memberApi";
 import {useSelector} from "react-redux";
 import {toast} from "react-toastify";
+import useToggle from "../../../../../hooks/useToggle";
 
 const ChangePassForm = () => {
     const {currentMember} = useSelector(state => state.member);
     const form = useForm();
-    const {handleSubmit, setError} = form;
-    const [isFormVisible, setIsFormVisible] = useState(false);
-
-    const toggleForm = () => {
-        if (isFormVisible) {
-            setIsFormVisible(false)
-        } else {
-            setIsFormVisible(true);
-        }
-    }
+    const {handleSubmit, setError, reset} = form;
+    const [isFormVisible, setIsFormVisible] = useToggle();
 
     const onSubmit = async (data) => {
         if (data.newPassword !== data.confirmPassword) {
             setError('confirmPassword', {message: "Mật khẩu không khớp"})
         } else {
             await changePass(currentMember._id, data).then(res => {
-                console.log(res)
                 toast.success(res.data.message);
-            }).catch(e => {
-                console.log(e)
+                reset();
+                setIsFormVisible();
+            }).catch((e) => {
+                setError('currentPassword', {message: e.response.data.message})
             })
         }
     }
@@ -37,7 +31,7 @@ const ChangePassForm = () => {
             <div className="card-header">
                 <h4 className="card-title">Đổi mật khẩu</h4>
 
-                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={toggleForm}>
+                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
                     <i className="tio-edit"/>
                 </button>
             </div>
@@ -74,13 +68,13 @@ const ChangePassForm = () => {
                                         placeholder={"Nhập lại mật khẩu mới"}/>
                             <div className="d-flex justify-content-end">
                                 <button type="submit" className="btn btn-primary mr-2">Lưu</button>
-                                <button type="button" onClick={toggleForm}
+                                <button type="button" onClick={setIsFormVisible}
                                         className="btn btn-light">Hủy
                                 </button>
                             </div>
                         </form>
                         :
-                        <div onClick={toggleForm}>
+                        <div onClick={setIsFormVisible} className={"cursor-pointer"}>
                             <InputFeild name={""} type={"password"} label={"Mật khẩu hiện tại"}
                                         form={form}
                                         disable={true}

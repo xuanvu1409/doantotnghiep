@@ -1,8 +1,6 @@
 const Location = require('../models/location');
 const Gender = require('../models/gender');
-const JobTitle = require('../models/jobTitle');
-const Interests = require('../models/interests');
-const Language = require('../models/languages');
+const Contact = require('../models/contact');
 
 class HomeController {
 
@@ -20,37 +18,6 @@ class HomeController {
         await Gender.find({}, (err, docs) => {
             res.json(docs);
         })
-    }
-
-    addJobTitle = async (req, res) => {
-        const {job} = req.body;
-        try {
-            await JobTitle.create(job, (err, docs) => {
-                res.send(docs);
-            })
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    addInterests = async (req, res) => {
-        try {
-            await Interests.create(req.body, (err, docs) => {
-                res.send(docs);
-            })
-        } catch (e) {
-            console.log(e)
-            }
-    }
-
-    addLanguages = async (req, res) => {
-        try {
-            await Language.create(req.body, (err, docs) => {
-                res.send(docs);
-            })
-        } catch (e) {
-            console.log(e)
-        }
     }
 }
 

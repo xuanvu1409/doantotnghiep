@@ -6,45 +6,37 @@ import Select from "react-select";
 import {updateLocation} from "../../../../../api/memberApi";
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 import {toast} from "react-toastify";
+import useToggle from '../../../../../hooks/useToggle';
+import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
 
 const LocationForm = () => {
     const dispatch = useDispatch();
-    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isFormVisible, setIsFormVisible] = useToggle();
     const [location, setLocation] = useState([]);
     const {currentMember} = useSelector(state => state.member);
-    const {control, setValue, handleSubmit} = useForm();
+    const {control, handleSubmit} = useForm();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const getAllLocation = async () => {
-            await getLocation().then(res => {
-                let location = res.data.map(e => ({label: e.name, value: e._id}));
-                setLocation(location);
-            })
-        }
-        getAllLocation();
-    }, [])
-
-    const toggleForm = () => {
         if (isFormVisible) {
-            setIsFormVisible(false)
-        } else {
-            setIsFormVisible(true);
-            getLocation().then(res => {
+             getLocation().then(res => {
                 let location = res.data.map(e => ({label: e.name, value: e._id}));
                 setLocation(location);
             })
         }
-    }
+    }, [isFormVisible === true])
 
     const onSubmit = (data) => {
         const formData = {
             _id: currentMember._id,
             locationId: data.location.value
         }
+        setLoading(true);
         updateLocation(formData).then(res => {
             dispatch(getMember(res.data._id));
             toast.success(res.data.message);
             setIsFormVisible(false);
+            setLoading(false);
         }).catch(e => {
             console.log(e)
         })
@@ -56,7 +48,7 @@ const LocationForm = () => {
             <div className="card-header">
                 <h2 className="card-header-title h5">Vị trí</h2>
 
-                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={toggleForm}>
+                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
                     <i className="tio-edit"/>
                 </button>
             </div>
@@ -83,14 +75,14 @@ const LocationForm = () => {
                                 />
                             </div>
                             <div className="float-right">
-                                <input type="submit" className="btn btn-primary mr-2" value={"Lưu"}/>
-                                <button type="button" onClick={toggleForm}
+                                <ButtonSubmit className={'m-2'} loading={loading}/>
+                                <button type="button" onClick={setIsFormVisible}
                                         className="btn btn-light">Hủy
                                 </button>
                             </div>
                         </form>
                         :
-                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3">
+                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
                             {
                                 currentMember.locationId
                                     ?

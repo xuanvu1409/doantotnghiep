@@ -21,6 +21,11 @@ router.get('/profile/get-gallery/:_id', auth, profileController.getGallery);
 router.delete('/profile/remove-image/:_id', auth, profileController.removeImageById);
 router.get('/profile/set-avatar/:_id', auth, profileController.setAvatarbyId);
 router.put('/profile/change-pass/:_id', auth, profileController.changePass);
+router.put('/profile/update-basic-info/:_id', auth, profileController.updateBasicInfo);
+router.put('/profile/update-contact/:_id', auth, profileController.updateContact);
+router.put('/profile/change-status-contact/:_id', auth, profileController.changeStatusContact);
+router.put('/profile/get-contact/:_id', auth, profileController.changeStatusContact);
+router.get('/profile/get-contact-not-hidden/:memberId', auth, profileController.getContactNotHidden);
 router.get('/', homeController.get);
 
 module.exports = router;

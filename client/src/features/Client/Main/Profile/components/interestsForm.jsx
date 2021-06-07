@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
@@ -7,36 +7,38 @@ import {getInterests} from "../../../../../api/interestsApi";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import {updateInterests} from "../../../../../api/memberApi";
+import useToggle from '../../../../../hooks/useToggle';
+import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
 
 const animatedComponents = makeAnimated();
 const InterestsForm = () => {
     const dispatch = useDispatch();
-    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isFormVisible, setIsFormVisible] = useToggle();
     const [interests, setInterests] = useState([]);
     const [valueForm, setValueForm] = useState([]);
     const {currentMember} = useSelector(state => state.member);
     const {control, setValue, handleSubmit} = useForm();
+    const [loading, setLoading] = useState(false);
 
-    const toggleForm = () => {
+    useEffect(() => {
         if (isFormVisible) {
-            setIsFormVisible(false)
-        } else {
-            setIsFormVisible(true);
             getInterests().then(res => {
                 setInterests(res.data.map(e => ({label: e.name, value: e._id})));
             })
         }
-    }
+    }, [isFormVisible === true])
 
     const onSubmit = (data) => {
         const formData = {
             _id: currentMember._id,
             interests: valueForm
         }
+        setLoading(true);
         updateInterests(formData).then(res => {
             toast.success(res.data.message);
             setIsFormVisible(false);
             dispatch(getMember(res.data._id));
+            setLoading(false);
         })
     }
 
@@ -51,7 +53,7 @@ const InterestsForm = () => {
             <div className="card-header">
                 <h2 className="card-header-title h5">Sở thích</h2>
 
-                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={toggleForm}>
+                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
                     <i className="tio-edit"/>
                 </button>
             </div>
@@ -81,14 +83,14 @@ const InterestsForm = () => {
                                 />
                             </div>
                             <div className="float-right">
-                                <input type="submit" className="btn btn-primary mr-2" value={"Lưu"}/>
-                                <button type="button" onClick={toggleForm}
+                                <ButtonSubmit className={'mr-2'} loading={loading}/>
+                                <button type="button" onClick={setIsFormVisible}
                                         className="btn btn-light">Hủy
                                 </button>
                             </div>
                         </form>
                         :
-                        <ul className="list-box text-dark mb-3">
+                        <ul className="list-box text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
                             {
                                 currentMember.interestsId
                                 &&

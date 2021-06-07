@@ -11,19 +11,6 @@ export const togglePassword = () => {
     }
 }
 
-export const toTimestamp = (year, month, day) => {
-    const datum = new Date(Date.UTC(year, month - 1, day));
-    return datum.getTime() / 1000;
-}
-
-export const toDate = (strTimestamp) => {
-    const date = new Date(strTimestamp * 1000);
-    const hours = date.getHours();
-    const minutes = "0" + date.getMinutes();
-    const seconds = "0" + date.getSeconds();
-    return hours + '/' + minutes.substr(-2) + '/' + seconds.substr(-2);
-}
-
 export const getImage = (urlImg) => {
     return process.env.REACT_APP_IMAGE_URL + urlImg;
 }

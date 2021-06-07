@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const genderSchema =  new Schema({
     _id: Number,
-    name: String,
+    name: {type:String, required: true},
 }, {
     versionKey: false
 })
