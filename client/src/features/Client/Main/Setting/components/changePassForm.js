@@ -7,7 +7,6 @@ import {toast} from "react-toastify";
 import useToggle from "../../../../../hooks/useToggle";
 
 const ChangePassForm = () => {
-    const {currentMember} = useSelector(state => state.member);
     const form = useForm();
     const {handleSubmit, setError, reset} = form;
     const [isFormVisible, setIsFormVisible] = useToggle();
@@ -16,7 +15,7 @@ const ChangePassForm = () => {
         if (data.newPassword !== data.confirmPassword) {
             setError('confirmPassword', {message: "Mật khẩu không khớp"})
         } else {
-            await changePass(currentMember._id, data).then(res => {
+            await changePass(data).then(res => {
                 toast.success(res.data.message);
                 reset();
                 setIsFormVisible();

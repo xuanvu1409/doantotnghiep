@@ -2,6 +2,7 @@ const Member = require('../models/member');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ramdom = require("../helper/random");
+const moment = require('moment');
 
 class AuthController {
 
@@ -43,7 +44,15 @@ class AuthController {
             if (!oldMember) return res.status(401).json({message: "Email không tồn tại"});
             const isPasswordCorrect = await bcrypt.compare(password, oldMember.password);
             if (!isPasswordCorrect) return res.status(400).json({message: "Mật khẩu không hợp lệ"});
-            const token = await jwt.sign({profileId: oldMember.profileId, id: oldMember._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
+            if (oldMember.deletedAt) {
+                if (moment() >= moment(oldMember.deletedAt)) {
+                    return res.status(401).json({message: "Tài khoản đã bị xóa"});
+                } else {
+                    oldMember.deletedAt = null;
+                    oldMember.save();
+                }
+            }
+            const token = await jwt.sign({profileId: oldMember.profileId, _id: oldMember._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE});
             return res.status(200).json({
                 member: oldMember,
                 message: "Đăng nhập thành công",

@@ -9,6 +9,7 @@ const auth = async (req, res, next) => {
                 console.log(`JWT Error: ${err}`);
                 return res.status(401).send("Access denied");
             }
+            req.member = decode;
         })
         next();
     } catch (e) {

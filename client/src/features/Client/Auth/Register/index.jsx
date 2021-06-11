@@ -60,8 +60,8 @@ const Index = () => {
                         <img className="w-100" src="assets\svg\logos\logo.svg" alt="Image Description"
                              style={{minWidth: '7rem', maxWidth: '7rem'}}/>
                     </a>
-                    {/* SelectFeild */}
-                    {/* End SelectFeild */}
+                    {/* Select */}
+                    {/* End Select */}
                 </div>
             </header>
             {/* ========== END HEADER ========== */}
@@ -80,8 +80,8 @@ const Index = () => {
                                         <img className="w-100" src="assets\svg\logos\logo.svg" alt="Image Description"
                                              style={{minWidth: '7rem', maxWidth: '7rem'}}/>
                                     </a>
-                                    {/* SelectFeild */}
-                                    {/* End SelectFeild */}
+                                    {/* Select */}
+                                    {/* End Select */}
                                 </div>
                             </div>
                             {/* End Logo & Language */}

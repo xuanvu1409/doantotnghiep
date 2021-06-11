@@ -70,7 +70,7 @@ const ContactForm = () => {
     const onSubmit = (data) => {
         setLoading(true);
         let formData = data.contact.map(e => ({name: e.name.value, value: e.value, memberId: currentMember._id}))
-        updateContact(currentMember._id, formData).then(res => {
+        updateContact(formData).then(res => {
             toast.success(res.data.message);
             getContact();
             setIsFormVisible(false);

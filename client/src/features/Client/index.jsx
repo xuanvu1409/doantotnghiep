@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Switch} from "react-router-dom";
 import Login from "./Auth/Login/index";
 import Register from "./Auth/Register/index";

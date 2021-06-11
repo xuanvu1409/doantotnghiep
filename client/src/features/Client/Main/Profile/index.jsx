@@ -17,8 +17,8 @@ const Index = () => {
     const {currentMember} = useSelector(state => state.member);
 
     useEffect(() => {
-        dispatch(getMember(currentMember._id)).then(res => {
-            if (res.payload.profileId === profileId) {
+        dispatch(getMember()).then(res => {
+            if (res.payload && res.payload.profileId === profileId) {
                 setIsMe(true);
             }
         });

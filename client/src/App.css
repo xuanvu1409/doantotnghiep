@@ -22,7 +22,3 @@
 .css-26l3qy-menu {
   z-index: 10 !important;
 }
-
-input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button {
-  border-radius: .3125rem !important;
-}

@@ -17,7 +17,7 @@ const InterestsForm = () => {
     const [interests, setInterests] = useState([]);
     const [valueForm, setValueForm] = useState([]);
     const {currentMember} = useSelector(state => state.member);
-    const {control, setValue, handleSubmit} = useForm();
+    const {control, handleSubmit} = useForm();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {

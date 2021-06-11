@@ -965,7 +965,7 @@ const Index = () => {
                                            placeholder="Search name or emails" aria-label="Search name or emails"
                                            aria-describedby="fullName"/>
                                     <div className="input-group-append input-group-append-last-sm-down-none">
-                                        {/* SelectFeild */}
+                                        {/* Select */}
                                         <div id="permissionSelect" className="select2-custom select2-custom-right">
                                             <select className="js-select2-custom custom-select" size={1}
                                                     defaultValue="guest"
@@ -981,7 +981,7 @@ const Index = () => {
                                                 <option value="full access">Full access</option>
                                             </select>
                                         </div>
-                                        {/* End SelectFeild */}
+                                        {/* End Select */}
                                         <a className="btn btn-primary d-none d-sm-block" href='javascript:;'>Invite</a>
                                     </div>
                                 </div>
@@ -1016,7 +1016,7 @@ const Index = () => {
                                                     <span className="d-block font-size-sm">amanda@example.com</span>
                                                 </div>
                                                 <div className="col-sm">
-                                                    {/* SelectFeild */}
+                                                    {/* Select */}
                                                     <div id="inviteUserSelect1"
                                                          className="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                         <select className="js-select2-custom custom-select-sm" size={1}
@@ -1037,7 +1037,7 @@ const Index = () => {
                                                             </option>
                                                         </select>
                                                     </div>
-                                                    {/* End SelectFeild */}
+                                                    {/* End Select */}
                                                 </div>
                                             </div>
                                             {/* End Row */}
@@ -1059,7 +1059,7 @@ const Index = () => {
                                                     <span className="d-block font-size-sm">david@example.com</span>
                                                 </div>
                                                 <div className="col-sm">
-                                                    {/* SelectFeild */}
+                                                    {/* Select */}
                                                     <div id="inviteUserSelect2"
                                                          className="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                         <select className="js-select2-custom custom-select-sm" size={1}
@@ -1080,7 +1080,7 @@ const Index = () => {
                                                             </option>
                                                         </select>
                                                     </div>
-                                                    {/* End SelectFeild */}
+                                                    {/* End Select */}
                                                 </div>
                                             </div>
                                             {/* End Row */}
@@ -1104,7 +1104,7 @@ const Index = () => {
                                                     <span className="d-block font-size-sm">Markvt@example.com</span>
                                                 </div>
                                                 <div className="col-sm">
-                                                    {/* SelectFeild */}
+                                                    {/* Select */}
                                                     <div id="inviteUserSelect4"
                                                          className="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                         <select className="js-select2-custom custom-select-sm" size={1}
@@ -1125,7 +1125,7 @@ const Index = () => {
                                                             </option>
                                                         </select>
                                                     </div>
-                                                    {/* End SelectFeild */}
+                                                    {/* End Select */}
                                                 </div>
                                             </div>
                                             {/* End Row */}
@@ -1146,7 +1146,7 @@ const Index = () => {
                                                     <span className="d-block font-size-sm">bob@example.com</span>
                                                 </div>
                                                 <div className="col-sm">
-                                                    {/* SelectFeild */}
+                                                    {/* Select */}
                                                     <div id="inviteUserSelect3"
                                                          className="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                         <select className="js-select2-custom custom-select-sm" size={1}
@@ -1167,7 +1167,7 @@ const Index = () => {
                                                             </option>
                                                         </select>
                                                     </div>
-                                                    {/* End SelectFeild */}
+                                                    {/* End Select */}
                                                 </div>
                                             </div>
                                             {/* End Row */}

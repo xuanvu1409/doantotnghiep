@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Controller, useForm} from "react-hook-form";
-import CreatableSelect from "react-select/creatable/dist/react-select.esm";
+import {useForm} from "react-hook-form";
 import {getJobTitle} from "../../../../../api/jobTitleApi";
 import {updateWorkAndEducation} from "../../../../../api/memberApi";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,12 +7,15 @@ import {toast} from 'react-toastify';
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 import useToggle from '../../../../../hooks/useToggle';
 import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
+import Select from "../../../../../components/Share/select";
+import Input from "../../../../../components/Share/Input";
 
 const WorkAndEducationForm = () => {
     const {currentMember} = useSelector(state => state.member);
     const [isFormVisible, setIsFormVisible] = useToggle();
     const [jobTitle, setJobTitle] = useState();
-    const {control, register, setValue, handleSubmit, formState: {errors}} = useForm();
+    const form = useForm();
+    const {setValue, handleSubmit} = form;
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
@@ -26,21 +28,14 @@ const WorkAndEducationForm = () => {
         }
     }, [isFormVisible === true])
 
-    const toggleForm = () => {
-        if (isFormVisible) {
-            setIsFormVisible(false)
-        } else {
-            setIsFormVisible(true);
-            if (currentMember.workAndEducation) {
-                setValue("company", currentMember.workAndEducation.company);
-                setValue("education", currentMember.workAndEducation.education);
-            }
-        }
-    }
+    useEffect(() => {
+        setValue("jobTitle", {label: currentMember.workAndEducation.jobTitle, value: currentMember.workAndEducation.jobTitle})
+        setValue("company", currentMember.workAndEducation.company);
+        setValue("education", currentMember.workAndEducation.education);
+    }, [])
 
     const onSubmit = (data) => {
         const formData = {
-            _id: currentMember._id,
             wordAndEducation: {
                 company: data.company,
                 education: data.education,
@@ -49,7 +44,7 @@ const WorkAndEducationForm = () => {
         }
         setLoading(true);
         updateWorkAndEducation(formData).then(res => {
-            dispatch(getMember(res.data._id));
+            dispatch(getMember());
             toast.success(res.data.message);
             setIsFormVisible(false);
             setLoading(false);
@@ -64,7 +59,7 @@ const WorkAndEducationForm = () => {
                 <h2 className="card-header-title h5">Công việc & giáo dục hiện tại</h2>
 
                 <button type="button" className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle"
-                        onClick={toggleForm}>
+                        onClick={setIsFormVisible}>
                     <i className="tio-edit"/>
                 </button>
             </div>
@@ -75,58 +70,39 @@ const WorkAndEducationForm = () => {
                     isFormVisible
                         ?
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="form-group">
-                                <label htmlFor="chuc-vu">Chức vụ</label>
-                                <Controller
-                                    name="jobTitle"
-                                    rules={{maxLength: {value: 150, message: "Vui lòng không nhập quá 150 ký tự"}}}
-                                    render={({field}) => (
-                                        <CreatableSelect
-                                            isClearable
-                                            {...field}
-                                            options={jobTitle}
-                                            placeholder={<div>Thêm chức vụ</div>}
-                                            defaultInputValue={currentMember.workAndEducation && currentMember.workAndEducation.jobTitle}
-                                        />
-                                    )}
-                                    control={control}
-                                />
-                                {errors.jobTitle &&
-                                <div className="invalid-feedback">{errors.jobTitle.message}</div>}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="company">Tên công ty</label>
-                                <input type="text" {...register("company", {
-                                    maxLength: {value: 100, message: "Vui lòng không nhập quá 100 ký tự"}
-                                })}
-                                       className={`form-control ${errors.company && "is-invalid"}`}
-                                       id="company"
-                                       autoComplete="off"
-                                       placeholder="Tối đa 100 ký tự"
-                                />
-                                {errors.company &&
-                                <div className="invalid-feedback">{errors.company.message}</div>}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="education">Tên trường học</label>
-                                <input type="text" id="education"
-                                       autoComplete="off"
-                                       className={`form-control js-count-characters ${errors.education && "is-invalid"}`} {...register("education", {
-                                    maxLength: {value: 150, message: "Vui lòng không nhập quá 150 ký tự"}
-                                })}
-                                       placeholder="Tối đa 150 ký tự"/>
-                                {errors.education &&
-                                <div className="invalid-feedback">{errors.education.message}</div>}
-                            </div>
+                            <Select
+                                isSearchable={true}
+                                options={jobTitle}
+                                isClearable={true}
+                                label={"Chức vụ"}
+                                validation={{maxLength: {value: 150, message: "Vui lòng không nhập quá 150 ký tự"}}}
+                                form={form}
+                                name={'jobTitle'}
+                                defaultValue={currentMember.workAndEducation && currentMember.workAndEducation.jobTitle}/>
+                            <Input
+                                label={'Tên công ty'}
+                                form={form}
+                                name={'company'}
+                                validation={{maxLength: {value: 100, message: "Vui lòng không nhập quá 100 ký tự"}}}
+                                placeholder={'Tối đa 100 ký tự'}
+                            />
+                            <Input
+                                label={'Tên trường học'}
+                                form={form}
+                                name={'education'}
+                                validation={{maxLength: {value: 150, message: "Vui lòng không nhập quá 150 ký tự"}}}
+                                placeholder={'Tối đa 150 ký tự'}
+                            />
                             <div className="float-right">
                                 <ButtonSubmit loading={loading} className={'mr-2'}/>
-                                <button type="button" onClick={toggleForm}
+                                <button type="button" onClick={setIsFormVisible}
                                         className="btn btn-light">Hủy
                                 </button>
                             </div>
                         </form>
                         :
-                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
+                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer"
+                            onClick={setIsFormVisible}>
                             {
                                 currentMember.workAndEducation && (currentMember.workAndEducation.jobTitle || currentMember.workAndEducation.company || currentMember.workAndEducation.education)
                                     ?

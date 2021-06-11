@@ -26,11 +26,15 @@ const BasicInfoForm = () => {
             dateOfBirth: moment(`${data.year.value}-${data.month.value}-${data.day.value}`).format(),
             genderId: data.genderId
         }
-        updateBasicInfo(currentMember._id, formData).then(res => {
+        setLoading(true)
+        updateBasicInfo(formData).then(res => {
             toast.success(res.data.message);
             dispatch(getMember(res.data._id));
+            setIsFormVisible();
+            setLoading(false);
         }).catch(e => {
-            toast.success(e.response.data.message);
+            console.log(e)
+            // toast.error(e.response.data.message);
         })
     }
 

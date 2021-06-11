@@ -11,14 +11,13 @@ const listContact = [
     {id: 6, label: "Website", value: "Website", icon: "tio-globe"},
 ]
 
-const Contact = ({memberId}) => {
+const Contact = () => {
     const [contact, setContact] = useState([]);
 
     useEffect(async () => {
         const getContact = async () => {
-            await getContactNotHidden(memberId).then(res => {
+            await getContactNotHidden().then(res => {
                 setContact(res.data);
-                console.log(res.data)
             }).catch(e => {
                 console.log(e)
             })
@@ -38,22 +37,25 @@ const Contact = ({memberId}) => {
             <div className="card-body">
                 <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3">
                     {
+                        contact.length > 0
+                        ?
                         contact.map((e) => (
                             <li key={e._id}>
                                 {
                                     listContact.map((x, index) => (
                                         x.label === e.name
                                             ?
-                                            <>
-                                                <i key={index} className={x.icon + " nav-icon mr-2"}/><a href={x.id === 1 ? "tel:" + e.value : e.value}>{e.name}</a>
-                                            </>
+                                            <span key={x.id}>
+                                                <i className={x.icon + " nav-icon mr-2"}/><a href={x.id === 1 ? "tel:" + e.value : e.value}>{e.name}</a>
+                                            </span>
                                             :
-
-                                            null
+                                            <div key={x.id}/>
                                     ))
                                 }
                             </li>
                         ))
+                            :
+                            <li>Chưa có thông tin liên hệ</li>
                     }
                 </ul>
             </div>

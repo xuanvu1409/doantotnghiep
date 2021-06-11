@@ -1,25 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {getLocation} from "../../../../../api/locationApi";
-import {Controller, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import Select from "react-select";
 import {updateLocation} from "../../../../../api/memberApi";
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 import {toast} from "react-toastify";
 import useToggle from '../../../../../hooks/useToggle';
 import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
+import Select from "../../../../../components/Share/select";
 
 const LocationForm = () => {
     const dispatch = useDispatch();
     const [isFormVisible, setIsFormVisible] = useToggle();
     const [location, setLocation] = useState([]);
     const {currentMember} = useSelector(state => state.member);
-    const {control, handleSubmit} = useForm();
+    const form = useForm();
+    const {handleSubmit} = form;
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (isFormVisible) {
-             getLocation().then(res => {
+            getLocation().then(res => {
                 let location = res.data.map(e => ({label: e.name, value: e._id}));
                 setLocation(location);
             })
@@ -59,21 +60,16 @@ const LocationForm = () => {
                     isFormVisible
                         ?
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="form-group">
-                                <Controller
-                                    name="location"
-                                    render={({field}) => (
-                                        <Select
-                                            placeholder={<div>Chọn vị trí</div>}
-                                            {...field}
-                                            options={location}
-                                            defaultValue={currentMember.locationId && {label: currentMember.locationId.name, value: currentMember.locationId._id}}
-                                            components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                                        />
-                                    )}
-                                    control={control}
-                                />
-                            </div>
+                            <Select
+                                name={'location'}
+                                options={location}
+                                form={form}
+                                defaultValue={currentMember.locationId && {
+                                    label: currentMember.locationId.name,
+                                    value: currentMember.locationId._id
+                                }}
+                                isSearchable={false}
+                            />
                             <div className="float-right">
                                 <ButtonSubmit className={'m-2'} loading={loading}/>
                                 <button type="button" onClick={setIsFormVisible}
@@ -82,7 +78,8 @@ const LocationForm = () => {
                             </div>
                         </form>
                         :
-                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
+                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer"
+                            onClick={setIsFormVisible}>
                             {
                                 currentMember.locationId
                                     ?

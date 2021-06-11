@@ -5,11 +5,10 @@ const initialState = {
     currentMember: {},
     isLoading: false,
     error: '',
-    isAuth: false
 }
 
-export const getMember = createAsyncThunk('member/getMember',  async (id) => {
-    const {data} = await getMemberById(id);
+export const getMember = createAsyncThunk('member/getMember',  async () => {
+    const {data} = await getMemberById();
     return data;
 })
 
@@ -21,10 +20,9 @@ const memberSlice = createSlice({
             state.isLoading = false;
             state.error = '';
             state.currentMember = {};
-            state.isAuth = false
+            localStorage.removeItem('token');
         },
         isLogin: (state, {payload}) => {
-            state.isAuth = true;
             state.currentMember = payload.member;
             localStorage.setItem('token', payload.token);
         }
@@ -34,6 +32,7 @@ const memberSlice = createSlice({
             state.isLoading = true;
         },
         [getMember.fulfilled] : (state, {payload}) => {
+            console.log(payload)
             state.currentMember = payload;
             state.isLoading = false;
             state.error = '';

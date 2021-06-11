@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import {Controller, useForm} from "react-hook-form";
-import Select from "react-select";
+import {Controller} from "react-hook-form";
 import moment from "moment";
+import CreatableSelect from "react-select/creatable";
 
 const day = () => {
     const items = [];
@@ -46,7 +46,8 @@ const DateOfBirth = ({form, value}) => {
                             name="day"
                             rules={{required: true}}
                             render={({field}) => (
-                                <Select
+                                <CreatableSelect
+                                    isSearchable={false}
                                     placeholder={<div>Ngày</div>}
                                     {...field}
                                     options={day()}
@@ -62,7 +63,8 @@ const DateOfBirth = ({form, value}) => {
                             name="month"
                             rules={{required: true}}
                             render={({field}) => (
-                                <Select
+                                <CreatableSelect
+                                    isSearchable={false}
                                     placeholder={<div>Tháng</div>}
                                     {...field}
                                     options={month()}
@@ -79,7 +81,8 @@ const DateOfBirth = ({form, value}) => {
                             name="year"
                             rules={{required: true}}
                             render={({field}) => (
-                                <Select
+                                <CreatableSelect
+                                    isSearchable={false}
                                     placeholder={<div>Năm</div>}
                                     {...field}
                                     options={year()}
@@ -87,7 +90,6 @@ const DateOfBirth = ({form, value}) => {
                             )}
                             control={control}
                         />
-
                     </div>
                 </div>
                 <div className="col-sm-12 invalid-dob">

@@ -6,11 +6,12 @@ const Image = require('../models/image');
 const cloudinary = require('../../config/cloudinary');
 const bcrypt = require("bcrypt");
 const Contact = require('../models/contact');
+const moment = require('moment');
 
 class ProfileController {
 
     getMemberById = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         try {
             const member = await Member.findOne({_id})
                 .select(["-password", "-isClose", "-createdAt", "-updatedAt"])
@@ -50,7 +51,8 @@ class ProfileController {
     }
 
     updateWordAndEducation = async (req, res) => {
-        let {_id, wordAndEducation} = req.body;
+        const {_id} = req.member;
+        const {wordAndEducation} = req.body;
         try {
             const member = await Member.findOne({_id});
             if (!member) return res.status(404).json({message: "ID thành viên không tồn tại"});
@@ -67,7 +69,7 @@ class ProfileController {
     }
 
     uploadAvatar = async (req, res) => {
-        const {_id} = req.body;
+        const {_id} = req.member;
         try {
             await cloudinary.uploader
                 .upload(req.file.path)
@@ -91,7 +93,8 @@ class ProfileController {
     }
 
     updateLocation = async (req, res) => {
-        const {_id, locationId} = req.body;
+        const {_id} = req.member;
+        const {locationId} = req.body;
         try {
             const member = await Member.findById(_id);
             if (!member) return res.status(404).json({message: "ID thành viên không tồn tại"});
@@ -164,7 +167,7 @@ class ProfileController {
     }
 
     uploadImage = async (req, res) => {
-        const {_id} = req.body;
+        const {_id} = req.member;
         try {
             const urls = [];
             for (const file of req.files) {
@@ -178,7 +181,7 @@ class ProfileController {
                 })
             }
 
-            await Image.create(urls, (err, doc) => {
+            await Image.create(urls, (err) => {
                 if (err) {
                     return res.status(500).send("Lỗi thêm ảnh");
                 }
@@ -191,7 +194,7 @@ class ProfileController {
     }
 
     getGallery = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         try {
             await Image.find(
                 {memberId: _id},
@@ -209,8 +212,9 @@ class ProfileController {
         }
     }
 
-    removeImageById = async (req, res) => {
+    removeImage = async (req, res) => {
         const {_id} = req.params;
+        console.log(_id)
         try {
             const image = await Image.findById(_id);
             if (!image) return res.json({message: "Ảnh không tồn tại"})
@@ -224,7 +228,7 @@ class ProfileController {
     }
 
     setAvatarbyId = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         try {
             const image = await Image.findById(_id);
             if (!image) return res.status(404).json({message: "Ảnh không tồn tại"})
@@ -253,7 +257,7 @@ class ProfileController {
     }
 
     changePass = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         const {currentPassword, newPassword} = req.body;
 
         try {
@@ -274,8 +278,9 @@ class ProfileController {
     }
 
     updateBasicInfo = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         const {name, dateOfBirth, genderId} = req.body;
+        console.log(_id, name, dateOfBirth, genderId)
         try {
             const member = await Member.findById(_id);
             if (!member) return res.status(400).json({message: "Thành viên không tồn tại"});
@@ -292,13 +297,13 @@ class ProfileController {
     }
 
     updateContact = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         try {
-            await Contact.deleteMany({memberId: _id}, (err, docs) => {
+            await Contact.deleteMany({memberId: _id}, (err) => {
                 if (err) {
                     return res.status(400).json({message: "Lỗi xóa liên hệ"});
                 } else {
-                    Contact.create(req.body, (err, docs) => {
+                    Contact.create(req.body, (err) => {
                         if (err) {
                             return res.status(400).json({message: "Lỗi tạo liên hệ"});
                         } else {
@@ -314,9 +319,9 @@ class ProfileController {
     }
 
     getContactByMemberId = async (req, res) => {
-        const {memberId} = req.params;
+        const {_id} = req.member;
         try {
-            await Contact.find({memberId}, (err, docs) => {
+            await Contact.find({memberId: _id}, (err, docs) => {
                 return res.json(docs)
             })
         } catch (e) {
@@ -326,7 +331,7 @@ class ProfileController {
     }
 
     changeStatusContact = async (req, res) => {
-        const {_id} = req.params;
+        const {_id} = req.member;
         const  {isHide} = req.body;
         try {
             const contact = await Contact.findById(_id);
@@ -342,11 +347,53 @@ class ProfileController {
     }
 
     getContactNotHidden = async (req, res) => {
-        const {memberId} = req.params;
+        const {_id} = req.member;
         try {
-            await Contact.find({memberId, isHide: false}, (err, docs) => {
+            await Contact.find({memberId: _id, isHide: false}, (err, docs) => {
                 if (!err) return res.json(docs);
             })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    delete = async (req, res) => {
+        const {_id} = req.member;
+        try {
+            const member = await Member.findById(_id);
+            if (!member) return res.status(404).json({mesage: "Thành viên không tồn tại"});
+            member.deletedAt = moment().add(14, 'day');
+            member.save(err => {
+                if (!err) return res.json({message: "Cập nhật thành công"});
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    updatePersonalInfo = async (req, res) => {
+        const {_id} = req.member;
+        try {
+            const member = await Member.findById(_id);
+            if (!member) return res.status(404).json({mesage: "Thành viên không tồn tại"});
+            member.personalInfo = req.body;
+            member.save(err => {
+                if (!err) return res.json({message: "Cập nhật thành công"});
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    getPersonalInfo = async (req, res) => {
+        const {_id} = req.member;
+        try {
+            const member = await Member.findById(_id).select("personalInfo");
+            if (!member) return res.status(404).json({mesage: "Thành viên không tồn tại"});
+            return res.json(member.personalInfo);
         } catch (e) {
             console.log(e)
             res.status(500).json({message: "Đã xảy ra sự cố"});

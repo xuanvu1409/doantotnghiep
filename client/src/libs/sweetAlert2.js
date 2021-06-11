@@ -21,4 +21,35 @@ export const sweetAlert = {
             preConfirm: callback
         });
     },
+
+    autoClose(icon, title, message, callback) {
+        Swal.fire({
+            title: title,
+            html: message + ' trong <b></b> giây.',
+            timer: 3000,
+            icon: icon,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                setInterval(() => {
+                    const content = Swal.getHtmlContainer()
+                    if (content) {
+                        const b = content.querySelector('b')
+                        if (b) {
+                            b.textContent = Math.floor(Swal.getTimerLeft()/1000)
+                        }
+                    }
+                }, 100)
+            },
+            didClose() {
+                callback()
+            }
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                callback()
+            }
+        })
+    }
+
 }
