@@ -1,16 +1,16 @@
 import React, {useEffect} from 'react';
-import {Redirect, Route, useLocation} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {Route, useLocation} from "react-router-dom";
 
 const Index = ({component: Component, ...rest}) => {
-    const dispatch = useDispatch();
-    // const history = useHistory();
     const location = useLocation();
-    const {isAuth} = useSelector(state => state.member);
 
     useEffect(() => {
-        if (!localStorage.getItem('token')) {
+        let token = localStorage.getItem('token');
+        if (!token) {
+            console.log("hehye")
             redirectLogin()
+        } else {
+            console.log('hkhk')
         }
     }, [location])
 

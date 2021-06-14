@@ -6,6 +6,7 @@ import "./login.css";
 import {useDispatch, useSelector} from "react-redux";
 import {loginAction} from "./loginAction";
 import {Spinner} from "react-bootstrap";
+import ButtonSubmit from "../../../../components/Share/buttonSubmit";
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -115,10 +116,11 @@ const Index = () => {
                                     </div>
                                     <div className="mb-4">
                                         <a className="btn btn-lg btn-white btn-block" href="#">
-                  <span className="d-flex justify-content-center align-items-center">
-                    <img className="avatar avatar-xss mr-2" src="assets\svg\brands\google.svg" alt="Image Description"/>
-                    Sign up with Google
-                  </span>
+                                          <span className="d-flex justify-content-center align-items-center">
+                                            <img className="avatar avatar-xss mr-2" src="assets\svg\brands\google.svg"
+                                                 alt="Image Description"/>
+                                            Sign up with Google
+                                          </span>
                                         </a>
                                     </div>
                                     <div className="text-center mb-4">
@@ -143,11 +145,11 @@ const Index = () => {
                                     {/* Form Group */}
                                     <div className="js-form-message form-group">
                                         <label className="input-label" htmlFor="signupSrPassword" tabIndex={0}>
-                  <span className="d-flex justify-content-between align-items-center">
-                    Mật khẩu
-                    <a className="input-label-secondary"
-                       href="authentication-reset-password-cover.html">Quên mật khẩu?</a>
-                  </span>
+                                              <span className="d-flex justify-content-between align-items-center">
+                                                Mật khẩu
+                                                <a className="input-label-secondary"
+                                                   href="authentication-reset-password-cover.html">Quên mật khẩu?</a>
+                                              </span>
                                         </label>
                                         <div className="input-group input-group-merge">
                                             <input type="password"
@@ -166,9 +168,9 @@ const Index = () => {
                                                     <i id="changePassIcon" className="tio-hidden-outlined"/>
                                                 </a>
                                             </div>
-                                            {errors.password &&
-                                            <div className="invalid-feedback">{errors.password.message}</div>}
                                         </div>
+                                        {errors.password &&
+                                        <div className="invalid-feedback">{errors.password.message}</div>}
                                     </div>
                                     {/* End Form Group */}
                                     {/* Checkbox */}
@@ -182,23 +184,7 @@ const Index = () => {
                                         </div>
                                     </div>
                                     {/* End Checkbox */}
-                                    {
-                                        isSubmitting
-                                            ?
-                                            <button className="btn btn-lg btn-block btn-primary" type="button" disabled>
-                                                <Spinner
-                                                    as="span"
-                                                    animation="grow"
-                                                    size="sm"
-                                                    role="status"
-                                                    aria-hidden="true"
-                                                />
-                                                &nbsp;Xin chờ...
-                                            </button>
-                                            :
-                                            <button type="submit" className="btn btn-lg btn-block btn-primary">Đăng
-                                                nhập</button>
-                                    }
+                                    <ButtonSubmit className={'btn-lg btn-block'} loading={isSubmitting} buttonText={'Đăng nhập'} />
                                 </form>
                                 {/* End Form */}
                             </div>

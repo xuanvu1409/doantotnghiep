@@ -1,10 +1,10 @@
 import React from 'react';
 import {Spinner} from "react-bootstrap";
 
-const ButtonSubmit = ({loading, className}) => {
+const ButtonSubmit = ({loading, className, buttonText}) => {
 
     return (
-            loading
+        loading
             ?
             <button type={"button"} className={"btn btn-primary " + (className || '')} disabled={true}>
                 <Spinner
@@ -14,9 +14,9 @@ const ButtonSubmit = ({loading, className}) => {
                     role="status"
                     aria-hidden="true"
                 />&nbsp;Xin chờ...</button>
-            : <button type={"submit"} className={"btn btn-primary " + (className || '')}>Lưu</button>
-)
-    ;
+            : <button type={"submit"} className={"btn btn-primary " + (className || '')}>{buttonText || 'Lưu'}</button>
+    )
+        ;
 };
 
 export default ButtonSubmit;

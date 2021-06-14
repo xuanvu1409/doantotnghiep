@@ -228,9 +228,9 @@ const Index = () => {
                                                     <i id="changePassIcon" className="tio-hidden-outlined"/>
                                                 </a>
                                             </div>
-                                            {errors.password &&
-                                            <div className="invalid-feedback">{errors.password.message}</div>}
                                         </div>
+                                        {errors.password &&
+                                        <div className="invalid-feedback">{errors.password.message}</div>}
                                     </div>
                                     {/* End Form Group */}
                                     {

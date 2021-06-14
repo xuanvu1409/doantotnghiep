@@ -7,10 +7,11 @@ export const loginAction = (formData) => async (dispatch) => {
     try {
         await signIn(formData).then((res) => {
             dispatch(isLogin(res.data));
-            console.log(res.data)
             return res.data;
         }).then(res => {
             dispatch(loginSuccess(res));
+        }).then(res => {
+            window.location.replace('/');
         });
     } catch (e) {
         dispatch(loginFail(e))

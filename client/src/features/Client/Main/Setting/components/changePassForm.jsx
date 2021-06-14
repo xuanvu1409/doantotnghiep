@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useForm} from "react-hook-form";
-import InputFeild from "../../../../../components/Share/inputFeild";
-import {changePass} from "../../../../../api/memberApi";
-import {useSelector} from "react-redux";
-import {toast} from "react-toastify";
 import useToggle from "../../../../../hooks/useToggle";
+import {changePass} from "../../../../../api/memberApi";
+import {toast} from "react-toastify";
+import InputFeild from "../../../../../components/Share/inputFeild";
 
 const ChangePassForm = () => {
     const form = useForm();

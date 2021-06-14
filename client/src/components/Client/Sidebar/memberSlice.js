@@ -21,6 +21,7 @@ const memberSlice = createSlice({
             state.error = '';
             state.currentMember = {};
             localStorage.removeItem('token');
+            window.location.replace('/login');
         },
         isLogin: (state, {payload}) => {
             state.currentMember = payload.member;
@@ -32,7 +33,6 @@ const memberSlice = createSlice({
             state.isLoading = true;
         },
         [getMember.fulfilled] : (state, {payload}) => {
-            console.log(payload)
             state.currentMember = payload;
             state.isLoading = false;
             state.error = '';

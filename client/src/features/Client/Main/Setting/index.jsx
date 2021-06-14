@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import ScrollspyNav from "react-scrollspy-nav";
 import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
-import ChangePassForm from "./components/changePassForm";
 import BasicInfoForm from "./components/basicInfoForm";
 import ContactForm from "./components/contactForm";
 import './setting.css';
 import DeleteForm from "./components/deleteForm";
 import {StickyContainer, Sticky} from 'react-sticky';
+import ChangePassForm from "./components/changePassForm";
 
 const Index = () => {
     const {currentMember} = useSelector(state => state.member);
