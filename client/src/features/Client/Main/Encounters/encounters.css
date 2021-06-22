@@ -69,6 +69,14 @@
     color: #F99DF0;
 }
 
+.encouter-page #actions button.active {
+    background-color: #F99DF0;
+}
+
+.encouter-page #actions button.active i.tio-heart {
+    color: #fff;
+}
+
 .encouter-page #actions button i.tio-restore {
     color: #FFB603;
 }

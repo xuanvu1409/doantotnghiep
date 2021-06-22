@@ -6,13 +6,17 @@ import Image from "./components/image";
 import Info from "./components/info";
 import {likeMember} from "../../../../api/actionApi";
 import {useSelector} from "react-redux";
+import Loading from "../../../../components/Share/loading";
+import LoadingSmall from "../../../../components/Share/loadingSmall";
 
 const Index = () => {
     const [data, setData] = useState({
         member: {},
-        images: []
+        images: [],
+        liked: false
     })
     const filter = useSelector(state => state.filter);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getData();
@@ -23,7 +27,7 @@ const Index = () => {
             memberId: data.member._id
         }
         await likeMember(formData).then(res => {
-            getData(data.member._id);
+            getData();
         })
     }
 
@@ -31,26 +35,33 @@ const Index = () => {
         await getData(data.member._id);
     }
 
-    const getData = async (notMember = null) => {
-        let formData = [];
-        if (notMember != null) {
-             formData = [notMember]
-        }
-        await encounter(formData).then(res => {
-            setData({member: res.data.member, images: res.data.images});
+    const getData = async () => {
+        setLoading(true);
+        await encounter([data.member._id]).then(res => {
+            console.log(res.data)
+            setData({member: res.data.member, images: res.data.images, liked: res.data.liked});
+            setTimeout(() => {
+                setLoading(false)
+            }, 500)
         })
     }
 
     return (
         <div className="encouter-page">
             <div className="card photo">
-                <div className="row">
-                    <Image images={data.images} avatar={data.member?.avatar}/>
-                    <Info member={data.member}/>
-                </div>
+                {
+                    loading
+                        ?
+                        <LoadingSmall loading={loading} style={{borderRadius: '.75rem'}}/>
+                        :
+                        <div className="row">
+                            <Image images={data.images} avatar={data.member?.avatar}/>
+                            <Info member={data.member}/>
+                        </div>
+                }
             </div>
 
-            <Action like={() => like} skip={() => skip}/>
+            <Action like={() => like} skip={() => skip} liked={data.liked} loading={loading}/>
         </div>
     );
 };

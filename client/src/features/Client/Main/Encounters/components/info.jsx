@@ -11,7 +11,7 @@ const Info = (props) => {
         <div className="col-lg-6 d-sm-none d-lg-block">
             <div className="card-body card-body-height">
                 <h1 className="page-header-title">
-                    <Link to="/encounters">
+                    <Link to={'/profile/'+ member.profileId}>
                         {member.name && titleCase(member.name)}, {moment().diff(member.dateOfBirth, 'years', false)} {member?.isConfirm &&
                     <i className="tio-checkmark-circle"/>}
                     </Link>

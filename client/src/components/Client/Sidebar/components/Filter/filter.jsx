@@ -8,6 +8,7 @@ import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {filterAction} from "./filterAction";
+import {loading} from "../../../../../appSlice";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <a
@@ -35,6 +36,7 @@ const Filter = () => {
     const {currentMember} = useSelector(state => state.member);
     const filterState = useSelector(state => state.filter);
 
+
     useEffect(() => {
         getLocation().then(res => {
             let newLocation = res.data.map(e => ({label: e.name, value: e._id}));
@@ -59,12 +61,16 @@ const Filter = () => {
     }, [])
 
     const onSubmit = async (data) => {
+        await dispatch(loading(true))
         let formData = {
             gender: data.gender,
             age: {min: valueSlider[0], max: valueSlider[1]},
             location: data.location
         }
         await dispatch(filterAction(formData));
+        setTimeout(() => {
+            dispatch(loading(false))
+        }, 500)
     }
 
     return (

@@ -4,17 +4,10 @@ import "./sidebar.css";
 import {useSelector} from "react-redux";
 import {titleCase} from "../../../utils/helper";
 import Logout from "./components/logout";
-import {Dropdown} from "react-bootstrap";
-import {Slider} from "primereact/slider";
-import Select from "../../Share/select";
-import {getLocation} from "../../../api/locationApi";
-import ButtonSubmit from "../../Share/buttonSubmit";
-import {useForm} from "react-hook-form";
 import Filter from "./components/Filter/filter";
 
 const Index = () => {
     const memberState = useSelector(state => state.member);
-
 
     return (
         <>

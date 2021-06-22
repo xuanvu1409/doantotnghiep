@@ -32,9 +32,11 @@ class EncounterController {
                         if (doc) {
                             images = await Image.find({memberId: doc._id});
                         }
-                        if (!err) {
-                            return res.json({member: doc, images});
+                        let liked = false;
+                        if (await Action.exists({actionMember: doc._id, actionBy: _id, type: 1})) {
+                            liked = true;
                         }
+                        return res.json({member: doc, images, liked: liked});
                     })
                 }
             } else {
@@ -55,15 +57,23 @@ class EncounterController {
         const {_id} = req.member;
         const {memberId} = req.body;
         try {
-            await Action.create({
-                actionMember: memberId,
-                actionBy: _id,
-                type: 1
-            }, (err, doc) => {
-                if (!err) {
-                    return res.json({message: 'Yêu thích thành công', action: doc});
-                }
-            })
+            if (await Action.exists({actionMember: memberId, actionBy: _id})) {
+                Action.remove({actionMember: memberId, actionBy: _id}, (err, doc) => {
+                    if (!err) {
+                        return res.json({message: 'Bỏ yêu thích thành công', action: doc});
+                    }
+                })
+            } else {
+                await Action.create({
+                    actionMember: memberId,
+                    actionBy: _id,
+                    type: 1
+                }, (err, doc) => {
+                    if (!err) {
+                        return res.json({message: 'Yêu thích thành công', action: doc});
+                    }
+                })
+            }
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});
