@@ -86,7 +86,6 @@ const ChangePassForm = () => {
                             <InputFeild name={""} type={"password"} label={"Nhập lại mật khẩu"}
                                         form={form}
                                         disable={true}
-
                             />
                         </div>
                 }

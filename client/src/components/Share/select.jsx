@@ -16,6 +16,7 @@ const Select = ({label, form, placeholder, isMulti, validation, defaultValue, cl
                         {...field}
                         className={className || 'basic-single'}
                         classNamePrefix="select"
+                        menuPlacement="top"
                         onBlurResetsInput={false}
                         closeMenuOnSelect={closeMenuOnSelect || true}
                         isLoading={isLoading || false}

@@ -11,26 +11,18 @@ const listContact = [
     {id: 6, label: "Website", value: "Website", icon: "tio-globe"},
 ]
 
-const Contact = () => {
-    const [contact, setContact] = useState([]);
-
-    useEffect(async () => {
-        const getContact = async () => {
-            await getContactNotHidden().then(res => {
-                setContact(res.data);
-            }).catch(e => {
-                console.log(e)
-            })
-        }
-        await getContact();
-    }, [])
+const Contact = ({contact, isMe}) => {
 
     return (
         <div className="card mb-3 mb-lg-5">
             {/* Header */}
             <div className="card-header">
                 <h2 className="card-header-title h5">Thông tin liên hệ</h2>
-                <Link to={'/settings'} className="btn btn-sm btn-white"><i className="tio-edit"/></Link>
+                {
+                    isMe
+                    &&
+                    <Link to={'/settings'} className="btn btn-sm btn-white"><i className="tio-edit"/></Link>
+                }
             </div>
             {/* End Header */}
             {/* Body */}
@@ -42,7 +34,7 @@ const Contact = () => {
                         contact.map((e) => (
                             <li key={e._id}>
                                 {
-                                    listContact.map((x, index) => (
+                                    listContact.map((x) => (
                                         x.label === e.name
                                             ?
                                             <span key={x.id}>

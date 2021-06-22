@@ -24,7 +24,7 @@ const template = {
             }
         },
         {
-            label: "Hôn nhân",
+            label: "Tình trạng",
             type: "select",
             name: "relationship",
             value: "",
@@ -614,7 +614,7 @@ const template = {
             options: [
                 {label: "Tôi không muốn nói", value: "none"},
                 {label: "Uống rượu bia giao tiếp", value: "Uống rượu bia giao tiếp"},
-                {label: "không uống rượu bia", value: "không uống rượu bia"},
+                {label: "không uống rượu bia", value: "Không uống rượu bia"},
                 {label: "Tôi ghét rượu bia", value: "Tôi ghét rượu bia"},
                 {label: "Tôi thích rượu bia", value: "Tôi thích rượu bia"},
             ]
@@ -623,7 +623,7 @@ const template = {
 }
 
 
-const PersonalInfoForm = () => {
+const PersonalInfoForm = ({member, isMe, load}) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState();
     const [isFormVisible, setIsFormVisible] = useToggle();
@@ -638,7 +638,7 @@ const PersonalInfoForm = () => {
             delete e.options;
         })
         updatePersonalInfo(newTemplate.fields).then(res => {
-            dispatch(getMember(currentMember._id))
+            load();
             toast.success(res.data.message);
             setIsFormVisible(false);
             setLoading(false);
@@ -653,9 +653,14 @@ const PersonalInfoForm = () => {
             <div className="card-header">
                 <h2 className="card-header-title h5">Thông tin cá nhân</h2>
                 {/* Unfold */}
-                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
-                    <i className="tio-edit"/>
-                </button>
+                {
+                    isMe
+                    &&
+                    <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle"
+                            onClick={setIsFormVisible}>
+                        <i className="tio-edit"/>
+                    </button>
+                }
                 {/* End Unfold */}
             </div>
             {/* End Header */}
@@ -665,20 +670,26 @@ const PersonalInfoForm = () => {
                     isFormVisible
                         ?
                         <RenderForm template={template} loading={loading} onSubmit={onSubmit}
-                                    data={currentMember.personalInfo || []} setIsFormVisible={() => setIsFormVisible(false)}/>
+                                    data={member.personalInfo || []}
+                                    setIsFormVisible={() => setIsFormVisible(false)}/>
                         :
-                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3 cursor-pointer"
-                            onClick={setIsFormVisible}>
+                        <ul className="list-unstyled list-unstyled-py-3 text-dark mb-3">
                             {
-                                    currentMember.personalInfo.length > 0 ? currentMember.personalInfo.map((e) => (
+                                member.personalInfo?.length > 0 ? member.personalInfo.map((e) => (
                                         <li key={e.name}><span
                                             className={'card-subtitle'}>{e.label}:</span> {(e.value.value === 'none' || e.value === '') ?
                                             <span
                                                 className={'text-danger'}>Chưa có thông tin</span> : (e.value.value || e.value)}
                                         </li>
                                     ))
-                                        :
-                                        <li>Thêm đôi lời về đặc điểm bản thân bạn</li>
+                                    :
+                                    (
+                                        isMe
+                                        ?
+                                            <li>Thêm đôi lời về đặc điểm bản thân bạn</li>
+                                            :
+                                            <li>Chưa có thông tin</li>
+                                    )
                             }
 
                         </ul>

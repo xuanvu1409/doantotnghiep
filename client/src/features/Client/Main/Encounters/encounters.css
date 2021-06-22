@@ -55,6 +55,11 @@
     transform: scale(1.14);
 }
 
+.encouter-page #actions button:disabled {
+    transform: unset;
+    opacity: 0.4;
+}
+
 .encouter-page #actions button i{
     font-weight: 700;
     font-size: 40px;

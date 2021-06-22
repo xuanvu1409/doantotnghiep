@@ -11,7 +11,7 @@ import useToggle from '../../../../../hooks/useToggle';
 import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
 
 const animatedComponents = makeAnimated();
-const LanguageForm = () => {
+const LanguageForm = ({member, isMe, load}) => {
     const dispatch = useDispatch();
     const [isFormVisible, setIsFormVisible] = useToggle();
     const [language, setLanguage] = useState([]);
@@ -21,23 +21,20 @@ const LanguageForm = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (isFormVisible) {
-            getLanguage().then(res => {
-                setLanguage(res.data.map(e => ({label: e.name, value: e._id})));
-            })
-        }
-    }, [isFormVisible === true])
+        getLanguage().then(res => {
+            setLanguage(res.data.map(e => ({label: e.name, value: e._id})));
+        })
+    }, [])
 
     const onSubmit = (data) => {
         const formData = {
-            _id: currentMember._id,
             language: valueForm
         }
         setLoading(true);
         updateLanguage(formData).then(res => {
+            load();
             toast.success(res.data.message);
             setIsFormVisible(false);
-            dispatch(getMember(res.data._id));
             setLoading(false);
         })
     }
@@ -52,10 +49,13 @@ const LanguageForm = () => {
             {/* Header */}
             <div className="card-header">
                 <h2 className="card-header-title h5">Ngôn ngữ</h2>
-
-                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
-                    <i className="tio-edit"/>
-                </button>
+                {
+                    isMe
+                    &&
+                    <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
+                        <i className="tio-edit"/>
+                    </button>
+                }
             </div>
             {/* End Header */}
             {/* Body */}
@@ -74,7 +74,10 @@ const LanguageForm = () => {
                                             onChange={handleChange}
                                             closeMenuOnSelect={false}
                                             components={animatedComponents}
-                                            defaultValue={currentMember.languageId && currentMember.languageId.map(e => ({label: e.name, value: e._id}))}
+                                            defaultValue={member.languageId && member.languageId.map(e => ({
+                                                label: e.name,
+                                                value: e._id
+                                            }))}
                                             isMulti
                                             placeholder={"Bạn nói được những ngôn ngữ nào?"}
                                             options={language}
@@ -91,16 +94,23 @@ const LanguageForm = () => {
                             </div>
                         </form>
                         :
-                        <ul className="list-box text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
+                        <ul className="list-box text-dark mb-3">
                             {
-                                currentMember.languageId
+                                member.languageId
                                 &&
-                                currentMember.languageId.map((e, i) => (<li className={"list-item-box"} key={i}>{e.name}</li>))
+                                member.languageId.map((e, i) => (
+                                    <li className={"list-item-box"} key={i}>{e.name}</li>))
                             }
                             {
-                                currentMember.languageId.length === 0
+                                member.languageId?.length === 0
                                 &&
-                                <li>Hãy cho mọi người biết bạn có thể giao tiếp bằng ngôn ngữ nào</li>
+                                (
+                                    isMe
+                                    ?
+                                        <li>Hãy cho mọi người biết bạn có thể giao tiếp bằng ngôn ngữ nào</li>
+                                        :
+                                        <li>Chưa có thông tin</li>
+                                )
                             }
 
                         </ul>

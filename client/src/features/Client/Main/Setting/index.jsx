@@ -111,35 +111,35 @@ const Index = () => {
                     </div>
                     {/* End Card */}
                     {/* Card */}
-                    <div id="emailSection" className="card mb-3 mb-lg-5">
-                        <div className="card-header">
-                            <h3 className="card-title h4">Email</h3>
-                        </div>
-                        {/* Body */}
-                        <div className="card-body">
-                            <p>Email hiện tại của bạn là <span className="font-weight-bold">{currentMember.email}</span>
-                            </p>
-                            {/* Form */}
-                            <form>
-                                {/* Form Group */}
-                                <div className="row form-group">
-                                    <label htmlFor="newEmailLabel" className="col-sm-3 col-form-label input-label">Địa
-                                        chỉ email mới</label>
-                                    <div className="col-sm-9">
-                                        <input type="email" className="form-control" name="newEmail" id="newEmailLabel"
-                                               placeholder="Enter new email address"
-                                               aria-label="Enter new email address"/>
-                                    </div>
-                                </div>
-                                {/* End Form Group */}
-                                <div className="d-flex justify-content-end">
-                                    <button type="submit" className="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
-                            {/* End Form */}
-                        </div>
-                        {/* End Body */}
-                    </div>
+                    {/*<div id="emailSection" className="card mb-3 mb-lg-5">*/}
+                    {/*    <div className="card-header">*/}
+                    {/*        <h3 className="card-title h4">Email</h3>*/}
+                    {/*    </div>*/}
+                    {/*    /!* Body *!/*/}
+                    {/*    <div className="card-body">*/}
+                    {/*        <p>Email hiện tại của bạn là <span className="font-weight-bold">{currentMember.email}</span>*/}
+                    {/*        </p>*/}
+                    {/*        /!* Form *!/*/}
+                    {/*        <form>*/}
+                    {/*            /!* Form Group *!/*/}
+                    {/*            <div className="row form-group">*/}
+                    {/*                <label htmlFor="newEmailLabel" className="col-sm-3 col-form-label input-label">Địa*/}
+                    {/*                    chỉ email mới</label>*/}
+                    {/*                <div className="col-sm-9">*/}
+                    {/*                    <input type="email" className="form-control" name="newEmail" id="newEmailLabel"*/}
+                    {/*                           placeholder="Enter new email address"*/}
+                    {/*                           aria-label="Enter new email address"/>*/}
+                    {/*                </div>*/}
+                    {/*            </div>*/}
+                    {/*            /!* End Form Group *!/*/}
+                    {/*            <div className="d-flex justify-content-end">*/}
+                    {/*                <button type="submit" className="btn btn-primary">Save changes</button>*/}
+                    {/*            </div>*/}
+                    {/*        </form>*/}
+                    {/*        /!* End Form *!/*/}
+                    {/*    </div>*/}
+                    {/*    /!* End Body *!/*/}
+                    {/*</div>*/}
                     {/* End Card */}
                     {/* Card */}
                     <div id="passwordSection" className="card mb-3 mb-lg-5">

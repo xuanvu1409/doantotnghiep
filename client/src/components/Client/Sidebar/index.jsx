@@ -1,12 +1,20 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, NavLink} from "react-router-dom";
 import "./sidebar.css";
 import {useSelector} from "react-redux";
 import {titleCase} from "../../../utils/helper";
 import Logout from "./components/logout";
+import {Dropdown} from "react-bootstrap";
+import {Slider} from "primereact/slider";
+import Select from "../../Share/select";
+import {getLocation} from "../../../api/locationApi";
+import ButtonSubmit from "../../Share/buttonSubmit";
+import {useForm} from "react-hook-form";
+import Filter from "./components/Filter/filter";
 
 const Index = () => {
     const memberState = useSelector(state => state.member);
+
 
     return (
         <>
@@ -471,19 +479,22 @@ const Index = () => {
                                     <ul className="navbar-nav navbar-nav-lg nav-tabs border-bottom">
                                         <li className="navbar-vertical-aside-has-menu">
                                             <div className="nav-link position-relative profile-detail">
-                                                <Link to={'/profile/' + memberState.currentMember.profileId} className="d-flex">
+                                                <Link to={'/profile/' + memberState.currentMember.profileId}
+                                                      className="d-flex">
                                                     <div className="avatar avatar-sm avatar-circle mr-2">
                                                         {
                                                             memberState.currentMember.avatar
                                                             &&
-                                                            <img className="avatar-img" src={memberState.currentMember.avatar.srcImage}
+                                                            <img className="avatar-img"
+                                                                 src={memberState.currentMember.avatar.srcImage}
                                                                  alt="Image Description"/>
                                                         }
                                                     </div>
                                                     <span
                                                         className="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
                                                 <div className="media-body">
-                                                    <span className="card-title h5">{memberState.currentMember.name && titleCase(memberState.currentMember.name)}</span>
+                                                    <span
+                                                        className="card-title h5">{memberState.currentMember.name && titleCase(memberState.currentMember.name)}</span>
                                                     <span className="card-text">{memberState.currentMember.email}</span>
                                                 </div>
                                             </span>
@@ -542,54 +553,67 @@ const Index = () => {
                                             <span className="divider text-uppercase font-weight-bolder">nổi bật</span>
                                         </div>
                                         <div className="list-trend">
+                                        </div>
+                                        <div className="list-trend">
                                             <a href="/" className="user-box">
-                                                <span className="avatar" data-toggle="tooltip" data-placement="top" title="Xuân vũ">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                <span className="avatar" data-toggle="tooltip" data-placement="top"
+                                                      title="Xuân vũ">
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                             <a href="/" className="user-box">
                                                 <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg" alt="Image Description"/>
+                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
+                                                       alt="Image Description"/>
                                                 </span>
                                             </a>
                                         </div>
@@ -715,21 +739,7 @@ const Index = () => {
                             <div className="navbar-vertical-footer">
                                 <ul className="navbar-vertical-footer-list">
                                     <li className="navbar-vertical-footer-list-item">
-                                        {/* Unfold */}
-                                        <div className="hs-unfold">
-                                            <a className="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                                               href='javascript:;' data-hs-unfold-options="{
-                                                &quot;target&quot;: &quot;#styleSwitcherDropdown&quot;,
-                                                &quot;type&quot;: &quot;css-animation&quot;,
-                                                &quot;animationIn&quot;: &quot;fadeInRight&quot;,
-                                                &quot;animationOut&quot;: &quot;fadeOutRight&quot;,
-                                                &quot;hasOverlay&quot;: true,
-                                                &quot;smartPositionOff&quot;: true
-                                               }">
-                                                <i className="tio-tune"/>
-                                            </a>
-                                        </div>
-                                        {/* End Unfold */}
+                                        <Filter/>
                                     </li>
                                     <li className="navbar-vertical-footer-list-item">
                                         {/* Other Links */}

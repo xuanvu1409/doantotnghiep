@@ -1,10 +1,7 @@
 import React from 'react';
 
 const InputFeild = ({label, type, name, error, placeholder, form, className, disable, value}) => {
-    const {
-        register,
-        formState: { errors },
-    } = form;
+    const { register, formState: { errors }} = form;
 
     return (
         <div className="row form-group">

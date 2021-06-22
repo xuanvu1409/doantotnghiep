@@ -2,6 +2,8 @@ import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import loginReducer from "../features/Client/Auth/Login/loginSlice";
 import registerReducer from "../features/Client/Auth/Register/registerSlice";
 import memberReducer from "../components/Client/Sidebar/memberSlice";
+import filterReducer from "../components/Client/Sidebar/components/Filter/filterSlice";
+import appReducer from "../appSlice";
 import {
     persistStore,
     persistReducer,
@@ -18,13 +20,15 @@ import { combineReducers } from 'redux';
 const rootReducer = combineReducers({
     login: loginReducer,
     register: registerReducer,
-    member: memberReducer
+    member: memberReducer,
+    filter: filterReducer,
+    app: appReducer
 })
 
 const persistConfig = {
     key: 'root',
     storage: storage,
-    whitelist: ['member']
+    whitelist: ['member', 'app']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

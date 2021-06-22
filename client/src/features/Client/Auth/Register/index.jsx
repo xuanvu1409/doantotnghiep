@@ -7,10 +7,10 @@ import Select from 'react-select';
 import {getLocation} from "../../../../api/locationApi";
 import {registerAction} from "./registerAction";
 import {useDispatch, useSelector} from "react-redux";
-import {Button, Spinner} from "react-bootstrap";
 import DateOfBirth from "../../../../components/Share/dateOfBirth";
 import Gender from "../../../../components/Share/gender";
 import moment from "moment";
+import ButtonSubmit from "../../../../components/Share/buttonSubmit";
 
 const Index = () => {
     const registerState = useSelector(state => state.register);
@@ -45,9 +45,6 @@ const Index = () => {
     useEffect(() => {
         if (registerState.status === "error") {
             setError("email", {message: registerState.message});
-        }
-        if (registerState.status === "success") {
-            window.location.replace('/');
         }
     }, [registerState])
 
@@ -233,25 +230,8 @@ const Index = () => {
                                         <div className="invalid-feedback">{errors.password.message}</div>}
                                     </div>
                                     {/* End Form Group */}
-                                    {
-                                        isSubmitting
-                                            ?
-                                            <button className="btn btn-lg btn-block btn-primary mb-2" type="button" disabled>
-                                                <Spinner
-                                                    as="span"
-                                                    animation="grow"
-                                                    size="sm"
-                                                    role="status"
-                                                    aria-hidden="true"
-                                                />
-                                                &nbsp;Xin chờ...
-                                            </button>
-                                            :
-                                            <button type="submit" className="btn btn-lg btn-block btn-primary mb-2">Tạo
-                                                tài
-                                                khoản
-                                            </button>
-                                    }
+
+                                    <ButtonSubmit className={'btn-lg btn-block'} loading={isSubmitting} buttonText={'Đăng ký'} />
                                 </form>
                                 {/* End Form */}
                             </div>

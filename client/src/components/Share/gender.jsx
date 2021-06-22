@@ -7,7 +7,6 @@ const Gender = ({form, inputClass, value}) => {
     const {register, setValue, formState: {errors}} = form;
     const [listGender, setListGender] = useState([]);
     const [modalShow, setModalShow] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const gender = async () => {
         setModalShow(true);

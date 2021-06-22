@@ -1,91 +1,80 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {Modal, Spinner} from "react-bootstrap";
+import {useDispatch} from "react-redux";
+import {Modal} from "react-bootstrap";
 import {useForm} from "react-hook-form";
 import {uploadAvatar} from "../../../../../api/memberApi";
-import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 import {toast} from "react-toastify";
 import Dropzone from "../../../../../components/Share/dropzone";
 import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
+import CustomModal from "../../../../../components/Share/customModal";
+import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 
 
-function MyVerticallyCenteredModal(props) {
-    const {onHide, show} = props;
-    const {currentMember} = useSelector(state => state.member);
+const Avatar = (props) => {
+    const [modalShow, setModalShow] = useState(false);
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(false);
     const {handleSubmit} = useForm();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (show === true) {
+        if (modalShow === true) {
             const newFiles = [...files]
             newFiles.splice(0, 1)
             setFiles(newFiles)
         }
-    }, [show])
+    }, [modalShow])
 
     const onSubmit = () => {
         setLoading(true);
         const formData = new FormData();
         formData.append('image', files[0]);
-        formData.append('_id', currentMember._id);
         uploadAvatar(formData).then(res => {
-            dispatch(getMember(currentMember._id));
             toast.success(res.data.message);
-            onHide();
+            setModalShow(false)
             setLoading(false)
+            dispatch(getMember()).then(res => {
+                props.setMember(res.payload);
+            })
         }).catch(e => {
             console.log(e)
         })
     }
 
     return (
-        <Modal
-            {...props}
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Cập nhật ảnh đại diện
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Dropzone files={files} setFiles={setFiles}/>
-                </Modal.Body>
-                <Modal.Footer>
-                    <ButtonSubmit className={'mr-2'} loading={loading}/>
-                    <button type={"button"} onClick={props.onHide} className={"btn btn-danger"}>Đóng</button>
-                </Modal.Footer>
-            </form>
-        </Modal>
+        <>
+            <label
+                className="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar"
+                htmlFor="avatarUploader" onClick={() => props.isMe && setModalShow(true)}>
+                <img id="avatarImg" className="avatar-img" src={props.avatar?.srcImage}
+                alt="Image Description"/>
+                <span className="avatar-uploader-trigger">
+            <i className="tio-edit avatar-uploader-icon shadow-soft"/>
+        </span>
+            </label>
+            {/*<MyVerticallyCenteredModal*/}
+            {/*    show={modalShow}*/}
+            {/*    onHide={() => setModalShow(false)}*/}
+            {/*/>*/}
+            <CustomModal show={modalShow} onHide={() => setModalShow(false)} size={'md'}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Cập nhật ảnh đại diện
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Dropzone files={files} setFiles={setFiles}/>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <ButtonSubmit className={'mr-2'} loading={loading}/>
+                        <button type={"button"} onClick={() => setModalShow(false)} className={"btn btn-danger"}>Đóng
+                        </button>
+                    </Modal.Footer>
+                </form>
+            </CustomModal>
+        </>
     );
-}
-
-const Avatar = () => {
-        const {currentMember} = useSelector(state => state.member);
-        const [modalShow, setModalShow] = useState(false);
-
-        return (
-            <>
-                <label
-                    className="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar"
-                    htmlFor="avatarUploader" onClick={() => setModalShow(true)}>
-                    <img id="avatarImg" className="avatar-img" src={currentMember.avatar.srcImage}
-                         alt="Image Description"/>
-                    <span className="avatar-uploader-trigger">
-                <i className="tio-edit avatar-uploader-icon shadow-soft"/>
-            </span>
-                </label>
-                <MyVerticallyCenteredModal
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                />
-            </>
-        );
-    }
-;
+};
 
 export default Avatar;

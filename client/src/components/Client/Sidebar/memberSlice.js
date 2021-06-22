@@ -19,7 +19,7 @@ const memberSlice = createSlice({
         logout: state => {
             state.isLoading = false;
             state.error = '';
-            state.currentMember = {};
+            // state.currentMember = {};
             localStorage.removeItem('token');
             window.location.replace('/login');
         },

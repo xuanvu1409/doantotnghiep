@@ -16,9 +16,11 @@ const memberSchema =  new Schema({
     workAndEducation: {jobTitle: String, company: String, education: String},
     interestsId: [{type: Number, ref: 'interests'}],
     languageId: [{type: Number, ref: 'languages'}],
+    filter: {gender: String, age: Object, location: Object},
     personalInfo: Array,
     packageInfo: Object,
-    deletedAt: Date
+    deletedAt: Date,
+    view: {type: Number, default: 0}
 }, {
     timestamps: true,
     versionKey: false

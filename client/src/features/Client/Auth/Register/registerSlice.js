@@ -10,17 +10,15 @@ const registerSlice = createSlice({
     name: 'register',
     initialState: initialState,
     reducers: {
-        registerPending(state,) {
+        registerPending(state) {
             state.isLoading = true;
         },
         registerSuccess(state, {payload}) {
-            console.log(payload)
             state.isLoading = false;
             state.status = 'success';
             state.message = payload.message;
         },
         registerFail(state, {payload}) {
-            console.log(payload)
             state.isLoading = false;
             state.status = 'error';
             state.message = payload.response.data.message;

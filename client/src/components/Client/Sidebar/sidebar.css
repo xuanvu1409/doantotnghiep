@@ -72,3 +72,15 @@
 .navbar-dropdown-menu {
     position: fixed!important;
 }
+
+.padding-menu {
+    padding: 8px 24px
+}
+
+.dropdown-menu {
+    width: 273px;
+}
+
+.w-40 {
+    width: 33.33%
+}

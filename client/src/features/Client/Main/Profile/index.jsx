@@ -7,22 +7,29 @@ import {Nav, Tab} from "react-bootstrap";
 import Info from "./components/info";
 import Gallery from "./components/gallery";
 import Avatar from "./components/avatar";
-import {getMember} from "../../../../components/Client/Sidebar/memberSlice";
-import {useParams} from "react-router-dom";
+import {useParams, useRouteMatch} from "react-router-dom";
+import {getMemberByProfileId} from "../../../../api/memberApi";
 
 const Index = () => {
     const {profileId} = useParams();
-    const dispatch = useDispatch();
     const [isMe, setIsMe] = useState(false);
-    const {currentMember} = useSelector(state => state.member);
+    const [member, setMember] = useState({});
+    const [contact, setContact] = useState([]);
+    const [gallery, setGallery] = useState([]);
+    const match = useRouteMatch();
 
     useEffect(() => {
-        dispatch(getMember()).then(res => {
-            if (res.payload && res.payload.profileId === profileId) {
-                setIsMe(true);
-            }
-        });
-    }, [dispatch])
+        getMember();
+    }, [match.params.profileId])
+
+    const getMember = async () => {
+         await getMemberByProfileId(profileId).then(res => {
+            setMember(res.data.member);
+            setIsMe(res.data.isMe);
+            setContact(res.data.contact);
+            setGallery(res.data.gallery);
+        })
+    }
 
     return (
         <div className="row justify-content-lg-center">
@@ -58,15 +65,15 @@ const Index = () => {
                 {/* Profile Header */}
                 <div className="text-center mb-5">
                     {/* Avatar */}
-                    <Avatar/>
+                    <Avatar avatar={member.avatar} setMember={setMember} isMe={isMe}/>
                     {/* End Avatar */}
-                    <h1 className="page-header-title">{currentMember.name && titleCase(currentMember.name)}
-                        {currentMember.isConfirm &&
+                    <h1 className="page-header-title">{member.name && titleCase(member.name)}
+                        {member.isConfirm &&
                         <i className="tio-checkmark-circle ml-1" data-toggle="tooltip" data-placement="top"
                            title="Đã xác nhận"/>}</h1>
                 </div>
                 {/* End Profile Header */}
-                <Tab.Container id="left-tabs-example" defaultActiveKey="info">
+                <Tab.Container id="left-tabs-example" defaultActiveKey={'info'}>
                     <div className="hs-nav-scroller-horizontal mb-5">
                         <Nav variant="pills" className="flex-column">
                             <ul className="nav nav-tabs align-items-center">
@@ -135,10 +142,10 @@ const Index = () => {
                     {/* End Nav */}
                     <Tab.Content>
                         <Tab.Pane eventKey="info">
-                            <Info/>
+                            <Info member={member} isMe={isMe} load={getMember} contact={contact}/>
                         </Tab.Pane>
                         <Tab.Pane eventKey="gallery">
-                            <Gallery/>
+                            <Gallery gallery={gallery} isMe={isMe} load={getMember}/>
                         </Tab.Pane>
                     </Tab.Content>
                 </Tab.Container>

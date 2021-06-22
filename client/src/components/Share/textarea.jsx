@@ -2,7 +2,6 @@ import React from 'react';
 
 const Textarea = ({name, form, validation, placeholder, className, label, rows}) => {
     const {register, formState: {errors}} = form;
-    console.log(name, validation)
     return (
 
         <div className="form-group">

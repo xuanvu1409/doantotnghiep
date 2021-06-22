@@ -11,8 +11,7 @@ import useToggle from '../../../../../hooks/useToggle';
 import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
 
 const animatedComponents = makeAnimated();
-const InterestsForm = () => {
-    const dispatch = useDispatch();
+const InterestsForm = ({member, load, isMe}) => {
     const [isFormVisible, setIsFormVisible] = useToggle();
     const [interests, setInterests] = useState([]);
     const [valueForm, setValueForm] = useState([]);
@@ -21,12 +20,10 @@ const InterestsForm = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (isFormVisible) {
-            getInterests().then(res => {
-                setInterests(res.data.map(e => ({label: e.name, value: e._id})));
-            })
-        }
-    }, [isFormVisible === true])
+        getInterests().then(res => {
+            setInterests(res.data.map(e => ({label: e.name, value: e._id})));
+        })
+    }, [])
 
     const onSubmit = (data) => {
         const formData = {
@@ -35,9 +32,9 @@ const InterestsForm = () => {
         }
         setLoading(true);
         updateInterests(formData).then(res => {
+            load();
             toast.success(res.data.message);
             setIsFormVisible(false);
-            dispatch(getMember(res.data._id));
             setLoading(false);
         })
     }
@@ -52,17 +49,21 @@ const InterestsForm = () => {
             {/* Header */}
             <div className="card-header">
                 <h2 className="card-header-title h5">Sở thích</h2>
-
-                <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" onClick={setIsFormVisible}>
-                    <i className="tio-edit"/>
-                </button>
+                {
+                    isMe
+                    &&
+                    <button className="btn btn-icon btn-sm btn-ghost-secondary rounded-circle"
+                            onClick={setIsFormVisible}>
+                        <i className="tio-edit"/>
+                    </button>
+                }
             </div>
             {/* End Header */}
             {/* Body */}
             <div className="card-body">
                 {
                     isFormVisible
-                    ?
+                        ?
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="form-group">
                                 <Controller
@@ -73,7 +74,10 @@ const InterestsForm = () => {
                                             onChange={handleChange}
                                             closeMenuOnSelect={false}
                                             components={animatedComponents}
-                                            defaultValue={currentMember.interestsId && currentMember.interestsId.map(e => ({label: e.name, value: e._id}))}
+                                            defaultValue={member.interestsId && member.interestsId.map(e => ({
+                                                label: e.name,
+                                                value: e._id
+                                            }))}
                                             isMulti
                                             placeholder={"Chọn tối đa 5 sở thích của bạn"}
                                             options={valueForm.length >= 5 ? [] : interests}
@@ -90,16 +94,21 @@ const InterestsForm = () => {
                             </div>
                         </form>
                         :
-                        <ul className="list-box text-dark mb-3 cursor-pointer" onClick={setIsFormVisible}>
+                        <ul className="list-box text-dark mb-3">
                             {
-                                currentMember.interestsId
+                                member.interestsId
                                 &&
-                                currentMember.interestsId.map((e, i) => (<li className={"list-item-box"} key={i}>{e.name}</li>))
+                                member.interestsId.map((e, i) => (
+                                    <li className={"list-item-box"} key={i}>{e.name}</li>))
                             }
                             {
-                                currentMember.interestsId.length === 0
+                                member.interestsId?.length === 0
                                 &&
+                                (isMe
+                                    ?
                                     <li>Hãy cho mọi người biết sở thích của bạn</li>
+                                    :
+                                    <li>Chưa có thông tin</li>)
                             }
 
                         </ul>

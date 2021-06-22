@@ -1,5 +1,5 @@
 import axios from "../libs/axios";
 
-export const getContactById = async (memberId) => {
-    return await axios.get('/contact/get-contact/' + memberId);
+export const getContactById = async () => {
+    return await axios.get('/contact/get-contact/');
 }

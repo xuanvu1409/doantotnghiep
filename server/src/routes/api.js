@@ -5,6 +5,7 @@ const jobTitleRouter = require('./jobTitle');
 const interestsRouter = require('./interests');
 const languageRouter = require('./language');
 const contactRouter = require('./contact');
+const actionRouter = require('./action');
 
 module.exports = (app) => {
     app.use('/api/job/', jobTitleRouter);
@@ -13,5 +14,6 @@ module.exports = (app) => {
     app.use('/api/interests/', interestsRouter);
     app.use('/api/language/', languageRouter);
     app.use('/api/contact/', contactRouter);
+    app.use('/api/action/', actionRouter);
     app.use('/api/', memberRouter);
 }

@@ -10,6 +10,8 @@ export const registerAction = (formData) => async (dispatch) => {
             return res.data;
         }).then(res => {
             dispatch(registerSuccess(res));
+        }).then(res => {
+            window.location.replace('/');
         });
 
     } catch (e) {

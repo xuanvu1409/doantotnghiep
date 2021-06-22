@@ -55,7 +55,7 @@ const ContactForm = () => {
     }
 
     const getContact = async () => {
-        await getContactById(currentMember._id).then(res => {
+        await getContactById().then(res => {
             setContact(res.data);
             const arrContact = [];
             res.data.map(e => (
@@ -102,14 +102,16 @@ const ContactForm = () => {
                                     {fields.map((item, index) => (
                                         <div className={"row"} style={{marginBottom: '1rem'}} key={item.id}>
                                             <div className="col-sm-7">
-                                                <input className={`form-control ${errors.contact?.[index]?.value && "is-invalid"}`}
-                                                       type={'text'}
-                                                       {...register(`contact.${index}.value`, {
-                                                           required: {value:true, message: "Vui lòng nhập trường này"}
-                                                       })}
-                                                       defaultValue={item.value || ''}
-                                                       placeholder={'Nhập liên kết liên hệ'}/>
-                                                {errors.contact?.[index]?.value && <div className="invalid-feedback">{errors.contact?.[index]?.value.message}</div>}
+                                                <input
+                                                    className={`form-control ${errors.contact?.[index]?.value && "is-invalid"}`}
+                                                    type={'text'}
+                                                    {...register(`contact.${index}.value`, {
+                                                        required: {value: true, message: "Vui lòng nhập trường này"}
+                                                    })}
+                                                    defaultValue={item.value || ''}
+                                                    placeholder={'Nhập liên kết liên hệ'}/>
+                                                {errors.contact?.[index]?.value && <div
+                                                    className="invalid-feedback">{errors.contact?.[index]?.value.message}</div>}
                                             </div>
                                             <div className="col-sm-4 input-group-add-field"
                                                  style={{marginTop: 0, lineHeight: '36px'}}>
@@ -125,21 +127,18 @@ const ContactForm = () => {
                                                     )}
                                                     control={control}
                                                 />
-                                                {
-                                                    fields.length > 1
-                                                    &&
-                                                    <span className="input-group-add-field-delete" style={{top: '0.1rem', opacity: 1}}
-                                                          onClick={() => remove(index)}>
+                                                <span className="input-group-add-field-delete"
+                                                      style={{top: '0.1rem', opacity: 1}}
+                                                      onClick={() => remove(index)}>
                                                     <i className="tio-clear"/>
                                                 </span>
-                                                }
                                             </div>
                                         </div>
                                     ))}
                                     <span
                                         className="js-create-field btn btn-sm btn-no-focus btn-ghost-primary"
-                                        onClick={() => append({value: '', name: {label: "Website", value: "Website"} })}>
-                                        <i className="tio-add"/> Add address
+                                        onClick={() => append({value: '', name: {label: "Website", value: "Website"}})}>
+                                        <i className="tio-add"/> Thêm liên hệ
                                     </span>
                                 </div>
                                 <div className="d-flex justify-content-end">
@@ -152,31 +151,41 @@ const ContactForm = () => {
                         :
                         <div className="list-group list-group-lg list-group-flush list-group-no-gutters">
                             {
-                                contact.map((e, index) => (
-                                    <div className="list-group-item" key={index}>
-                                        <div className="media">
-                                            {listContact.map((x, index) => (
-                                                x.label === e.name
-                                                    ?
-                                                    <i key={index} className={x.icon + " list-group-icon mt-1"}/>
-                                                    :
+                                contact.length > 0
+                                    ?
+                                    contact.map((e, index) => (
+                                        <div className="list-group-item" key={index}>
+                                            <div className="media">
+                                                {listContact.map((x, index) => (
+                                                    x.label === e.name
+                                                        ?
+                                                        <i key={index} className={x.icon + " list-group-icon mt-1"}/>
+                                                        :
 
-                                                    null
-                                            ))}
-                                            <div className="media-body">
-                                                <div className="row align-items-center">
-                                                    <div className="col-sm mb-2 mb-sm-0">
-                                                        <h5 className="mb-0">{e.name}</h5>
-                                                        <a className="font-size-sm" href={e.value}>{e.value}</a>
-                                                    </div>
-                                                    <div className="col-sm-auto">
-                                                        <ToggleButton checked={e.isHide} id={e._id} onChange={changeStatus} style={{fontSize: '.8125rem', padding: '.4375rem .65625rem'}} onLabel="Hiện" offLabel="Ẩn" onIcon="pi pi-eye" offIcon="pi pi-eye-slash" />
+                                                        null
+                                                ))}
+                                                <div className="media-body">
+                                                    <div className="row align-items-center">
+                                                        <div className="col-sm mb-2 mb-sm-0">
+                                                            <h5 className="mb-0">{e.name}</h5>
+                                                            <a className="font-size-sm" href={e.value}>{e.value}</a>
+                                                        </div>
+                                                        <div className="col-sm-auto">
+                                                            <ToggleButton checked={e.isHide} id={e._id}
+                                                                          onChange={changeStatus} style={{
+                                                                fontSize: '.8125rem',
+                                                                padding: '.4375rem .65625rem'
+                                                            }} onLabel="Hiện" offLabel="Ẩn" onIcon="pi pi-eye"
+                                                                          offIcon="pi pi-eye-slash"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
+                                    ))
+                                    :
+                                    <div>Thêm liên hệ của
+                                        bạn</div>
                             }
                         </div>
                 }

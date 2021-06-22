@@ -47,3 +47,8 @@
 .btn-remove-image:hover {
     color: #d7164a!important;
 }
+
+.border-card {
+    height: 300px !important;
+    border-radius: .75rem !important;
+}

@@ -27,11 +27,26 @@ class ProfileController {
     }
 
     getMemberByProfileId = async (req, res) => {
-        const profileId = req.params.profileId;
+        const {profileId} = req.params;
         try {
-            const member = await Member.findOne({profileId});
-            if (!member) return res.status(404).json({message: "ID thành viên không tồn tại"});
-            return res.json(member);
+            const member = await Member.findOne({profileId})
+                .select(["-password", "-isClose", "-createdAt", "-updatedAt"])
+                .populate('interestsId')
+                .populate('genderId')
+                .populate('locationId')
+                .populate('languageId');
+            let isMe = false;
+            if (profileId === req.member.profileId) {
+                isMe = true;
+            }
+            const contact = await Contact.find({memberId: member._id, isHide: false});
+            const gallery = await Image.find(
+                {memberId: member._id}, {}, {
+                    sort: {
+                        cloudinaryId: -1
+                    }
+                })
+            res.json({member, isMe, contact, gallery});
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});
@@ -71,16 +86,22 @@ class ProfileController {
     uploadAvatar = async (req, res) => {
         const {_id} = req.member;
         try {
+            const member = await Member.findById(_id);
+            if (!member) return res.status(404).json({message: "ID thành viên không tồn tại"});
+            if (member.avatar.cloudinaryId) {
+                await cloudinary.uploader.destroy(member.avatar.cloudinaryId);
+            }
             await cloudinary.uploader
                 .upload(req.file.path)
                 .then(result => {
-                    Member.findOneAndUpdate(_id, {
-                        avatar: {
-                            srcImage: result.secure_url,
-                            cloudinaryId: result.public_id
+                    member.avatar = {
+                        srcImage: result.secure_url,
+                        cloudinaryId: result.public_id
+                    }
+                    member.save((err, doc) => {
+                        if (!err) {
+                            return res.json({message: "Cập nhật thành công"});
                         }
-                    }, (err) => {
-                        if (!err) return res.json({message: "Cập nhật thành công", _id});
                     })
                 })
                 .catch(error => {
@@ -101,7 +122,7 @@ class ProfileController {
             member.locationId = locationId;
             member.save((err, doc) => {
                 if (!err) {
-                    return res.json({message: "Cập nhật thành công", _id: doc._id});
+                    return res.json({message: "Cập nhật thành công"});
                 }
             })
         } catch (e) {
@@ -122,7 +143,8 @@ class ProfileController {
     }
 
     updateInterests = async (req, res) => {
-        const {_id, interests} = req.body;
+        const {_id} = req.member;
+        const {interests} = req.body;
         try {
             const member = await Member.findById(_id);
             if (!member) return res.status(404).json({message: "ID thành viên không tồn tại"});
@@ -150,7 +172,8 @@ class ProfileController {
     }
 
     updateLanguage = async (req, res) => {
-        const {_id, language} = req.body;
+        const {_id} = req.member;
+        const {language} = req.body;
         try {
             const member = await Member.findById(_id);
             if (!member) return res.status(404).json({message: "ID thành viên không tồn tại"});
@@ -193,25 +216,6 @@ class ProfileController {
         }
     }
 
-    getGallery = async (req, res) => {
-        const {_id} = req.member;
-        try {
-            await Image.find(
-                {memberId: _id},
-                {},
-                {
-                    sort: {
-                        cloudinaryId: -1
-                    }
-                }, (err, docs) => {
-                    res.json(docs);
-                })
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({message: "Đã xảy ra sự cố"});
-        }
-    }
-
     removeImage = async (req, res) => {
         const {_id} = req.params;
         console.log(_id)
@@ -228,7 +232,7 @@ class ProfileController {
     }
 
     setAvatarbyId = async (req, res) => {
-        const {_id} = req.member;
+        const {_id} = req.params;
         try {
             const image = await Image.findById(_id);
             if (!image) return res.status(404).json({message: "Ảnh không tồn tại"})
@@ -237,14 +241,15 @@ class ProfileController {
             await cloudinary.uploader
                 .upload(image.srcImage)
                 .then(async (result) => {
-                    await cloudinary.uploader.destroy(member.avatar.cloudinaryId);
-                    await Member.findOneAndUpdate(image.memberId, {
-                        avatar: {
-                            srcImage: result.secure_url,
-                            cloudinaryId: result.public_id
-                        }
-                    }, (err) => {
-                        if (!err) return res.json({message: "Cập nhật thành công", _id: member._id});
+                    if (member.avatar.cloudinaryId) {
+                        await cloudinary.uploader.destroy(member.avatar.cloudinaryId);
+                    }
+                    member.avatar = {
+                        srcImage: result.secure_url,
+                        cloudinaryId: result.public_id
+                    }
+                    member.save(err => {
+                        if (!err) return res.json({message: "Cập nhật thành công"});
                     })
                 })
                 .catch(error => {
@@ -252,7 +257,7 @@ class ProfileController {
                 })
         } catch (e) {
             console.log(e);
-            res.status(500).json({message: "Đã xảy ra sự cố"});
+            res.status(501).json({message: "Đã xảy ra sự cố"});
         }
     }
 
@@ -331,7 +336,7 @@ class ProfileController {
     }
 
     changeStatusContact = async (req, res) => {
-        const {_id} = req.member;
+        const {_id} = req.params;
         const  {isHide} = req.body;
         try {
             const contact = await Contact.findById(_id);
@@ -339,18 +344,6 @@ class ProfileController {
             contact.isHide = isHide;
             contact.save(err => {
                 if (!err) return res.json({message: "Cập nhật thành công"});
-            })
-        } catch (e) {
-            console.log(e)
-            res.status(500).json({message: "Đã xảy ra sự cố"});
-        }
-    }
-
-    getContactNotHidden = async (req, res) => {
-        const {_id} = req.member;
-        try {
-            await Contact.find({memberId: _id, isHide: false}, (err, docs) => {
-                if (!err) return res.json(docs);
             })
         } catch (e) {
             console.log(e)
@@ -394,6 +387,21 @@ class ProfileController {
             const member = await Member.findById(_id).select("personalInfo");
             if (!member) return res.status(404).json({mesage: "Thành viên không tồn tại"});
             return res.json(member.personalInfo);
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    updateFilter = async (req, res) => {
+        const {_id} = req.member;
+        try {
+            const member = await Member.findById(_id);
+            if (!member) return res.status(404).json({mesage: "Thành viên không tồn tại"});
+            member.filter = req.body;
+            member.save(err => {
+                if (!err) return res.json({message: "Cập nhật thành công"});
+            })
         } catch (e) {
             console.log(e)
             res.status(500).json({message: "Đã xảy ra sự cố"});

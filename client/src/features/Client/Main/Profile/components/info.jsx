@@ -13,8 +13,7 @@ import {useSelector} from "react-redux";
 import Contact from "./contact";
 import PersonalInfoForm from "./personalInfoForm";
 
-const Info = () => {
-    const {currentMember} = useSelector(state => state.member);
+const Info = ({member, isMe, load, contact}) => {
 
     return (
         <div className="row">
@@ -34,20 +33,20 @@ const Info = () => {
                 {/*</div>*/}
                 {/* End Card */}
                 {/* Card */}
-                <Contact/>
+                <Contact contact={contact} isMe={isMe}/>
                 {/* End Card */}
             </div>
 
             <div className="col-lg-8">
-                <WorkAndEducationForm/>
+                <WorkAndEducationForm member={member} isMe={isMe} load={load}/>
 
-                <LocationForm/>
+                <LocationForm member={member} isMe={isMe} load={load}/>
 
-                <InterestsForm/>
+                <InterestsForm member={member} isMe={isMe} load={load}/>
 
-                <PersonalInfoForm/>
+                <PersonalInfoForm member={member} isMe={isMe} load={load}/>
 
-                <LanguageForm/>
+                <LanguageForm member={member} isMe={isMe} load={load}/>
             </div>
         </div>
     );

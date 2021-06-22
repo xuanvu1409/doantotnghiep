@@ -7,10 +7,7 @@ const Index = ({component: Component, ...rest}) => {
     useEffect(() => {
         let token = localStorage.getItem('token');
         if (!token) {
-            console.log("hehye")
             redirectLogin()
-        } else {
-            console.log('hkhk')
         }
     }, [location])
 

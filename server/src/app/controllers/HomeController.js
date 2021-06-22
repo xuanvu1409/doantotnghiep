@@ -1,10 +1,9 @@
 const Location = require('../models/location');
 const Gender = require('../models/gender');
-const Contact = require('../models/contact');
 
 class HomeController {
 
-    get = (req, res) => {
+    get = async (req, res) => {
         res.send("Welcome to Xuan Vu's website");
     }
 
