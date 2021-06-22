@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {removeImageById, setAvatarById, uploadImage} from "../../../../../api/memberApi";
 import {useForm} from "react-hook-form";
@@ -61,7 +61,7 @@ const Gallery = ({gallery, isMe, load}) => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Header */}
                 <div className="card-header">
-                    <h4 className="card-header-title">Media</h4>
+                    <h4 className="card-header-title">Media {isMe &&  <span className={'text-danger'}>(Vui lòng chọn tối đa 5 ảnh)</span>}</h4>
                     {
                         files.length > 0
                         &&
@@ -90,7 +90,7 @@ const Gallery = ({gallery, isMe, load}) => {
                     {
                         isMe
                         &&
-                        <Dropzone files={files} setFiles={setFiles} mutiple={true} className={"mb-3 mb-lg-5"}/>
+                        <Dropzone maxFile={5} files={files} setFiles={setFiles} mutiple={true} className={"mb-3 mb-lg-5"}/>
                     }
                     {/* End Dropzone */}
                     {/* Gallery */}

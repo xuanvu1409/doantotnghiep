@@ -50,6 +50,24 @@ export const sweetAlert = {
                 callback()
             }
         })
+    },
+
+    success(title, message, callback) {
+        Swal.fire({
+            icon: 'success',
+            title: title,
+            html: message,
+            showConfirmButton: false,
+            timer: 1500,
+            didClose() {
+                callback()
+            }
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                callback()
+            }
+        })
     }
 
 }

@@ -2,6 +2,15 @@ const Member = require('../models/member');
 const moment = require('moment');
 const Image = require('../models/image');
 const Action = require('../models/actions');
+const Relationship = require('../models/relationship');
+
+//Action
+//(type:1) Thích
+//(type:2) Danh sách yêu thích
+
+//Relationship
+//(type:1) Gửi lời mời
+//(type:2) Đồng ý
 
 class EncounterController {
 
@@ -36,16 +45,44 @@ class EncounterController {
                         if (await Action.exists({actionMember: doc._id, actionBy: _id, type: 1})) {
                             liked = true;
                         }
-                        return res.json({member: doc, images, liked: liked});
+                        let favorited = false;
+                        if (await Action.exists({actionMember: doc._id, actionBy: _id, type: 2})) {
+                            favorited = true;
+                        }
+                        let status = 0;
+                        let relationship = await Relationship.findOne({relatingId: doc._id, relatedId: _id});
+                        if (relationship) {
+                            status = relationship.status;
+                        }
+                        return res.json({member: doc, images, liked: liked, favorited, relationship: status});
                     })
                 }
             } else {
-                await Member.findOne({}, async (err, doc) => {
-                    if (doc) {
-                        images = await Image.find({memberId: doc._id});
-                    }
-                    return res.json({member: doc, images});
-                })
+                const newMember = await Member.findOne({
+                    _id: {$nin: [...req.body, _id]}
+                }).sort('view');
+                if (newMember) {
+                    newMember.view += 1;
+                    newMember.save(async (err, doc) => {
+                        if (doc) {
+                            images = await Image.find({memberId: doc._id});
+                        }
+                        let liked = false;
+                        if (await Action.exists({actionMember: doc._id, actionBy: _id, type: 1})) {
+                            liked = true;
+                        }
+                        let favorited = false;
+                        if (await Action.exists({actionMember: doc._id, actionBy: _id, type: 2})) {
+                            favorited = true;
+                        }
+                        let status = 0;
+                        let relationship = await Relationship.findOne({relatingId: doc._id, relatedId: _id});
+                        if (relationship) {
+                            status = relationship.status;
+                        }
+                        return res.json({member: doc, images, liked: liked, favorited, relationship: status});
+                    })
+                }
             }
         } catch (e) {
             console.log(e);
@@ -57,10 +94,10 @@ class EncounterController {
         const {_id} = req.member;
         const {memberId} = req.body;
         try {
-            if (await Action.exists({actionMember: memberId, actionBy: _id})) {
-                Action.remove({actionMember: memberId, actionBy: _id}, (err, doc) => {
+            if (await Action.exists({actionMember: memberId, actionBy: _id, type: 1})) {
+                Action.remove({actionMember: memberId, actionBy: _id, type: 1}, (err, doc) => {
                     if (!err) {
-                        return res.json({message: 'Bỏ yêu thích thành công', action: doc});
+                        return res.json({message: 'Cập nhật thành công'});
                     }
                 })
             } else {
@@ -70,7 +107,63 @@ class EncounterController {
                     type: 1
                 }, (err, doc) => {
                     if (!err) {
-                        return res.json({message: 'Yêu thích thành công', action: doc});
+                        return res.json({message: 'Cập nhật thành công'});
+                    }
+                })
+            }
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    favorite = async (req, res) => {
+        const {_id} = req.member;
+        const {memberId} = req.body;
+        try {
+            if (await Action.exists({actionMember: memberId, actionBy: _id, type: 2})) {
+                await Action.remove({actionMember: memberId, actionBy: _id, type: 2}, (err, doc) => {
+                    if (!err) {
+                        return res.json({message: 'Đã xóa khỏi danh sách yêu thích'});
+                    }
+                })
+            } else {
+                await Action.create({
+                    actionMember: memberId,
+                    actionBy: _id,
+                    type: 2
+                }, (err, doc) => {
+                    if (!err) {
+                        return res.json({message: 'Đã thêm vào danh sách yêu thích'});
+                    }
+                })
+            }
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
+    }
+
+    sendCrush = async (req, res) => {
+        const {_id} = req.member;
+        const {memberId, content} = req.body;
+        console.log(req.body)
+        try {
+            if (await Relationship.exists({relatingId: memberId, relatedId: _id})) {
+                await Relationship.remove({relatingId: memberId, relatedId: _id}, (err, doc) => {
+                    if (!err) {
+                        return res.json({message: 'Đã xóa khỏi danh sách kết đôi'});
+                    }
+                })
+            } else {
+                await Relationship.create({
+                    relatingId: memberId,
+                    relatedId: _id,
+                    status: 1,
+                    content: content
+                }, (err, doc) => {
+                    if (!err) {
+                        return res.json({message: 'Đã gửi lời tỏ tình'});
                     }
                 })
             }

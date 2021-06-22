@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDropzone} from "react-dropzone";
+import {toast} from "react-toastify";
 
 const thumbsContainer = {
     display: 'flex',
@@ -35,12 +36,13 @@ const img = {
     objectFit: 'cover'
 };
 
-const Dropzone = ({files, setFiles, mutiple, className}) => {
+const Dropzone = ({files, setFiles, mutiple, className, maxFile}) => {
 
     const {getRootProps, getInputProps} = useDropzone({
         autoDiscover: false,
         accept: 'image/*',
         multiple: mutiple || false,
+        maxFiles: maxFile || 1,
         onDrop: acceptedFiles => {
             setFiles(acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)

@@ -69,7 +69,7 @@
     color: #F99DF0;
 }
 
-.encouter-page #actions button.active {
+.encouter-page #actions #like.active {
     background-color: #F99DF0;
 }
 
@@ -89,6 +89,22 @@
     color: #29B9FF;
 }
 
+.encouter-page #actions #favorite.active {
+    background-color: #29B9FF;
+}
+
+.encouter-page #actions button.active i.tio-star {
+    color: #fff;
+}
+
 .encouter-page #actions button i.tio-favorite-comment {
     color: #9B4ED9;
+}
+
+.encouter-page #actions #crush.active {
+    background-color: #29B9FF;
+}
+
+.encouter-page #actions button.active i.tio-favorite-comment {
+    color: #fff;
 }
