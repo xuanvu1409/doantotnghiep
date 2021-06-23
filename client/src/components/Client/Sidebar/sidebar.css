@@ -34,6 +34,7 @@
     margin-right: 10px;
     margin-bottom: 10px;
 }
+
 .list-trend .user-box:nth-child(4n + 0) {
     margin-right: 0px;
 }
@@ -58,7 +59,7 @@
     color: unset !important;
 }
 
-.profile-detail a:hover span{
+.profile-detail a:hover span {
     color: #0052ea !important;
 }
 
@@ -70,7 +71,7 @@
 }
 
 .navbar-dropdown-menu {
-    position: fixed!important;
+    position: fixed !important;
 }
 
 .padding-menu {
@@ -83,4 +84,21 @@
 
 .w-40 {
     width: 33.33%
+}
+
+.fullscreen-modal.modal-dialog  {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    background-color: papayawhip;
+}
+
+.fullscreen-modal .modal-content {
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    right: 50px;
+    bottom: 50px;
 }

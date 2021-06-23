@@ -5,9 +5,12 @@ import {useSelector} from "react-redux";
 import {titleCase} from "../../../utils/helper";
 import Logout from "./components/logout";
 import Filter from "./components/Filter/filter";
+import CustomModal from "../../Share/customModal";
+import {Modal} from "react-bootstrap";
 
 const Index = () => {
     const memberState = useSelector(state => state.member);
+    const [modalShow, setModalShow] = useState(false);
 
     return (
         <>
@@ -834,43 +837,9 @@ const Index = () => {
                                     <li className="navbar-vertical-footer-list-item">
                                         {/* Other Links */}
                                         <div className="hs-unfold">
-                                            <a className="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                                               href='javascript:;' data-hs-unfold-options="{
-            &quot;target&quot;: &quot;#otherLinksDropdown&quot;,
-            &quot;type&quot;: &quot;css-animation&quot;,
-            &quot;animationIn&quot;: &quot;slideInDown&quot;,
-            &quot;hideOnScroll&quot;: true
-           }">
+                                            <Link to={'/message'} className="btn btn-icon btn-ghost-secondary rounded-circle" onClick={() => setModalShow(true)}>
                                                 <i className="tio-messenger"/>
-                                            </a>
-                                            <div id="otherLinksDropdown"
-                                                 className="hs-unfold-content dropdown-unfold dropdown-menu navbar-vertical-footer-dropdown">
-                                                <span className="dropdown-header">Help</span>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-book-outlined dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="Resources & tutorials">Resources &amp; tutorials</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-command-key dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2" title="Keyboard shortcuts">Keyboard shortcuts</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-alt dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2" title="Connect other apps">Connect other apps</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-gift dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="What's new?">What's new?</span>
-                                                </a>
-                                                <div className="dropdown-divider"/>
-                                                <span className="dropdown-header">Contacts</span>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-chat-outlined dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2" title="Contact support">Contact support</span>
-                                                </a>
-                                            </div>
+                                            </Link>
                                         </div>
                                         {/* End Other Links */}
                                     </li>

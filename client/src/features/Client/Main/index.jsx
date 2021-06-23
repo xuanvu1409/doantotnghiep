@@ -8,6 +8,7 @@ import Search from "./Search";
 import Encounters from "./Encounters";
 import Profile from "./Profile";
 import Setting from "./Setting";
+import Message from "./Message";
 
 const Index = () => {
 
@@ -72,6 +73,7 @@ const Index = () => {
                         <Route path={'/favourite'} component={Favourite} />
                         <Route path={'/profile/:profileId'} component={Profile} />
                         <Route path={'/settings'} component={Setting} />
+                        <Route path={'/message'} component={Message} />
                         <Redirect exact={true} from={'/'} to={'/encounters'} />
                     </Switch>
                 </div>
