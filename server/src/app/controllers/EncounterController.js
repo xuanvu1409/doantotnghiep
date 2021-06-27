@@ -1,8 +1,10 @@
 const Member = require('../models/member');
 const moment = require('moment');
 const Image = require('../models/image');
-const Action = require('../models/actions');
+const Action = require('../models/action');
 const Relationship = require('../models/relationship');
+const Message = require('../models/message');
+const MessageThread = require('../models/messageThread');
 
 //Action
 //(type:1) Thích
@@ -13,6 +15,59 @@ const Relationship = require('../models/relationship');
 //(type:2) Đồng ý
 
 class EncounterController {
+
+    sendMessage = async (req, res) => {
+        const {_id} = req.member;
+        const {messageTo, content, media} = req.body;
+        try {
+            const threadFrom = await MessageThread.findOne({to: messageTo, from: _id, status: 1});
+            const threadTo = await MessageThread.findOne({to: _id, from: messageTo, status: 1});
+            if (!threadTo) {
+                await MessageThread.create({
+                    to: _id,
+                    from: messageTo,
+                    status: 1
+                })
+            }
+            if (!threadFrom) {
+                await MessageThread.create({
+                    to: messageTo,
+                    from: _id,
+                    status: 1
+                }, async (err) => {
+                    if (!err) {
+                        await Message.create({
+                            to: messageTo,
+                            from: _id,
+                            content: content,
+                            media: media,
+                            status: 1
+                        }, (err) => {
+                            if (!err) {
+                                return res.json({message: "Cập nhật thành công"});
+                            }
+                            console.log(err)
+                        })
+                    }
+                })
+            } else {
+                await Message.create({
+                    to: messageTo,
+                    from: _id,
+                    content: content,
+                    media: media,
+                    status: 1
+                }, (err) => {
+                    if (!err) {
+                        return res.json({message: "Cập nhật thành công"});
+                    }
+                    console.log(err)
+                })
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     get = async (req, res) => {
         const {_id} = req.member;

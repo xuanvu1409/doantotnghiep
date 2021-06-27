@@ -19,7 +19,8 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.15",
     "mongoose-auto-increment": "^5.0.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "socket.io": "^4.1.2"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

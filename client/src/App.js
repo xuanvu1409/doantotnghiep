@@ -21,6 +21,7 @@ function App() {
         window.$('.js-hs-unfold-invoker').each(function (e) {
             var unfold = new window.HSUnfold(window.$(this)).init();
         });
+
         return (
             setTimeout(() => {
                 dispatch(loading(false))

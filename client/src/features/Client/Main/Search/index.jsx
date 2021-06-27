@@ -5,7 +5,7 @@ import {search} from "../../../../api/memberApi";
 import {Link} from "react-router-dom";
 import moment from "moment";
 import {titleCase} from "../../../../utils/helper";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 const Index = () => {
     const [pagination, setPagination] = useState({
@@ -33,7 +33,7 @@ const Index = () => {
     }
 
     return (
-        <div className="search-page">
+        <div className="content container-fluid search-page">
             <div className="row">
                 {
                     member.map(e => (

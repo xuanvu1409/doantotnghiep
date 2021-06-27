@@ -61,7 +61,7 @@ const Gallery = ({gallery, isMe, load}) => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Header */}
                 <div className="card-header">
-                    <h4 className="card-header-title">Media {isMe &&  <span className={'text-danger'}>(Vui lòng chọn tối đa 5 ảnh)</span>}</h4>
+                    <h4 className="card-header-title">Media</h4>
                     {
                         files.length > 0
                         &&

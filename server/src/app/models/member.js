@@ -33,4 +33,5 @@ memberSchema.plugin(autoIncrement.plugin, {
     startAt: 1,
     incrementBy: 1
 });
+
 module.exports = mongoose.model('members', memberSchema);

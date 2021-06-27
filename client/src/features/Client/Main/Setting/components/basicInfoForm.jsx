@@ -28,8 +28,8 @@ const BasicInfoForm = () => {
         }
         setLoading(true)
         updateBasicInfo(formData).then(res => {
-            toast.success(res.data.message);
             dispatch(getMember(res.data._id));
+            toast.success(res.data.message);
             setIsFormVisible();
             setLoading(false);
         }).catch(e => {

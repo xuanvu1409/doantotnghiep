@@ -6,7 +6,6 @@ import {uploadAvatar} from "../../../../../api/memberApi";
 import {toast} from "react-toastify";
 import Dropzone from "../../../../../components/Share/dropzone";
 import ButtonSubmit from "../../../../../components/Share/buttonSubmit";
-import CustomModal from "../../../../../components/Share/customModal";
 import {getMember} from "../../../../../components/Client/Sidebar/memberSlice";
 
 
@@ -52,11 +51,7 @@ const Avatar = (props) => {
             <i className="tio-edit avatar-uploader-icon shadow-soft"/>
         </span>
             </label>
-            {/*<MyVerticallyCenteredModal*/}
-            {/*    show={modalShow}*/}
-            {/*    onHide={() => setModalShow(false)}*/}
-            {/*/>*/}
-            <CustomModal show={modalShow} onHide={() => setModalShow(false)} size={'md'}>
+            <Modal show={modalShow} onHide={() => setModalShow(false)} size={'md'} centered>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
@@ -72,7 +67,7 @@ const Avatar = (props) => {
                         </button>
                     </Modal.Footer>
                 </form>
-            </CustomModal>
+            </Modal>
         </>
     );
 };

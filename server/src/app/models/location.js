@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 const autoIncrement = require('mongoose-auto-increment');
 
 const locationSchema =  new Schema({
-    _id: Number,
     name: String,
 }, {
     versionKey: false

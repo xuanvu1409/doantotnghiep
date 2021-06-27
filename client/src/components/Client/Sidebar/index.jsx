@@ -1,16 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, NavLink} from "react-router-dom";
 import "./sidebar.css";
 import {useSelector} from "react-redux";
 import {titleCase} from "../../../utils/helper";
 import Logout from "./components/logout";
 import Filter from "./components/Filter/filter";
-import CustomModal from "../../Share/customModal";
-import {Modal} from "react-bootstrap";
 
 const Index = () => {
     const memberState = useSelector(state => state.member);
-    const [modalShow, setModalShow] = useState(false);
 
     return (
         <>
@@ -837,7 +834,7 @@ const Index = () => {
                                     <li className="navbar-vertical-footer-list-item">
                                         {/* Other Links */}
                                         <div className="hs-unfold">
-                                            <Link to={'/message'} className="btn btn-icon btn-ghost-secondary rounded-circle" onClick={() => setModalShow(true)}>
+                                            <Link to={'/message'} className="btn btn-icon btn-ghost-secondary rounded-circle">
                                                 <i className="tio-messenger"/>
                                             </Link>
                                         </div>

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {getGender} from "../../api/genderApi";
 import {Button, Modal} from "react-bootstrap";
-import CustomModal from "./customModal";
 
 const Gender = ({form, inputClass, value}) => {
     const {register, setValue, formState: {errors}} = form;
@@ -78,7 +77,7 @@ const Gender = ({form, inputClass, value}) => {
             </div>
 
 
-            <CustomModal show={modalShow} onHide={() => setModalShow(false)} size={'sm'}>
+            <Modal show={modalShow} onHide={() => setModalShow(false)} size={'sm'} centered>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         <h5 className="modal-title h4 text-center" id="mySmallModalLabel">Chọn giới tính của
@@ -106,7 +105,7 @@ const Gender = ({form, inputClass, value}) => {
                     </div>
                     <Button className={'float-right'} onClick={() => setModalShow(false)}>Đóng</Button>
                 </Modal.Body>
-            </CustomModal>
+            </Modal>
         </>
     );
 };

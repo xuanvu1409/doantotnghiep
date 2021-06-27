@@ -8,7 +8,6 @@ import {favoriteMember, likeMember, sendCrush} from "../../../../api/actionApi";
 import {useSelector} from "react-redux";
 import LoadingSmall from "../../../../components/Share/loadingSmall";
 import {sweetAlert} from "../../../../libs/sweetAlert2";
-import CustomModal from "../../../../components/Share/customModal";
 import {Modal} from "react-bootstrap";
 import ButtonSubmit from "../../../../components/Share/buttonSubmit";
 import Textarea from "../../../../components/Share/textarea";
@@ -105,7 +104,7 @@ const Index = () => {
     }
 
     return (
-        <>
+        <div className={'content container-fluid'}>
             <div className="encouter-page">
                 <div className="card photo">
                     {
@@ -132,7 +131,7 @@ const Index = () => {
                     cancelRelationship={() => cancelSendCrush}
                 />
             </div>
-            <CustomModal show={modalShow} onHide={() => setModalShow(false)} size={'md'}>
+            <Modal show={modalShow} onHide={() => setModalShow(false)} size={'md'} centered>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
@@ -159,8 +158,8 @@ const Index = () => {
                         </button>
                     </Modal.Footer>
                 </form>
-            </CustomModal>
-        </>
+            </Modal>
+        </div>
     );
 };
 

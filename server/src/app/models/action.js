@@ -6,6 +6,7 @@ const actionSchema =  new Schema({
     actionBy: {type:Number, required: true, ref: 'members'},
     type: {type: Number, required: true}
 }, {
+    timestamps: true,
     versionKey: false
 })
 
