@@ -1,5 +1,6 @@
 const Location = require('../models/location');
 const Gender = require('../models/gender');
+const Member = require('../models/member');
 
 class HomeController {
 
@@ -17,6 +18,16 @@ class HomeController {
         await Gender.find({}, (err, docs) => {
             res.json(docs);
         })
+    }
+
+    spotlight = async (req, res) => {
+        try {
+            const spotlight = await Member.find({}).sort('-like').limit(12);
+            return res.json(spotlight);
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({message: "Đã xảy ra sự cố"});
+        }
     }
 }
 

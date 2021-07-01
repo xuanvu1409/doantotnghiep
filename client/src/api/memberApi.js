@@ -89,3 +89,7 @@ export const search = async (pagination) => {
 export const encounter = async (formData) => {
     return await axios.post('/encounter', formData);
 }
+
+export const getSpotlight = async () => {
+    return await axios.get('/get-spotlight');
+}

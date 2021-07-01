@@ -1,14 +1,12 @@
-import React, {} from 'react';
+import React from 'react';
 import {Switch, Route, Redirect} from "react-router-dom";
 import SideBar from "../../../components/Client/Sidebar";
 import Matched from "./Matched";
-import History from "./History";
 import Favourite from "./Favourite";
 import Search from "./Search";
 import Encounters from "./Encounters";
 import Profile from "./Profile";
 import Setting from "./Setting";
-import Message from "./Message";
 
 const Index = () => {
 
@@ -34,11 +32,9 @@ const Index = () => {
                         <Route path={'/search'} component={Search} />
                         <Route path={'/encounters'} component={Encounters} />
                         <Route path={'/matched'} component={Matched} />
-                        <Route path={'/history'} component={History} />
                         <Route path={'/favourite'} component={Favourite} />
                         <Route path={'/profile/:profileId'} component={Profile} />
                         <Route path={'/settings'} component={Setting} />
-                        <Route path={'/message'} component={Message} />
                         <Redirect exact={true} from={'/'} to={'/encounters'} />
                     </Switch>
             </main>

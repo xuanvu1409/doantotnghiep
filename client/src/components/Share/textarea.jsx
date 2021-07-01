@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Textarea = ({name, form, validation, placeholder, className, label, rows, value}) => {
+const Textarea = ({name, form, validation, placeholder, className, label, rows, defaultValue}) => {
     const {register, formState: {errors}} = form;
     return (
 
@@ -9,7 +9,7 @@ const Textarea = ({name, form, validation, placeholder, className, label, rows, 
                    htmlFor={name}>{label}</label>
             <textarea id={name}
                 {...register(name, validation)}
-                value={value || ''}
+                defaultValue={defaultValue || ''}
                 className={`form-control ${errors.company && "is-invalid"} ${className || ''}`}
                 placeholder={placeholder} rows={rows || 4}/>
             {errors[name] &&

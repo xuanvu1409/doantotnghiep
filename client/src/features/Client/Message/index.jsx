@@ -2,42 +2,68 @@ import React, {useEffect, useState} from 'react';
 import './message.css';
 import Chats from "./components/chats";
 import Box from "./components/box";
-import {socket} from "../../../../libs/socketIO";
+import {socket} from "../../../libs/socketIO";
 import {useSelector} from "react-redux";
-import {titleCase} from "../../../../utils/helper";
-import {getMessages, getMessageThread} from "../../../../api/messageApi";
+import {titleCase} from "../../../utils/helper";
+import {getMessages, getMessageThread} from "../../../api/messageApi";
+import {useParams} from "react-router-dom";
 
 const Index = () => {
     const [messages, setMessages] = useState([]);
-    const [messageThread, setMessageThread] = useState([]);
+    const [data, setData] = useState({
+        messageThread: [],
+        member: []
+    });
     const [me, setMe] = useState(null);
     const [toMember, setToMember] = useState({});
     const [selectThread, setSelectThread] = useState(false);
     const {currentMember} = useSelector(state => state.member);
+    const {id} = useParams();
+    const [errMatched, setErrMatched] = useState(false);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
-        getMessageThread().then(res => {
-            setMessageThread(res.data);
-        })
+        if (id) {
+            loadMessage(id)
+        }
+        getThread();
     }, [])
+
+    const getThread = async (q = '') => {
+        let formData = {
+            q
+        }
+        await getMessageThread(formData).then(res => {
+            setData({
+                messageThread: res.data.thread,
+                member: res.data.member
+            });
+        })
+    }
 
     useEffect(() => {
         socket.on('message', message => {
-            scollToBottom();
             setMessages(messages => [...messages, message]);
+            getThread();
         });
     }, [])
 
-    const selectMessageThread = async (id) => {
+    const loadMessage = async (id) => {
         let formData = {
-            idTo: id
+            idTo: id ? id : toMember._id,
+            limit: 15
         }
+        setFiles([]);
         setSelectThread(true);
+        setErrMatched(false);
         await getMessages(formData).then(res => {
             setMe(res.data.me);
             setMessages(res.data.messages);
-            setToMember(res.data.toMember)
-            scollToBottom();
+            setToMember(res.data.toMember);
+        }).catch(e => {
+            setErrMatched(true);
+            setToMember(e.response.data.toMember);
+            setMessages(e.response.data.messages);
         })
     }
 
@@ -49,20 +75,21 @@ const Index = () => {
         socket.emit('send-message', formData);
     }
 
-    const scollToBottom = () => {
-        const elem = document.getElementById('end-of-chat');
-        if (elem) {
-            elem.scrollIntoView({ behavior: "smooth" });
-        }
-    }
-
     return (
         <div className={'app-mess'}>
-            <Box messageThread={messageThread} selectMessageThread={selectMessageThread}/>
+            <Box data={data} loadMessage={loadMessage} getThread={getThread} toMember={toMember}/>
             {
                 selectThread
                     ?
-                    <Chats messages={messages} me={me} toMember={toMember} sendMessage={sendMessage}/>
+                    <Chats
+                        files={files}
+                        setFiles={setFiles}
+                        messages={messages}
+                        me={me} toMember={toMember}
+                        sendMessage={sendMessage}
+                        loadMessage={loadMessage}
+                        errMatched={errMatched}
+                        getThread={getThread}/>
                     :
                     <div className="main-mess">
                         <div className="chat flex-column justify-content-center text-center">
@@ -70,7 +97,7 @@ const Index = () => {
                                 <div className="avatar avatar-xl avatar-circle mb-3">
                                     <img className="avatar-img" src={currentMember.avatar?.srcImage} alt=""/>
                                 </div>
-                                <h4>Chào, {titleCase(currentMember?.name)}</h4>
+                                <h4>Xin chào, {titleCase(currentMember?.name)}</h4>
                                 <p>Vui lòng chọn một cuộc trò chuyện để bắt đầu nhắn tin.</p>
                             </div>
                         </div>

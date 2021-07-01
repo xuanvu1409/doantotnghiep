@@ -50,16 +50,16 @@ const Dropzone = ({files, setFiles, mutiple, className, maxFile}) => {
         },
     });
 
-    const removeFile = (event) => {
+    const removeFile = (event, index) => {
         event.stopPropagation();
         const newFiles = [...files]
         if (newFiles.length > 0) {
-            newFiles.splice(0, 1)
+            newFiles.splice(index, 1)
             setFiles(newFiles)
         }
     }
 
-    const thumbs = files.map(file => (
+    const thumbs = files.map((file, index) => (
         <div key={file.name}>
             <div style={thumb}>
                 <div style={thumbInner}>
@@ -69,7 +69,7 @@ const Dropzone = ({files, setFiles, mutiple, className, maxFile}) => {
                         alt={file.name}
                     />
                     <div className="d-flex justify-content-end dz-close-icon position-absolute text-white"
-                         onClick={removeFile} style={{"right": 0}}><small className="tio-clear"/></div>
+                         onClick={(e => removeFile(e, index))} style={{"right": 0}}><small className="tio-clear"/></div>
                 </div>
             </div>
         </div>

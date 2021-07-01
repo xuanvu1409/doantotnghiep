@@ -1,118 +1,105 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
-import moment from "moment";
 import 'moment-timezone';
-import {titleCase} from "../../../../../utils/helper";
+import {titleCase} from "../../../../utils/helper";
 import 'emoji-mart/css/emoji-mart.css';
-import { Picker } from 'emoji-mart';
-import useToggle from '../../../../../hooks/useToggle';
+import {Picker} from 'emoji-mart';
+import RenderMessage from "./renderMessage";
+import ScrollToBottom from 'react-scroll-to-bottom';
+import {Dropdown} from "react-bootstrap";
+import {useDropzone} from "react-dropzone";
+
+const dropDown = React.forwardRef(({children, onClick}, ref) => (
+    <button className="btn btn-ico btn-secondary btn-minimal bg-transparent border-0"
+          type="button"
+          ref={ref}
+          onClick={(e) => {
+              e.preventDefault();
+              onClick(e);
+          }}
+    >
+        {children}
+    </button>
+));
 
 const Chats = (props) => {
-    const {messages, me, toMember, sendMessage} = props;
-    const {handleSubmit, register, reset, append} = useForm();
-    const [emoji, setEmoji] = useToggle(false);
+    const {messages, me, toMember, sendMessage, errMatched, files, setFiles} = props;
+    const {handleSubmit, register, reset, setValue, getValues} = useForm();
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: 'image/*',
+        onDrop: acceptedFiles => {
+            setFiles(acceptedFiles.map(file => Object.assign(file, {
+                preview: URL.createObjectURL(file)
+            })));
+        }
+    });
 
-    const addEmoji = (e) => {
-        if (e.native) {
-            document.getElementById('chat-input').value += e.native;
+    const thumbs = files.map((file, index) => (
+        <div className="col-4 my-2 dz-processing dz-error dz-complete dz-image-preview" key={file.name}>
+            <div className="card bg-light">
+                <div className="card-body p-2">
+                    <div className="media align-items-center">
+                        <div className="dropzone-image-preview">
+                            <div className="avatar avatar mr-3">
+                                <img
+                                    src={file.preview}
+                                    className="avatar-img rounded" data-dz-thumbnail=""
+                                    alt="img13.jpg"/>
+                            </div>
+                        </div>
+
+                        <div className="media-body overflow-hidden">
+                            <h6 className="text-truncate small mb-0"
+                                data-dz-name="">{file.name}</h6>
+                            <p className="extra-small" data-dz-size=""><strong>{Math.round((file.size / 1024) * 100) / 100}</strong> KB
+                            </p>
+                        </div>
+
+                        <div className="ml-5">
+                            <span onClick={() => removeFile(index)}
+                               className="btn btn-sm btn-link text-decoration-none text-muted"
+                               data-dz-remove="">
+                                <i className="tio-clear"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    ));
+
+    const removeFile = (index) => {
+        const newFiles = [...files]
+        if (newFiles.length > 0) {
+            newFiles.splice(index, 1)
+            setFiles(newFiles)
         }
     }
 
-    const renderMessage = () => {
-        return (
-            messages?.map(e => (
-                <div className={'message' + (e.from?._id === me ? ' message-right' : '')} key={e._id}>
-                    {/* Avatar */}
-                    {
-                        e.from?._id !== me
-                        &&
-                        <span className="avatar avatar-circle avatar-sm mr-2 mr-lg-3" href="#"
-                              style={{flex: 'none'}}>
-                            <img className="avatar-img" src={e.from.avatar?.srcImage} alt=""/>
-                        </span>
-                    }
-                    {/* Message: body */}
-                    <div className="message-body">
-                        {/* Message: row */}
-                        <div className="message-row">
-                            <div
-                                className={'d-flex align-items-center' + (e.from?._id === me ? ' justify-content-end' : '')}>
-                                {
-                                    e.from?._id !== me
-                                        ?
-                                        <>
-                                            {/* Message: content */}
-                                            <div className="message-content bg-light">
-                                                <div>{e.content}
-                                                </div>
-                                                <div className="mt-1">
-                                                    <small className="opacity-65">
-                                                        {
-                                                            moment(new Date()).diff(e.updateAt, 'days') >= 1
-                                                                ?
-                                                                moment.tz(e.updateAt, 'Asia/Ho_Chi_Minh').format('D-M')
-                                                                :
-                                                                moment.tz(e.updateAt, 'Asia/Ho_Chi_Minh').format('h:m')
-                                                        }
-                                                    </small>
-                                                </div>
-                                            </div>
-                                            {/* Message: content */}
-                                            {/* Message: dropdown */}
-                                            <div className="dropdown">
-                                                <a className={'text-muted opacity-60' + (e.from?._id === me ? ' mr-2' : ' ml-2')}
-                                                   href="#"
-                                                   data-toggle="dropdown" aria-haspopup="true"
-                                                   aria-expanded="false">
-                                                    <i className="tio-more-vertical"/>
-                                                </a>
-                                            </div>
-                                            {/* Message: dropdown */}
-                                        </>
-                                        :
-                                        <>
-                                            {/* Message: dropdown */}
-                                            <div className="dropdown">
-                                                <a className={'text-muted opacity-60' + (e.from?._id === me ? ' mr-2' : ' ml-2')}
-                                                   href="#"
-                                                   data-toggle="dropdown" aria-haspopup="true"
-                                                   aria-expanded="false">
-                                                    <i className="tio-more-vertical"/>
-                                                </a>
-                                            </div>
-                                            {/* Message: dropdown */}
-                                            {/* Message: content */}
-                                            <div className="message-content bg-primary text-white">
-                                                <div>{e.content}
-                                                </div>
-                                                <div className="mt-1">
-                                                    <small className="opacity-65">
-                                                        {
-                                                            moment(new Date()).diff(e.updateAt, 'days') >= 1
-                                                                ?
-                                                                moment.tz(e.updateAt, 'Asia/Ho_Chi_Minh').format('D-M')
-                                                                :
-                                                                moment.tz(e.updateAt, 'Asia/Ho_Chi_Minh').format('h:m')
-                                                        }
-                                                    </small>
-                                                </div>
-                                            </div>
-                                            {/* Message: content */}
-                                        </>
-                                }
-                            </div>
-                        </div>
-                        {/* Message: row */}
-                    </div>
-                    {/* Message: Body */}
-                </div>
-            ))
-        )
+    useEffect(() => () => {
+        console.log(files)
+        // Make sure to revoke the data uris to avoid memory leaks
+        files.forEach(file => URL.revokeObjectURL(file.preview));
+    }, [files]);
+
+    const addEmoji = (e) => {
+        if (e.native) {
+            setValue("content", getValues().content += e.native)
+        }
     }
 
     const onSubmit = (data) => {
         sendMessage(data);
         reset();
+    }
+
+    const handleSendMess = (e) => {
+        if (e.charCode === 13) {
+            handleSubmit(onSubmit)();
+        }
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     }
 
     return (
@@ -211,65 +198,87 @@ const Chats = (props) => {
                     </div>
                     {/* Chat: Search */}
                     {/* Chat: Content*/}
-                    <div className="chat-content px-lg-6">
+                    <ScrollToBottom className={'chat-content'} followButtonClassName={"scroll-btn"}
+                                    scrollViewClassName={'px-lg-6'} atEnd={true}>
                         <div className="container-xl py-4 py-lg-6">
-                            {renderMessage()}
+                            <RenderMessage messages={messages} me={me}/>
                         </div>
-                        <div id="end-of-chat"/>
-                        {/* Scroll to end */}
-                    </div>
+                    </ScrollToBottom>
+                    {/* Scroll to end */}
                     {/* Chat: Content */}
                     {/* Chat: DropzoneJS container */}
-                    {/*<div className="chat-files hide-scrollbar px-lg-8">*/}
-                    {/*    <div className="container-xl">*/}
-                    {/*        <div className="dropzone-previews-js form-row py-4" />*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                    {
+                        files.length > 0
+                        &&
+                        <div className="chat-files hide-scrollbar px-lg-8">
+                            <div className="container-xl">
+                                <div className="dropzone-previews-js form-row py-3">
+                                    {thumbs}
+                                </div>
+                            </div>
+                        </div>
+                    }
                     {/* Chat: DropzoneJS container */}
                     {/* Chat: Footer */}
                     <div className="chat-footer border-top py-3 py-lg-4 px-lg-6">
-                        <form id="chat-id-2-form"
-                              onSubmit={handleSubmit(onSubmit)}>
-                            <div className="form-row align-items-center">
-                                <div className="col">
-                                    <div className="input-group">
-                                        {/* Textarea */}
-                                        <textarea id="chat-input" {...register('content', {required: true})}
-                                                  className="form-control bg-transparent border-0"
-                                                  placeholder="Aa" rows={1} data-emoji-input
-                                                  data-autosize="true" defaultValue={""}/>
-                                        {/* Emoji button */}
-                                        <div className="input-group-append position-relative">
-                                            {/*<ReactEmojiPicker onSelected={(currentEmoji) => {*/}
-                                            {/*    setEmoji(currentEmoji);*/}
-                                            {/*}}*/}
-                                            {/*/>*/}
-                                            <button
-                                                onClick={() => setEmoji(true)}
-                                                className="btn btn-ico btn-secondary btn-minimal bg-transparent border-0"
-                                                type="button">
-                                                <img src="assets/images/smile.svg" data-inject-svg="" alt=""/>
-                                            </button>
-                                            <Picker sheetSize={32} emoji='point_up' showPreview={false} showSkinTones={false} onSelect={addEmoji} style={{width: '318px', display: (!emoji ? 'none' : '')}} enableFrequentEmojiSort={true} />
+                        {
+                            errMatched
+                            ?
+                                <div className={'text-center'}>Không thể trò chuyện do thành viên này chưa kết đôi với bạn</div>
+                                :
+                                // <section className="container">
+                                //     <div {...getRootProps({className: 'dropzone'})}>
+                                //         <input {...getInputProps()} />
+                                //         <p>Drag 'n' drop some files here, or click to select files</p>
+                                //     </div>
+                                // </section>
+                                <form id="chat-id-2-form"
+                                      onSubmit={handleSubmit(onSubmit)}>
+                                    <div className="form-row align-items-center">
+                                        <div className="col">
+                                            <div className="input-group">
+                                                {/* Textarea */}
+                                                <textarea id="chat-input" {...register('content', {required: true})}
+                                                          className="form-control bg-transparent border-0"
+                                                          placeholder="Aa" rows={1}
+                                                          data-autosize="true" onKeyPress={handleSendMess}/>
+                                                {/* Emoji button */}
+                                                <div className="input-group-append position-relative">
+
+                                                    <Dropdown>
+                                                        <Dropdown.Toggle as={dropDown}>
+                                                            <img src="assets/images/smile.svg" data-inject-svg="" alt=""/>
+                                                        </Dropdown.Toggle>
+
+                                                        <Dropdown.Menu bsPrefix={'not-box'}>
+                                                                <Picker sheetSize={32} emoji='point_up' showPreview={false}
+                                                                        showSkinTones={false} onSelect={addEmoji}
+                                                                        style={{width: '318px'}}
+                                                                        enableFrequentEmojiSort={true}/>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </div>
+                                                {/* Upload button */}
+                                                <div className="input-group-append">
+                                                    <button id="chat-upload-btn-1"
+                                                            className=""
+                                                            type="button" {...getRootProps({className: 'btn btn-ico btn-secondary btn-minimal bg-transparent border-0'})}>
+                                                        <input {...getInputProps()} />
+                                                        <img src="assets/images/paperclip.svg" data-inject-svg=""
+                                                             alt=""/>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        {/* Upload button */}
-                                        <div className="input-group-append">
-                                            <button id="chat-upload-btn-2"
-                                                    className="btn btn-ico btn-secondary btn-minimal bg-transparent border-0 dropzone-button-js"
-                                                    type="button">
-                                                <img src="assets/images/paperclip.svg" alt=""/>
+                                        {/* Submit button */}
+                                        <div className="col-auto">
+                                            <button className="btn icon-shape btn-primary rounded-circle" type="submit">
+                                                <i className="tio-send"/>
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                                {/* Submit button */}
-                                <div className="col-auto">
-                                    <button className="btn icon-shape btn-primary rounded-circle" type="submit">
-                                        <i className="tio-send"/>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                                </form>
+                        }
                     </div>
                     {/* Chat: Footer */}
                 </div>
@@ -614,7 +623,7 @@ const Chats = (props) => {
             </div>
             {/* Chat */}
         </div>
-);
+    );
 };
 
 export default Chats;

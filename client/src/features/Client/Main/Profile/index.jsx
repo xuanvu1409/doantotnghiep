@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
 import {titleCase} from "../../../../utils/helper";
 import "./profile.css";
 import {Nav, Tab} from "react-bootstrap";

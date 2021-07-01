@@ -19,7 +19,7 @@ class ProfileController {
                 .populate('genderId')
                 .populate('locationId')
                 .populate('languageId');
-            res.json(member);
+            return res.json(member);
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});
@@ -46,7 +46,7 @@ class ProfileController {
                         cloudinaryId: -1
                     }
                 })
-            res.json({member, isMe, contact, gallery});
+            return res.json({member, isMe, contact, gallery});
         } catch (e) {
             console.log(e);
             res.status(500).json({message: "Đã xảy ra sự cố"});

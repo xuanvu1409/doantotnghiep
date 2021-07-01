@@ -11,7 +11,6 @@ import Dropzone from "../../../../../components/Share/dropzone";
 
 const Gallery = ({gallery, isMe, load}) => {
     const dispatch = useDispatch();
-    const {currentMember} = useSelector(state => state.member);
     const [loading, setLoading] = useState(false);
     const {handleSubmit} = useForm()
     const [files, setFiles] = useState([]);
@@ -19,7 +18,6 @@ const Gallery = ({gallery, isMe, load}) => {
     const onSubmit = (data) => {
         setLoading(true);
         const formData = new FormData();
-        formData.append("_id", currentMember._id);
         files.map(file => (formData.append('image', file)))
         uploadImage(formData).then(res => {
             toast.success(res.data.message);

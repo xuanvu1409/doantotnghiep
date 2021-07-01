@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {titleCase} from "../../../utils/helper";
 import Logout from "./components/logout";
 import Filter from "./components/Filter/filter";
+import Spotlight from "./components/spotlight";
 
 const Index = () => {
     const memberState = useSelector(state => state.member);
@@ -526,91 +527,13 @@ const Index = () => {
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="js-nav-tooltip-link nav-link" activeClassName="active"
-                                                 to="/history"
-                                                 title="Welcome page" data-placement="left">
-                                            <span
-                                                className="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Lịch sử</span>
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink className="js-nav-tooltip-link nav-link" activeClassName="active"
                                                  to="/favourite"
                                                  title="Welcome page" data-placement="left">
                                             <span
                                                 className="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Mục yêu thích</span>
                                         </NavLink>
                                     </li>
-                                    <li className="top-trend">
-                                        <div className="trend">
-
-                                            <span className="divider text-uppercase font-weight-bolder">nổi bật</span>
-                                        </div>
-                                        <div className="list-trend">
-                                        </div>
-                                        <div className="list-trend">
-                                            <a href="/" className="user-box">
-                                                <span className="avatar" data-toggle="tooltip" data-placement="top"
-                                                      title="Xuân vũ">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                            <a href="/" className="user-box">
-                                                <span className="avatar">
-                                                  <img className="avatar-img" src="../assets/img/160x160/img10.jpg"
-                                                       alt="Image Description"/>
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </li>
+                                    <Spotlight/>
                                     {/* Front Builder */}
                                     <li className="nav-item nav-footer-item ">
                                         <a className="d-none d-md-flex js-hs-unfold-invoker nav-link nav-link-toggle"
@@ -669,62 +592,6 @@ const Index = () => {
                                         </ul>
                                     </li>
                                     {/* End Help */}
-                                    {/* Language */}
-                                    <li className="navbar-vertical-aside-has-menu nav-footer-item ">
-                                        <a className="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle "
-                                           href='javascript:;' title="Language">
-                                            <img className="avatar avatar-xss avatar-circle"
-                                                 src="assets\vendor\flag-icon-css\flags\1x1\us.svg"
-                                                 alt="United States Flag"/>
-                                            <span
-                                                className="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Language</span>
-                                        </a>
-                                        <ul className="js-navbar-vertical-aside-submenu nav nav-sub">
-                                            <li className="nav-item">
-                                                <a className="nav-link" href='javascript:;' title="English (US)">
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\us.svg" alt="Flag"/>
-                                                    English (US)
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href='javascript:;' title="English (UK)">
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\gb.svg" alt="Flag"/>
-                                                    English (UK)
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href='javascript:;' title="Deutsch">
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\de.svg" alt="Flag"/>
-                                                    Deutsch
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href='javascript:;' title="Dansk">
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\dk.svg" alt="Flag"/>
-                                                    Dansk
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href='javascript:;' title="Italiano">
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\it.svg" alt="Flag"/>
-                                                    Italiano
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href='javascript:;' title="中文 (繁體)">
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\cn.svg" alt="Flag"/>
-                                                    中文 (繁體)
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    {/* End Language */}
                                 </ul>
                             </div>
                             {/* End Content */}
@@ -737,104 +604,7 @@ const Index = () => {
                                     <li className="navbar-vertical-footer-list-item">
                                         {/* Other Links */}
                                         <div className="hs-unfold">
-                                            <a className="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                                               href='javascript:;' data-hs-unfold-options="{
-            &quot;target&quot;: &quot;#otherLinksDropdown&quot;,
-            &quot;type&quot;: &quot;css-animation&quot;,
-            &quot;animationIn&quot;: &quot;slideInDown&quot;,
-            &quot;hideOnScroll&quot;: true
-           }">
-                                                <i className="tio-help-outlined"/>
-                                            </a>
-                                            <div id="otherLinksDropdown"
-                                                 className="hs-unfold-content dropdown-unfold dropdown-menu navbar-vertical-footer-dropdown">
-                                                <span className="dropdown-header">Help</span>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-book-outlined dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="Resources & tutorials">Resources &amp; tutorials</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-command-key dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2" title="Keyboard shortcuts">Keyboard shortcuts</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-alt dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2" title="Connect other apps">Connect other apps</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-gift dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="What's new?">What's new?</span>
-                                                </a>
-                                                <div className="dropdown-divider"/>
-                                                <span className="dropdown-header">Contacts</span>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <i className="tio-chat-outlined dropdown-item-icon"/>
-                                                    <span className="text-truncate pr-2" title="Contact support">Contact support</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        {/* End Other Links */}
-                                    </li>
-                                    <li className="navbar-vertical-footer-list-item">
-                                        {/* Language */}
-                                        <div className="hs-unfold">
-                                            <a className="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                                               href='javascript:;' data-hs-unfold-options="{
-            &quot;target&quot;: &quot;#languageDropdown&quot;,
-            &quot;type&quot;: &quot;css-animation&quot;,
-            &quot;animationIn&quot;: &quot;slideInDown&quot;,
-            &quot;hideOnScroll&quot;: true
-           }">
-                                                <img className="avatar avatar-xss avatar-circle"
-                                                     src="assets\vendor\flag-icon-css\flags\1x1\us.svg"
-                                                     alt="United States Flag"/>
-                                            </a>
-                                            <div id="languageDropdown"
-                                                 className="hs-unfold-content dropdown-unfold dropdown-menu navbar-vertical-footer-dropdown">
-                                                <span className="dropdown-header">Select language</span>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\us.svg" alt="Flag"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="English">English (US)</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\gb.svg" alt="Flag"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="English">English (UK)</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\de.svg" alt="Flag"/>
-                                                    <span className="text-truncate pr-2" title="Deutsch">Deutsch</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\dk.svg" alt="Flag"/>
-                                                    <span className="text-truncate pr-2" title="Dansk">Dansk</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\it.svg" alt="Flag"/>
-                                                    <span className="text-truncate pr-2"
-                                                          title="Italiano">Italiano</span>
-                                                </a>
-                                                <a className="dropdown-item" href='javascript:;'>
-                                                    <img className="avatar avatar-xss avatar-circle mr-2"
-                                                         src="assets\vendor\flag-icon-css\flags\1x1\cn.svg" alt="Flag"/>
-                                                    <span className="text-truncate pr-2" title="中文 (繁體)">中文 (繁體)</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        {/* End Language */}
-                                    </li>
-                                    <li className="navbar-vertical-footer-list-item">
-                                        {/* Other Links */}
-                                        <div className="hs-unfold">
-                                            <Link to={'/message'} className="btn btn-icon btn-ghost-secondary rounded-circle">
+                                            <Link to={'/messages'} className="btn btn-icon btn-ghost-secondary rounded-circle">
                                                 <i className="tio-messenger"/>
                                             </Link>
                                         </div>

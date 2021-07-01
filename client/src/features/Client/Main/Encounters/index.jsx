@@ -19,9 +19,10 @@ const Index = () => {
         images: [],
         liked: false,
         favorited: false,
-        backMember: 0,
-        relationship: 0
+        relationship: false,
+        relationshiped: false,
     })
+    const [oldData, setOldData] = useState({});
     const filter = useSelector(state => state.filter);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(false);
@@ -34,6 +35,7 @@ const Index = () => {
     }, [filter])
 
     const like = async () => {
+        setOldData(data);
         let formData = {
             memberId: data.member._id
         }
@@ -43,10 +45,12 @@ const Index = () => {
     }
 
     const skip = async () => {
+        setOldData(data);
         await getData(data.member._id);
     }
 
     const favorite = async () => {
+        setOldData(data);
         let formData = {
             memberId: data.member._id
         }
@@ -59,14 +63,14 @@ const Index = () => {
 
     const getData = async () => {
         setLoading(true);
-        await encounter([data.member._id]).then(res => {
-            console.log(res.data)
+        await encounter({memberId:data.member._id}).then(res => {
             setData({
                 member: res.data.member,
                 images: res.data.images,
                 liked: res.data.liked,
                 favorited: res.data.favorited,
-                relationship: res.data.relationship
+                relationship: res.data.relationship,
+                relationshiped: res.data.relationshiped
             });
             setTimeout(() => {
                 setLoading(false)
@@ -92,8 +96,8 @@ const Index = () => {
             memberId: data.member._id
         }
         sweetAlert.warning(
-            data.relationship === 1 ? "Hủy tỏ tình" : "Huỷ kết đôi",
-            data.relationship === 1 ? "Bạn chắc chắn hủy lời tỏ tình?" : "Bạn muốn tiếp tục hủy kết đôi?",
+            data.relationshiped ? "Người này đã tỏ tình với bạn" : "Huỷ tỏ tình",
+            data.relationshiped ? "Bạn chắc chắn từ chối lời tỏ tình?" : "Bạn muốn tiếp tục hủy tỏ tình?",
             async () => {
             await sendCrush(formData).then(res => {
                 sweetAlert.success("Thành công", res.data.message, () => {
@@ -120,6 +124,8 @@ const Index = () => {
                 </div>
 
                 <Action
+                    oldData={oldData}
+                    back={() => setData(oldData)}
                     like={() => like}
                     skip={() => skip}
                     liked={data.liked}
@@ -140,7 +146,7 @@ const Index = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <Textarea rows={5} form={form} name={"content"}
-                                  value={data.member ? `Xin chào, tôi là ${currentMember.name}!` : "Xin chào, làm quen nha!"}
+                                  defaultValue={data.member ? `Xin chào, tôi là ${currentMember.name}!` : "Xin chào, làm quen nha!"}
                                   validation={{
                                       required: {
                                           value: true,

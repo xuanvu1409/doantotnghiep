@@ -114,18 +114,18 @@ const Index = () => {
                                         <h1 className="display-4">Đăng nhập</h1>
                                         <p>Bạn chưa có tài khoản? <Link to="/register">Tạo tài khoản tại đây</Link></p>
                                     </div>
-                                    <div className="mb-4">
-                                        <a className="btn btn-lg btn-white btn-block" href="#">
-                                          <span className="d-flex justify-content-center align-items-center">
-                                            <img className="avatar avatar-xss mr-2" src="assets\svg\brands\google.svg"
-                                                 alt="Image Description"/>
-                                            Sign up with Google
-                                          </span>
-                                        </a>
-                                    </div>
-                                    <div className="text-center mb-4">
-                                        <span className="divider text-muted">Hoặc</span>
-                                    </div>
+                                    {/*<div className="mb-4">*/}
+                                    {/*    <a className="btn btn-lg btn-white btn-block" href="#">*/}
+                                    {/*      <span className="d-flex justify-content-center align-items-center">*/}
+                                    {/*        <img className="avatar avatar-xss mr-2" src="assets\svg\brands\google.svg"*/}
+                                    {/*             alt="Image Description"/>*/}
+                                    {/*        Sign up with Google*/}
+                                    {/*      </span>*/}
+                                    {/*    </a>*/}
+                                    {/*</div>*/}
+                                    {/*<div className="text-center mb-4">*/}
+                                    {/*    <span className="divider text-muted">Hoặc</span>*/}
+                                    {/*</div>*/}
                                     {/* Form Group */}
                                     <div className="js-form-message form-group">
                                         <label className="input-label" htmlFor="signupSrEmail">Email</label>

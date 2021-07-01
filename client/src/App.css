@@ -199,3 +199,11 @@ body {
 .info a {
   color: inherit;
 }
+
+.drop-btn {
+  display: none;
+}
+
+.bg-card:hover .drop-btn {
+  display: block !important;
+}

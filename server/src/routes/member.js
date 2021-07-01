@@ -6,7 +6,6 @@ const auth = require('../app/middleware/auth');
 const profileController = require('../app/controllers/ProfileController');
 const uploadSingle = require('../config/uploadSingleFile');
 const uploadMultiple = require('../config/uploadMultipleFile');
-const searchController = require('../app/controllers/SearchController');
 const encounterController = require('../app/controllers/EncounterController');
 
 router.put('/profile/upload-avatar', auth, uploadSingle, profileController.uploadAvatar);
@@ -29,8 +28,9 @@ router.put('/profile/update-personal-info', auth, profileController.updatePerson
 router.put('/profile/update-filter', auth, profileController.updateFilter);
 router.get('/profile/get', auth, profileController.getMemberById);
 router.get('/profile/get-member/:profileId', auth, profileController.getMemberByProfileId);
-router.get('/search', auth, searchController.get);
+router.get('/search', auth, encounterController.search);
 router.post('/encounter', auth, encounterController.get);
+router.get('/get-spotlight', homeController.spotlight);
 router.get('/', homeController.get);
 
 module.exports = router;

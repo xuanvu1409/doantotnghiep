@@ -20,7 +20,9 @@ const memberSchema =  new Schema({
     personalInfo: Array,
     packageInfo: Object,
     deletedAt: Date,
-    view: {type: Number, default: 0}
+    view: {type: Number, default: 0},
+    like: {type: Number, default: 0},
+    role: {type: Boolean, default: false},
 }, {
     timestamps: true,
     versionKey: false
