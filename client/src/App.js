@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import './App.css';
 import {Route, Switch, useLocation} from "react-router-dom";
-import Client from "./features/Client/index";
-import Admin from "./features/Admin/index";
+import Client from "./pages/Client/index";
+import Admin from "./pages/Admin/index";
 import 'react-toastify/dist/ReactToastify.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';

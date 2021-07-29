@@ -11,6 +11,6 @@ export const getMessages = async (formData) => {
     return await axios.get(`/message/get-messages?${paramsString}`);
 }
 
-export const sendMessage = async (formData) => {
+export const sendMessages = async (formData) => {
     return await axios.post('/message/send-message', formData);
 }

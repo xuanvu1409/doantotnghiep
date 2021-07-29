@@ -31,6 +31,7 @@ router.get('/profile/get-member/:profileId', auth, profileController.getMemberBy
 router.get('/search', auth, encounterController.search);
 router.post('/encounter', auth, encounterController.get);
 router.get('/get-spotlight', homeController.spotlight);
+router.get('/check-login', auth, homeController.checkLogin);
 router.get('/', homeController.get);
 
 module.exports = router;

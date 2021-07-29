@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const messageSchema =  new Schema({
     to: {type: Number, required: true},
     from: {type: Number, required: true, ref: 'members'},
-    content: {type: String, required: true},
+    content: {type: String},
     media: [{srcImage: String, cloudinaryId: String}],
     status: {type: Number}
 }, {

@@ -10,10 +10,10 @@
     margin: unset;
 }
 
-#notificationDropdown {
-    top: 0;
-    z-index: 999;
-    left: 360px;
+.drop-noti {
+    top: 0 !important;
+    z-index: 999999;
+    left: 360px !important;
 }
 
 .top-trend {

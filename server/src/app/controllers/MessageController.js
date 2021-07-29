@@ -2,6 +2,7 @@ const MessageThread = require("../models/messageThread");
 const Message = require("../models/message");
 const Member = require("../models/member");
 const Relationship = require("../models/relationship");
+const cloudinary = require('../../config/cloudinary');
 
 class MessageController {
 
@@ -29,10 +30,13 @@ class MessageController {
                         $match:{
                             'member.name':{ $regex: '.*' + q + '.*' }
                         }
+                    },
+                    {
+                        $sort: {updatedAt: -1}
                     }
                 ])
-                const member = await Member.find({_id: {$ne: _id}});
-                return res.json({thread, member});
+                const relationship = await Relationship.find({status: 2, $or: [{relatingId: _id}, {relatedId: _id}]}).populate('relatingId').populate('relatedId').sort('-updatedAt');
+                return res.json({thread, relationship, me: _id});
             } else {
                 const thread = await MessageThread.aggregate([
                     {
@@ -48,10 +52,13 @@ class MessageController {
                     },
                     {
                         $unwind:'$member'
+                    },
+                    {
+                        $sort: {updatedAt: -1}
                     }
                 ])
-                const member = await Member.find({_id: {$ne: _id}});
-                return res.json({thread, member});
+                const relationship = await Relationship.find({status: 2, $or: [{relatingId: _id}, {relatedId: _id}]}).populate('relatingId').populate('relatedId').sort('-updatedAt');
+                return res.json({thread, relationship, me: _id});
             }
         } catch (e) {
             console.log(e);
@@ -83,51 +90,53 @@ class MessageController {
 
     sendMessage = async (req, res) => {
         const {_id} = req.member;
-        const {messageTo, content, media} = req.body;
+        const {messageTo, content} = req.body;
+
         try {
-            const threadFrom = await MessageThread.findOne({to: messageTo, from: _id, status: 1});
-            const threadTo = await MessageThread.findOne({to: _id, from: messageTo, status: 1});
-            if (!threadTo) {
-                await MessageThread.create({
-                    to: _id,
-                    from: messageTo,
-                    status: 1
+            const urls = [];
+            for (const file of req.files) {
+                await cloudinary.uploader.upload(file.path, (err, res) => {
+                    if (err) return res.status(500).send("Lỗi upload file");
+                    urls.push({
+                        srcImage: res.secure_url,
+                        cloudinaryId: res.public_id
+                    })
                 })
             }
-            if (!threadFrom) {
-                await MessageThread.create({
+            const newMessage = await Message.create({
+                to: messageTo,
+                from: _id,
+                content: content,
+                media: urls,
+                status: 1
+            })
+            if (!await MessageThread.exists({
+                $or: [{from: _id, to: messageTo}, {from: messageTo, to: _id}]
+            })) {
+                await MessageThread.insertMany([{
                     to: messageTo,
                     from: _id,
-                    status: 1
-                }, async (err) => {
-                    if (!err) {
-                        await Message.create({
-                            to: messageTo,
-                            from: _id,
-                            content: content,
-                            media: media,
-                            status: 1
-                        }, (err) => {
-                            if (!err) {
-                                return res.json({message: "Cập nhật thành công"});
-                            }
-                            console.log(err)
-                        })
-                    }
-                })
+                    status: 1,
+                    lastMessage: content !== '' ? content : "Bạn đã gửi ảnh"
+                }, {
+                    from: messageTo,
+                    to: _id,
+                    status: 1,
+                    lastMessage: content !== '' ? content : "Đã gửi ảnh cho bạn",
+                    $inc: {notRead: 1}
+                }])
+                const message = await Message.findById(newMessage._id).populate('from');
+                return res.json(message);
             } else {
-                await Message.create({
-                    to: messageTo,
-                    from: _id,
-                    content: content,
-                    media: media,
-                    status: 1
-                }, (err) => {
-                    if (!err) {
-                        return res.json({message: "Cập nhật thành công"});
-                    }
-                    console.log(err)
+                await MessageThread.findOneAndUpdate({to: _id, from: messageTo}, {
+                    $inc: {notRead: 1},
+                    lastMessage: content !== '' ? content : "Đã gửi ảnh cho bạn"
                 })
+                await MessageThread.findOneAndUpdate({from: _id, to: messageTo}, {
+                    lastMessage: content !== '' ? content : "Bạn đã gửi ảnh", notRead: 0
+                })
+                const message = await Message.findById(newMessage._id).populate('from');
+                return res.json(message);
             }
         } catch (e) {
             console.log(e);

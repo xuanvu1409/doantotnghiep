@@ -1,0 +1,45 @@
+.register-page .custom-select {
+    height: calc(1.5em + 1.875rem);
+    padding: .875rem 1.09375rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .3125rem;
+}
+
+.register-page .card-body-height {
+
+    height: unset;
+    max-height: 70vh;
+}
+
+.invalid-feedback {
+    display: unset;
+}
+
+.register-page .input-group.is-invalid:last-child {
+    border-bottom-right-radius: .3125rem !important;
+    border-top-right-radius: .3125rem !important;
+}
+
+.register-page .css-26l3qy-menu {
+    z-index: 10;
+}
+
+.register-page .css-yk16xz-control {
+    height: calc(1.5em + 1.875rem);
+    border: .0625rem solid #e7eaf3;
+}
+
+.register-page .css-1pahdxg-control {
+    height: calc(1.5em + 1.875rem);
+    box-shadow: 0 0 10px rgb(55 125 255 / 10%);
+    border-color: rgba(55,125,255,.4);
+}
+
+.valid-dob .form-group {
+    margin-bottom: unset;
+}
+
+.invalid-dob {
+    margin-bottom: 1.5rem;
+}

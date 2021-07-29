@@ -29,6 +29,10 @@ class HomeController {
             res.status(500).json({message: "Đã xảy ra sự cố"});
         }
     }
+
+    checkLogin = (req, res) => {
+        return res.json(true);
+    }
 }
 
 module.exports = new HomeController;

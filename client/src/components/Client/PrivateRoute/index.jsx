@@ -1,25 +1,30 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Route, useLocation} from "react-router-dom";
+import {checkLogin} from "../../../api/memberApi";
+import localStorage from "redux-persist/es/storage";
 
 const Index = ({component: Component, ...rest}) => {
     const location = useLocation();
+    const [isLogin, setIsLogin] = useState(false);
 
     useEffect(() => {
-        let token = localStorage.getItem('token');
-        if (!token) {
-            redirectLogin()
-        }
+        check();
     }, [location])
 
-    const redirectLogin = () => {
-        window.location.replace('/login');
+    const check = async () => {
+        await checkLogin().then(res => {
+            if (res.data)
+                setIsLogin(true)
+        }).catch(e => {
+            setIsLogin(false)
+            window.location.replace('/login')
+        })
     }
 
 
     return (
         <Route {...rest} render={(props) => (
-            localStorage.getItem('token')
-                && <Component {...props} />
+            isLogin && <Component {...props} />
         )}/>
     )
 };

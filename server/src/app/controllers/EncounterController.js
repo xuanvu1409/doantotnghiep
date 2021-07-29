@@ -16,63 +16,6 @@ const MessageThread = require('../models/messageThread');
 
 class EncounterController {
 
-    sendMessage = async (req, res) => {
-        const {_id} = req.member;
-        const {messageTo, content, media} = req.body;
-        try {
-            const threadFrom = await MessageThread.findOne({to: messageTo, from: _id, status: 1});
-            const threadTo = await MessageThread.findOne({to: _id, from: messageTo, status: 1});
-            if (!threadTo) {
-                await MessageThread.create({
-                    to: _id,
-                    from: messageTo,
-                    status: 1,
-                    lastMessage: content
-                })
-            }
-            if (!threadFrom) {
-                await MessageThread.create({
-                    to: messageTo,
-                    from: _id,
-                    status: 1,
-                    lastMessage: content
-                }, async (err) => {
-                    if (!err) {
-                        await Message.create({
-                            to: messageTo,
-                            from: _id,
-                            content: content,
-                            media: media,
-                            status: 1
-                        }, (err) => {
-                            if (!err) {
-                                return res.json({message: "Cập nhật thành công"});
-                            }
-                            console.log(err)
-                        })
-                    }
-                })
-            }
-            await Message.create({
-                to: messageTo,
-                from: _id,
-                content: content,
-                media: media,
-                status: 1
-            })
-            await MessageThread.updateMany({
-                $or: [{from: _id, to: messageTo}, {from: messageTo, to: _id}]
-            }, {
-                $set: {updatedAt: moment(), lastMessage: content}
-            }, (err, doc) => {
-                return res.json({message: "Cập nhật thành công"});
-            })
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({message: "Đã xảy ra sự cố"});
-        }
-    }
-
     get = async (req, res) => {
         const {_id} = req.member;
         const {memberId} = req.body;

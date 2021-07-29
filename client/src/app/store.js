@@ -1,6 +1,6 @@
 import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
-import loginReducer from "../features/Client/Auth/Login/loginSlice";
-import registerReducer from "../features/Client/Auth/Register/registerSlice";
+import loginReducer from "../pages/Client/Auth/Login/loginSlice";
+import registerReducer from "../pages/Client/Auth/Register/registerSlice";
 import memberReducer from "../components/Client/Sidebar/memberSlice";
 import filterReducer from "../components/Client/Sidebar/components/Filter/filterSlice";
 import appReducer from "../appSlice";

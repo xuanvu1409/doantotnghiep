@@ -19,7 +19,7 @@ const Spotlight = () => {
             <div className="list-trend">
                 {
                     data.map(e => (
-                        <Link to={'/profile/'+e.propfileId} className="user-box" key={e._id}>
+                        <Link to={'/profile/'+e.profileId} className="user-box" key={e._id}>
                                                 <span className="avatar" data-toggle="tooltip" data-placement="top"
                                                       title="Xuân vũ">
                                                   <img className="avatar-img" src={e.avatar.srcImage}

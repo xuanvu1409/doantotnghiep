@@ -1,18 +1,24 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Route } from "react-router-dom";
+import localStorage from "redux-persist/es/storage";
 
 const Index = ({ component: Component, ...rest }) => {
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            window.location.replace('/')
-        }
-    }, [localStorage.getItem('token')])
+    // const [isLogin, setIsLogin] = useState(false);
+    //
+    // useEffect(() => {
+    //     check();
+    // }, [])
+    //
+    // const check = async () => {
+    //     if (localStorage.getItem('token')) {
+    //         setIsLogin(true)
+    //     }
+    // }
 
     return (
         <Route {...rest} render={(props) => {
             return (
-                !localStorage.getItem('token') && <Component {...props} />
+                <Component {...props} />
             );
         }} />
     );

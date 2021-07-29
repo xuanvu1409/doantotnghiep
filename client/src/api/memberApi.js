@@ -9,6 +9,10 @@ export const signUp = async (formData) => {
     return await axios.post('/register', formData);
 }
 
+export const checkLogin = async () => {
+    return await axios.get('/check-login');
+}
+
 export const getMemberByProfileId = async (profileId) => {
     return await axios.get(`/profile/get-member/${profileId}`);
 }

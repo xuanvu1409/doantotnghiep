@@ -1,6 +1,4 @@
 const jwt = require("jsonwebtoken");
-const MessageThread = require("../app/models/messageThread");
-const Message = require("../app/models/message");
 
 module.exports = (app) => {
 
@@ -30,43 +28,24 @@ module.exports = (app) => {
     })
 
     io.on('connection', (socket) => {
-
+        //message
         socket.on('send-message', async (data) => {
-            const newMessage = await Message.create({
-                to: data.messageTo,
-                from: socket.member._id,
-                content: data.content,
-                media: data.media,
-                status: 1
-            })
-            if (!await MessageThread.exists({
-                $or: [{from: socket.member._id, to: data.messageTo}, {from: data.messageTo, to: socket.member._id}]
-            })) {
-                await MessageThread.insertMany([{
-                    to: data.messageTo,
-                    from: socket.member._id,
-                    status: 1,
-                    lastMessage: data.content
-                }, {
-                    from: data.messageTo,
-                    to: socket.member._id,
-                    status: 1,
-                    lastMessage: data.content,
-                    $inc: {notRead: 1}
-                }])
-                const message = await Message.findById(newMessage._id).populate('from');
-                io.emit('message', message);
-            } else {
-                await MessageThread.findOneAndUpdate({to: socket.member._id, from: data.messageTo}, {
-                    $inc: {notRead: 1},
-                    lastMessage: data.content
-                })
-                await MessageThread.findOneAndUpdate({from: socket.member._id, to: data.messageTo}, {
-                    lastMessage: data.content, notRead: 0
-                })
-                const message = await Message.findById(newMessage._id).populate('from');
-                io.emit('message', message);
-            }
+            io.emit('message', data);
+        })
+
+        //video call
+        socket.emit("me", socket.id)
+
+        socket.on("disconnect", () => {
+            socket.broadcast.emit("callEnded")
+        })
+
+        socket.on("callUser", (data) => {
+            io.to(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
+        })
+
+        socket.on("answerCall", (data) => {
+            io.to(data.to).emit("callAccepted", data.signal)
         })
     })
 }
